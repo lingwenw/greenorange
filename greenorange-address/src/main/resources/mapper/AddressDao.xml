@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wpp.greenorange.dao.AddressDao">
+
+    <resultMap type="com.wpp.greenorange.domain.Address" id="addressMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="contact" column="contact" jdbcType="VARCHAR"/>
+        <result property="isDefault" column="is_default" jdbcType="BOOLEAN"/>
+        <result property="notes" column="notes" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="findById" resultMap="addressMap">
+        select
+          id, user_id, mobile, address, contact, is_default, notes, deleted, create_time, update_time
+        from greenorange.tb_address
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="findAllByCondition" resultMap="addressMap">
+        select
+        id, user_id, mobile, address, contact, is_default, notes, deleted, create_time, update_time
+        from greenorange.tb_address
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = #{mobile}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="contact != null and contact != ''">
+                and contact = #{contact}
+            </if>
+            <if test="default != null">
+                and is_default = #{default}
+            </if>
+            <if test="notes != null and notes != ''">
+                and notes = #{notes}
+            </if>
+            <if test="deleted != null">
+                and deleted = #{deleted}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into greenorange.tb_address(user_id, mobile, address, contact, is_default, notes, deleted, create_time, update_time)
+        values (#{userId}, #{mobile}, #{address}, #{contact}, #{default}, #{notes}, #{deleted}, #{createTime}, #{updateTime})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update greenorange.tb_address
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="contact != null and contact != ''">
+                contact = #{contact},
+            </if>
+            <if test="default != null">
+                is_default = #{default},
+            </if>
+            <if test="notes != null and notes != ''">
+                notes = #{notes},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from greenorange.tb_address where id = #{id}
+    </delete>
+
+</mapper>
