@@ -1263,10 +1263,22 @@ img {
 	background-color: #7cc816
 }
 
-.hide {
-	display: none
+/*.hide {*/
+/*	display: none;*/
+/*}*/
+/*
+自己添加三级联动插件的修改样式
+*/
+#distpicker{
+	width: 100px;
+	height: 50px;
 }
-
+#city-picker3{
+	height: 29px;
+	margin-left: 15px;
+	margin-top: 7px;
+}
+/**/
 .toolbar-footer {
 	position: absolute;
 	bottom: -1px;
@@ -12038,7 +12050,8 @@ input[type=submit].btn.btn-mini {
 }
 
 .sui-modal.fade.in {
-	top: 50%
+	/*top: 50%*/
+	top: 15%;
 }
 
 .sui-modal .modal-header {
@@ -13098,9 +13111,9 @@ input[type=submit].btn.btn-mini {
 	float: left
 }
 
-.hide {
-	display: none
-}
+/*.hide {*/
+/*	display: none*/
+/*}*/
 
 .show {
 	display: block

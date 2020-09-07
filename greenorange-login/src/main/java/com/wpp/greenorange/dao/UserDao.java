@@ -55,4 +55,21 @@ public interface UserDao {
      */
     Integer deleteById(Integer id);
 
+    /*
+     * @param email 邮箱
+     * @return User
+     */
+    User findByemail(String email);
+
+    /*
+     * @param phone 手机号
+     * @return User
+     */
+    User findByphone(String phone);
+
+    /*
+     * @param name 用户名
+     * @return User
+     */
+    User findByname(String name);
 }
