@@ -2,15 +2,16 @@ package com.wpp.greenorange.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * (Goods)实体类
  *
  * @author 吴鹏鹏ppp
- * @since 2020-09-04 02:29:29
+ * @since 2020-09-06 23:13:34
  */
 public class Goods implements Serializable {
-    private static final long serialVersionUID = 615905797717511924L;
+    private static final long serialVersionUID = -97445866589391238L;
     /**
      * 主键id
      */
@@ -19,10 +20,6 @@ public class Goods implements Serializable {
      * 分类id
      */
     private Integer categoryId;
-    /**
-     * 标题
-     */
-    private String title;
     /**
      * 商品名
      */
@@ -36,6 +33,14 @@ public class Goods implements Serializable {
      */
     private Integer saleCount;
     /**
+     * 参数列表
+     */
+    private String params;
+    /**
+     * 介绍图片(介绍资源)
+     */
+    private String introduceData;
+    /**
      * 好评数
      */
     private Integer goodEvaluate;
@@ -44,13 +49,9 @@ public class Goods implements Serializable {
      */
     private Integer badEvaluate;
     /**
-     * 尺寸，大小
-     */
-    private String size;
-    /**
      * 最低价
      */
-    private Float minprice;
+    private Float minPrice;
     /**
      * 是否删除（逻辑删除）
      */
@@ -63,7 +64,18 @@ public class Goods implements Serializable {
      * 最近一次修改时间
      */
     private Date updateTime;
+    /**
+     * sku列表
+     */
+    private List<GoodsSku> skuList;
 
+    public List<GoodsSku> getSkuList() {
+        return skuList;
+    }
+
+    public void setSkuList(List<GoodsSku> skuList) {
+        this.skuList = skuList;
+    }
 
     public Integer getId() {
         return id;
@@ -79,14 +91,6 @@ public class Goods implements Serializable {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getName() {
@@ -113,6 +117,22 @@ public class Goods implements Serializable {
         this.saleCount = saleCount;
     }
 
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
+
+    public String getIntroduceData() {
+        return introduceData;
+    }
+
+    public void setIntroduceData(String introduceData) {
+        this.introduceData = introduceData;
+    }
+
     public Integer getGoodEvaluate() {
         return goodEvaluate;
     }
@@ -129,20 +149,12 @@ public class Goods implements Serializable {
         this.badEvaluate = badEvaluate;
     }
 
-    public String getSize() {
-        return size;
+    public Float getMinPrice() {
+        return minPrice;
     }
 
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public Float getMinprice() {
-        return minprice;
-    }
-
-    public void setMinprice(Float minprice) {
-        this.minprice = minprice;
+    public void setMinPrice(Float minPrice) {
+        this.minPrice = minPrice;
     }
 
     public Boolean getDeleted() {
