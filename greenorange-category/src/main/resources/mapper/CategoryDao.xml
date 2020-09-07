@@ -9,10 +9,10 @@
         <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-        <collection property="categories"
-                    select="findCategorys"
-                    column="id">
-        </collection>
+<!--        <collection property="categories"-->
+<!--                    select="findCategorys"-->
+<!--                    column="id">-->
+<!--        </collection>-->
     </resultMap>
 
     <!--级联查询所有数据-->
@@ -20,7 +20,7 @@
         select
           id, parent_id, name, deleted, create_time, update_time
         from greenorange.tb_category
-        where parent_id = #{id}
+--         where parent_id = #{id}
 --         and deleted = false
     </select>
     <!--查询单个-->
