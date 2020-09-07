@@ -1,5 +1,7 @@
 package com.wpp.greenorange.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.dao.CategoryDao;
 import com.wpp.greenorange.domain.Category;
 import com.wpp.greenorange.service.CategoryService;
@@ -72,5 +74,19 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Boolean deleteById(Integer id) {
         return this.categoryDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public PageInfo<Category> findCategoryLimit(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        Category category = new Category();
+        category.setDeleted(true);
+        List<Category> list = categoryDao.findAllByCondition(category);
+        return PageInfo.of(list, 3);
+    }
+
+    @Override
+    public List<Category> findCategorys(Integer id) {
+        return categoryDao.findCategorys(id);
     }
 }
