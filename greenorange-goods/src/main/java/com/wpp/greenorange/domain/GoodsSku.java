@@ -7,10 +7,10 @@ import java.util.Date;
  * (GoodsSku)实体类
  *
  * @author 吴鹏鹏ppp
- * @since 2020-09-04 02:29:30
+ * @since 2020-09-06 12:17:40
  */
 public class GoodsSku implements Serializable {
-    private static final long serialVersionUID = 730701029185268015L;
+    private static final long serialVersionUID = -25101515350189499L;
     /**
      * 主键id
      */
@@ -20,13 +20,9 @@ public class GoodsSku implements Serializable {
      */
     private Integer goodsId;
     /**
-     * 颜色id
+     * 标题
      */
-    private Integer colorId;
-    /**
-     * 颜色代码，json格式
-     */
-    private String color;
+    private String title;
     /**
      * sku参数
      */
@@ -51,7 +47,26 @@ public class GoodsSku implements Serializable {
      * 最近一次修改时间
      */
     private Date updateTime;
+    /**
+     * 展示图片
+     */
+    private String showImg;
 
+    @Override
+    public String toString() {
+        return "GoodsSku{" +
+                "id=" + id +
+                ", goodsId=" + goodsId +
+                ", title='" + title + '\'' +
+                ", skuEdition='" + skuEdition + '\'' +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", deleted=" + deleted +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", showImg='" + showImg + '\'' +
+                '}';
+    }
 
     public Integer getId() {
         return id;
@@ -69,20 +84,12 @@ public class GoodsSku implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public Integer getColorId() {
-        return colorId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setColorId(Integer colorId) {
-        this.colorId = colorId;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getSkuEdition() {
@@ -131,6 +138,14 @@ public class GoodsSku implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getShowImg() {
+        return showImg;
+    }
+
+    public void setShowImg(String showImg) {
+        this.showImg = showImg;
     }
 
 }

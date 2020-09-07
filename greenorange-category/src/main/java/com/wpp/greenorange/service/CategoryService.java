@@ -1,5 +1,6 @@
 package com.wpp.greenorange.service;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Category;
 
 import java.util.List;
@@ -52,4 +53,18 @@ public interface CategoryService {
      */
     Boolean deleteById(Integer id);
 
+    /**
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    PageInfo<Category> findCategoryLimit(Integer pageNum, Integer pageSize);
+
+    /**
+     * 级联查询所有数据
+     * @param id
+     * @return
+     */
+    List<Category> findCategorys(Integer id);
 }

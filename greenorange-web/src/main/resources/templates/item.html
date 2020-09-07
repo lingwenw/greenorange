@@ -1,16 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 	<title>产品详情页</title>
-	<link rel="icon" href="./img/favicon.ico">
+	<link rel="icon" href="../img/favicon.ico">
 
-	<link rel="stylesheet" type="text/css" href="./css/all.css" />
-	<link rel="stylesheet" type="text/css" href="./css/pages-item.css" />
-	<link rel="stylesheet" type="text/css" href="./css/pages-zoom.css" />
+	<link rel="stylesheet" type="text/css" href="../css/all.css" />
+	<link rel="stylesheet" type="text/css" href="../css/pages-item.css" />
+	<link rel="stylesheet" type="text/css" href="../css/pages-zoom.css" />
+	<style>
+		.goods-intro{
+			margin: 20px 0;
+		}
+		.goods-intro>li{
+			width: 200px;
+			padding-left: 35px;
+			display: inline-block;
+		}
+		.zoomdiv img{
+			width: 800px;
+			height: 800px;
+		}
+	</style>
 </head>
 
 <body>
@@ -25,9 +39,9 @@
 						<ul class="fl">
 							<li class="f-item">青橙欢迎您！</li>
 							<li class="f-item">请
-								<a href="login.html" target="_blank">登录</a>
+								<a href="../login.html" target="_blank">登录</a>
 								<span>
-									<a href="register.html" target="_blank">免费注册</a>
+									<a href="../register.html" target="_blank">免费注册</a>
 								</span>
 							</li>
 						</ul>
@@ -39,12 +53,12 @@
 
 								<li class="f-item">
 									<span>
-										<a href="cart.html" target="_blank">我的购物车</a>
+										<a href="../cart.html" target="_blank">我的购物车</a>
 									</span>
 								</li>
 								<li class="f-item">
 									<span>
-										<a href="home.html" target="_blank">我的青橙</a>
+										<a href="../home.html" target="_blank">我的青橙</a>
 									</span>
 								</li>
 								<li class="f-item">
@@ -58,7 +72,7 @@
 								</li>
 								<li class="f-item">
 									<span>
-										<a href="cooperation.html" target="_blank">合作招商</a>
+										<a href="../cooperation.html" target="_blank">合作招商</a>
 									</span>
 								</li>
 								<li class="f-item">
@@ -67,7 +81,7 @@
 									</span>
 								</li>
 								<li class="f-item">
-									<span>网站导航</li>
+									<span>网站导航</span></li>
 							</ul>
 						</div>
 
@@ -80,7 +94,7 @@
 				<div class="py-container">
 					<div class="yui3-g Logo">
 						<div class="yui3-u Left logoArea">
-							<a class="logo-bd" title="青橙" href="index.html" target="_blank"></a>
+							<a class="logo-bd" title="青橙" href="../index.html" target="_blank"></a>
 						</div>
 						<div class="yui3-u Rit searchArea">
 							<div class="search">
@@ -1804,7 +1818,7 @@
 						<li class="f-item">团购</li>
 						<li class="f-item">有趣</li>
 						<li class="f-item">
-							<a href="seckill-index.html" target="_blank">秒杀</a>
+							<a href="../seckill-index.html" target="_blank">秒杀</a>
 						</li>
 					</ul>
 				</div>
@@ -1836,7 +1850,7 @@
 						<!--默认第一个预览-->
 						<div id="preview" class="spec-preview">
 							<span class="jqzoom">
-								<img jqimg="./img/_/b1.png" src="./img/_/s1.png" />
+								<img th:jqimg="'../img/goods_img/'+${imgs[0]}" th:src="'../img/goods_img/'+${imgs[0]}" width="400" height="400" />
 							</span>
 						</div>
 						<!--下方的缩略图-->
@@ -1845,32 +1859,8 @@
 							<!--左右按钮-->
 							<div class="items">
 								<ul>
-									<li>
-										<img src="./img/_/s1.png" bimg="./img/_/b1.png" onmousemove="preview(this)" />
-									</li>
-									<li>
-										<img src="./img/_/s2.png" bimg="./img/_/b2.png" onmousemove="preview(this)" />
-									</li>
-									<li>
-										<img src="./img/_/s3.png" bimg="./img/_/b3.png" onmousemove="preview(this)" />
-									</li>
-									<li>
-										<img src="./img/_/s1.png" bimg="./img/_/b1.png" onmousemove="preview(this)" />
-									</li>
-									<li>
-										<img src="./img/_/s2.png" bimg="./img/_/b2.png" onmousemove="preview(this)" />
-									</li>
-									<li>
-										<img src="./img/_/s3.png" bimg="./img/_/b3.png" onmousemove="preview(this)" />
-									</li>
-									<li>
-										<img src="./img/_/s1.png" bimg="./img/_/b1.png" onmousemove="preview(this)" />
-									</li>
-									<li>
-										<img src="./img/_/s2.png" bimg="./img/_/b2.png" onmousemove="preview(this)" />
-									</li>
-									<li>
-										<img src="./img/_/s3.png" bimg="./img/_/b3.png" onmousemove="preview(this)" />
+									<li th:each="img:${imgs}">
+										<img th:src="'../img/goods_img/'+${img}" th:bimg="'../img/goods_img/'+${img}" onmousemove="preview(this)" />
 									</li>
 								</ul>
 							</div>
@@ -1880,10 +1870,10 @@
 				</div>
 				<div class="fr itemInfo-wrap">
 					<div class="sku-name">
-						<h4>Apple iPhone 6s（A1700）64G玫瑰金色 移动通信电信4G手机</h4>
+						<h4 th:text="${sku.title}"></h4>
 					</div>
 					<div class="news">
-						<span>推荐选择下方[移动优惠购],手机套餐齐搞定,不用换号,每月还有花费返</span>
+						<span th:utext="${goods.sellPoint}"></span>
 					</div>
 					<div class="summary">
 						<div class="summary-wrap">
@@ -1892,7 +1882,7 @@
 							</div>
 							<div class="fl price">
 								<i>¥</i>
-								<em>5299.00</em>
+								<em th:text="${#numbers.formatDecimal(sku.price,0,2)}"></em>
 								<span>降价通知</span>
 							</div>
 							<div class="fr remark">
@@ -1930,90 +1920,19 @@
 					</div>
 					<div class="clearfix choose">
 						<div id="specification" class="summary-wrap clearfix">
-							<dl>
+							<dl th:each="edition:${editionMap}">
 								<dt>
 									<div class="fl title">
-										<i>选择颜色</i>
+										<i th:text="${edition.key}"></i>
 									</div>
 								</dt>
-								<dd>
-									<a href="javascript:;" class="selected">金色
+								<dd th:each="editionValue:${edition.value}">
+									<a th:href="${editionValue.url==null?'javascript:void(0);':editionValue.url}"
+									   th:class="${editionValue.url==null?'locked':editionValue.checked?'selected':''}"
+									   th:text="${editionValue.option}">
 										<span title="点击取消选择">&nbsp;</span>
 									</a>
 								</dd>
-								<dd>
-									<a href="javascript:;">银色</a>
-								</dd>
-								<dd>
-									<a href="javascript:;">黑色</a>
-								</dd>
-							</dl>
-							<dl>
-								<dt>
-									<div class="fl title">
-										<i>内存容量</i>
-									</div>
-								</dt>
-								<dd>
-									<a href="javascript:;" class="selected">16G
-										<span title="点击取消选择">&nbsp;</span>
-									</a>
-								</dd>
-								<dd>
-									<a href="javascript:;">64G</a>
-								</dd>
-								<dd>
-									<a href="javascript:;" class="locked">128G</a>
-								</dd>
-							</dl>
-							<dl>
-								<dt>
-									<div class="fl title">
-										<i>选择版本</i>
-									</div>
-								</dt>
-								<dd>
-									<a href="javascript:;" class="selected">公开版
-										<span title="点击取消选择">&nbsp;</span>
-									</a>
-								</dd>
-								<dd>
-									<a href="javascript:;">移动版</a>
-								</dd>
-							</dl>
-							<dl>
-								<dt>
-									<div class="fl title">
-										<i>购买方式</i>
-									</div>
-								</dt>
-								<dd>
-									<a href="javascript:;" class="selected">官方标配
-										<span title="点击取消选择">&nbsp;</span>
-									</a>
-								</dd>
-								<dd>
-									<a href="javascript:;">移动优惠版</a>
-								</dd>
-								<dd>
-									<a href="javascript:;" class="locked">电信优惠版</a>
-								</dd>
-							</dl>
-							<dl>
-								<dt>
-									<div class="fl title">
-										<i>套　　装</i>
-									</div>
-								</dt>
-								<dd>
-									<a href="javascript:;" class="selected">保护套装
-										<span title="点击取消选择">&nbsp;</span>
-									</a>
-								</dd>
-								<dd>
-									<a href="javascript:;" class="locked">充电套装</a>
-								</dd>
-
 							</dl>
 						</div>
 
@@ -2030,7 +1949,7 @@
 							<div class="fl">
 								<ul class="btn-choose unstyled">
 									<li>
-										<a href="cart.html" target="_blank" class="sui-btn  btn-danger addshopcar">加入购物车</a>
+										<a href="../cart.html" target="_blank" class="sui-btn  btn-danger addshopcar">加入购物车</a>
 									</li>
 								</ul>
 							</div>
@@ -2069,7 +1988,7 @@
 								<li>
 									<div class="list-wrap">
 										<div class="p-img">
-											<img src="./img/_/part01.png" />
+											<img src="../img/_/part01.png" />
 										</div>
 										<div class="attr">
 											<em>Apple苹果iPhone 6s (A1699)</em>
@@ -2088,7 +2007,7 @@
 								<li>
 									<div class="list-wrap">
 										<div class="p-img">
-											<img src="./img/_/part02.png" />
+											<img src="../img/_/part02.png" />
 										</div>
 										<div class="attr">
 											<em>Apple苹果iPhone 6s (A1699)</em>
@@ -2107,7 +2026,7 @@
 								<li>
 									<div class="list-wrap">
 										<div class="p-img">
-											<img src="./img/_/part03.png" />
+											<img src="../img/_/part03.png" />
 										</div>
 										<div class="attr">
 											<em>Apple苹果iPhone 6s (A1699)</em>
@@ -2124,7 +2043,7 @@
 									</div>
 									<div class="list-wrap">
 										<div class="p-img">
-											<img src="./img/_/part02.png" />
+											<img src="../img/_/part02.png" />
 										</div>
 										<div class="attr">
 											<em>Apple苹果iPhone 6s (A1699)</em>
@@ -2141,7 +2060,7 @@
 									</div>
 									<div class="list-wrap">
 										<div class="p-img">
-											<img src="./img/_/part03.png" />
+											<img src="../img/_/part03.png" />
 										</div>
 										<div class="attr">
 											<em>Apple苹果iPhone 6s (A1699)</em>
@@ -2171,7 +2090,7 @@
 							<div class="fl master">
 								<div class="list-wrap">
 									<div class="p-img">
-										<img src="./img/_/l-m01.png" />
+										<img src="../img/_/l-m01.png" />
 									</div>
 									<em>￥5299</em>
 									<i>+</i>
@@ -2181,7 +2100,7 @@
 								<ul class="suit-list">
 									<li class="">
 										<div id="">
-											<img src="./img/_/dp01.png" />
+											<img src="../img/_/dp01.png" />
 										</div>
 										<i>Feless费勒斯VR</i>
 										<label data-toggle="checkbox" class="checkbox-pretty">
@@ -2191,7 +2110,7 @@
 									</li>
 									<li class="">
 										<div id="">
-											<img src="./img/_/dp02.png" /> </div>
+											<img src="../img/_/dp02.png" /> </div>
 										<i>Feless费勒斯VR</i>
 										<label data-toggle="checkbox" class="checkbox-pretty">
 											<input type="checkbox">
@@ -2200,7 +2119,7 @@
 									</li>
 									<li class="">
 										<div id="">
-											<img src="./img/_/dp03.png" />
+											<img src="../img/_/dp03.png" />
 										</div>
 										<i>Feless费勒斯VR</i>
 										<label data-toggle="checkbox" class="checkbox-pretty">
@@ -2210,7 +2129,7 @@
 									</li>
 									<li class="">
 										<div id="">
-											<img src="./img/_/dp04.png" />
+											<img src="../img/_/dp04.png" />
 										</div>
 										<i>Feless费勒斯VR</i>
 										<label data-toggle="checkbox" class="checkbox-pretty">
@@ -2262,25 +2181,10 @@
 						<div class="tab-content tab-wraped">
 							<div id="one" class="tab-pane active">
 								<ul class="goods-intro unstyled">
-									<li>分辨率：1920*1080(FHD)</li>
-									<li>后置摄像头：1200万像素</li>
-									<li>前置摄像头：500万像素</li>
-									<li>核 数：其他</li>
-									<li>频 率：以官网信息为准</li>
-									<li>品牌： Apple</li>
-									<li>商品名称：APPLEiPhone 6s Plus</li>
-									<li>商品编号：1861098</li>
-									<li>商品毛重：0.51kg</li>
-									<li>商品产地：中国大陆</li>
-									<li>热点：指纹识别，Apple Pay，金属机身，拍照神器</li>
-									<li>系统：苹果（IOS）</li>
-									<li>像素：1000-1600万</li>
-									<li>机身内存：64GB</li>
+									<li th:each="param:${params}" th:text="${param.key}+' : '+${param.value}"></li>
 								</ul>
-								<div class="intro-detail">
-									<img src="./img/_/intro01.png" />
-									<img src="./img/_/intro02.png" />
-									<img src="./img/_/intro03.png" />
+								<div class="intro-detail" style="text-align: center">
+									<img th:each="introduce:${introduces}" th:src="'../img/goods_img/'+${introduce}" />
 								</div>
 							</div>
 							<div id="two" class="tab-pane">
@@ -2322,7 +2226,7 @@
 											<div class="com-item">
 												<div class="user-column">
 													<div class="username">
-														<img src="./img/_/photo.jpg" />用户****1</div>
+														<img src="../img/_/photo.jpg" />用户****1</div>
 													<div class="usernum">品享值258698</div>
 												</div>
 												<div class="user-info">
@@ -2347,7 +2251,7 @@
 											<div class="com-item">
 												<div class="user-column">
 													<div class="username">
-														<img src="./img/_/photo.jpg" />用户****1</div>
+														<img src="../img/_/photo.jpg" />用户****1</div>
 													<div class="usernum">品享值258698</div>
 												</div>
 												<div class="user-info">
@@ -2372,7 +2276,7 @@
 											<div class="com-item">
 												<div class="user-column">
 													<div class="username">
-														<img src="./img/_/photo.jpg" />用户****1</div>
+														<img src="../img/_/photo.jpg" />用户****1</div>
 													<div class="usernum">品享值258698</div>
 												</div>
 												<div class="user-info">
@@ -2397,7 +2301,7 @@
 											<div class="com-item">
 												<div class="user-column">
 													<div class="username">
-														<img src="./img/_/photo.jpg" />用户****1</div>
+														<img src="../img/_/photo.jpg" />用户****1</div>
 													<div class="usernum">品享值258698</div>
 												</div>
 												<div class="user-info">
@@ -2422,7 +2326,7 @@
 											<div class="com-item">
 												<div class="user-column">
 													<div class="username">
-														<img src="./img/_/photo.jpg" />用户****1</div>
+														<img src="../img/_/photo.jpg" />用户****1</div>
 													<div class="usernum">品享值258698</div>
 												</div>
 												<div class="user-info">
@@ -2464,7 +2368,7 @@
 						<li class="yui3-u-1-6">
 							<div class="list-wrap">
 								<div class="p-img">
-									<img src="./img/_/itemlike01.png" />
+									<img src="../img/_/itemlike01.png" />
 								</div>
 								<div class="attr">
 									<em>DELL戴尔Ins 15MR-7528SS 15英寸 银色 笔记本</em>
@@ -2483,7 +2387,7 @@
 						<li class="yui3-u-1-6">
 							<div class="list-wrap">
 								<div class="p-img">
-									<img src="./img/_/itemlike02.png" />
+									<img src="../img/_/itemlike02.png" />
 								</div>
 								<div class="attr">
 									<em>Apple苹果iPhone 6s/6s Plus 16G 64G 128G</em>
@@ -2502,7 +2406,7 @@
 						<li class="yui3-u-1-6">
 							<div class="list-wrap">
 								<div class="p-img">
-									<img src="./img/_/itemlike03.png" />
+									<img src="../img/_/itemlike03.png" />
 								</div>
 								<div class="attr">
 									<em>DELL戴尔Ins 15MR-7528SS 15英寸 银色 笔记本</em>
@@ -2521,7 +2425,7 @@
 						<li class="yui3-u-1-6">
 							<div class="list-wrap">
 								<div class="p-img">
-									<img src="./img/_/itemlike04.png" />
+									<img src="../img/_/itemlike04.png" />
 								</div>
 								<div class="attr">
 									<em>DELL戴尔Ins 15MR-7528SS 15英寸 银色 笔记本</em>
@@ -2540,7 +2444,7 @@
 						<li class="yui3-u-1-6">
 							<div class="list-wrap">
 								<div class="p-img">
-									<img src="./img/_/itemlike05.png" />
+									<img src="../img/_/itemlike05.png" />
 								</div>
 								<div class="attr">
 									<em>DELL戴尔Ins 15MR-7528SS 15英寸 银色 笔记本</em>
@@ -2559,7 +2463,7 @@
 						<li class="yui3-u-1-6">
 							<div class="list-wrap">
 								<div class="p-img">
-									<img src="./img/_/itemlike06.png" />
+									<img src="../img/_/itemlike06.png" />
 								</div>
 								<div class="attr">
 									<em>DELL戴尔Ins 15MR-7528SS 15英寸 银色 笔记本</em>
@@ -2689,7 +2593,7 @@
 						</div>
 						<div class="yui3-u-1-6">
 							<h4>帮助中心</h4>
-							<img src="./img/wx_cz.jpg">
+							<img src="../img/wx_cz.jpg">
 						</div>
 					</div>
 				</div>
@@ -2873,10 +2777,10 @@
 		</div>
 	</div>
 
-	<script type="text/javascript" src="./js/plugins/jquery/jquery.min.js"></script>
-	<script type="text/javascript" src="./js/plugins/sui/sui.min.js"></script>
-	<script type="text/javascript" src="./js/plugins/jquery.jqzoom/jquery.jqzoom.js"></script>
-	<script type="text/javascript" src="./js/plugins/jquery.jqzoom/zoom.js"></script>
+	<script type="text/javascript" src="../js/plugins/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/plugins/sui/sui.min.js"></script>
+	<script type="text/javascript" src="../js/plugins/jquery.jqzoom/jquery.jqzoom.js"></script>
+	<script type="text/javascript" src="../js/plugins/jquery.jqzoom/zoom.js"></script>
 </body>
 
 </html>

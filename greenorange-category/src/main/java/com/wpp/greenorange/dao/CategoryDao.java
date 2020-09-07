@@ -55,4 +55,11 @@ public interface CategoryDao {
      */
     Integer deleteById(Integer id);
 
+    /**
+     * 级联查询所有数据
+     * @param id
+     * @return
+     */
+    List<Category> findCategorys(Integer id);
+
 }
