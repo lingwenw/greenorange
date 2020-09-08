@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
 	<meta charset="UTF-8">
@@ -22,21 +22,23 @@
 			<div class="py-container">
 				<div class="shortcut">
 					<ul class="fl">
-						<li class="f-item">青橙欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+<!--						<li class="f-item">青橙欢迎您！</li>-->
+<!--						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>-->
+						<li class="f-item"><label th:text="${session.loginUser}">,.青橙欢迎您！</label></li>
+
 					</ul>
 					<div class="fr typelist">
 						<ul class="types">
 							<li class="f-item"><span>我的订单</span></li>
-							
+
 							<li class="f-item"><span><a href="cart.html" target="_blank">我的购物车</a></span></li>
-							<li class="f-item"><span><a href="home.html" target="_blank">我的青橙</a></span></li>			
-							<li class="f-item"><span>青橙会员</span></li>						
-							<li class="f-item"><span>企业采购</span></li>						
+							<li class="f-item"><span><a href="home.html" target="_blank">我的青橙</a></span></li>
+							<li class="f-item"><span>青橙会员</span></li>
+							<li class="f-item"><span>企业采购</span></li>
 							<li class="f-item"><span>关注青橙</span></li>
 							<li class="f-item"><span><a href="cooperation.html" target="_blank">合作招商</a></span></li>
-							<li class="f-item"><span><a href="shoplogin.html" target="_blank">商家后台</a></span></li>				
-							<li class="f-item"><span>网站导航</li>
+							<li class="f-item"><span><a href="shoplogin.html" target="_blank">商家后台</a></span></li>
+							<li class="f-item"><span>网站导航</span></li>
 						</ul>
 					</div>
 					

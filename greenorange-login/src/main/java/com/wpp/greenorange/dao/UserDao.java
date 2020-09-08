@@ -55,21 +55,58 @@ public interface UserDao {
      */
     Integer deleteById(Integer id);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*
      * @param email 邮箱
+     * 通过邮箱查询
      * @return User
      */
-    User findByemail(String email);
+    User findByemail(String Email,String password);
 
     /*
      * @param phone 手机号
+     * 通过手机号查询
      * @return User
      */
-    User findByphone(String phone);
+    User findByphone(String Phone,String password);
 
     /*
      * @param name 用户名
+     * 通过用户名查询
      * @return User
      */
-    User findByname(String name);
+    User findByname(String Name,String password);
+
+
+    /**
+     * 添加普通用户
+     *
+     * @param user 实体注册user
+     * @return 影响行数
+     */
+    int insertUser(User user);
+
+    /*
+     * @param eamil 邮箱
+     * @return
+     */
+    int registerFindByemail(String email);
+
+    /*
+     * @param phone 手机
+     * @return
+     */
+    int registerFindByphone(String phone);
 }
