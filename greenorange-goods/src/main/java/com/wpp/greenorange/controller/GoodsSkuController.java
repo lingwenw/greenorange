@@ -1,5 +1,6 @@
 package com.wpp.greenorange.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.service.GoodsSkuService;
 import org.springframework.web.bind.annotation.RequestMapping;
