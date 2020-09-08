@@ -33,4 +33,14 @@ public class AddressController {
         return this.addressService.findById(id);
     }
 
+    /**
+     *
+     * @param address
+     * @return
+     */
+    @RequestMapping("/SetName")
+    public Address SetName(Address address) {
+//        return this.addressService.insert(address);
+        return null;
+    }
 }

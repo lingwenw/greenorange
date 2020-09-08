@@ -3,19 +3,50 @@
 // }
 
 /*商品分类*/
-$(function() {
-	$('.all-sort-list2 > .item').hover(function() {
-		//父类分类列表容器的高度
+$(function () {
+    function bindEvent() {
+        console.log($('.all-sort-list2 > .item'))
+        $('.all-sort-list2 > .item').hover(function () {
+            //父类分类列表容器的高度
 
-		$(this).addClass('hover');
-		$(this).children('.item-list').css('display', 'block');
-	}, function() {
-		$(this).removeClass('hover');
-		$(this).children('.item-list').css('display', 'none');
-	});
+            $(this).addClass('hover');
+            $(this).children('.item-list').css('display', 'block');
+        }, function () {
+            $(this).removeClass('hover');
+            $(this).children('.item-list').css('display', 'none');
+        });
 
-	$('.item > .item-list > .close').click(function() {
-		$(this).parent().parent().removeClass('hover');
-		$(this).parent().hide();
-	});
+        $('.item > .item-list > .close').click(function () {
+            $(this).parent().parent().removeClass('hover');
+            $(this).parent().hide();
+        });
+    }
+
+    new Vue({
+        el: ".sort",
+        data: {
+            sites: []
+        },
+        methods: {
+            findAll: function () {
+                var _this = this;
+                axios.get("/category/findCategorys")
+                    .then(function (resp) {
+                        console.log(resp)
+                        _this.sites = resp.data;
+                    })
+                    .catch(function (resp) {
+                        console.log("服务器繁忙")
+                    })
+            }
+        },
+        created: function () {
+            this.findAll();
+        },
+        updated: function () {
+            bindEvent();
+        }
+    })
+
+
 });

@@ -33,4 +33,9 @@ public class UserController {
         return this.userService.findById(id);
     }
 
+    @RequestMapping("/findByIDemailOrUserNameOrphone/{}")
+    public User findByIDemailOrUserNameOrphone(User user){
+
+        return null;
+    }
 }

@@ -1,8 +1,10 @@
 package com.wpp.greenorange.service;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Category;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品类目(Category)表服务接口
@@ -52,4 +54,18 @@ public interface CategoryService {
      */
     Boolean deleteById(Integer id);
 
+    /**
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    PageInfo<Category> findCategoryLimit(Integer pageNum, Integer pageSize);
+
+    /**
+     * 级联查询所有数据
+     * @param
+     * @return
+     */
+    List<Map> findCategorys();
 }
