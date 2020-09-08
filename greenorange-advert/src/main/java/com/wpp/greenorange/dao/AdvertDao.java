@@ -31,6 +31,7 @@ public interface AdvertDao {
      */
     List<Advert> findAllByCondition(Advert advert);
 
+
     /**
      * 新增数据
      *

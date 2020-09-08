@@ -1,11 +1,15 @@
 package com.wpp.greenorange.controller;
 
+import com.google.gson.Gson;
 import com.wpp.greenorange.domain.Advert;
 import com.wpp.greenorange.service.AdvertService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * (Advert)表控制层
@@ -31,6 +35,18 @@ public class AdvertController {
     @RequestMapping("/getOne")
     public Advert getOne(Integer id) {
         return this.advertService.findById(id);
+    }
+
+    /**
+     *
+     * @return查询全部数据返回页面
+     */
+    @RequestMapping("/getAllByPositionId")
+    public List getAllByPid(Integer PositionId) {
+        Advert advert=new Advert();
+        advert.setPositionId(PositionId);
+        List<Advert> allByCondition = advertService.findAllByCondition(advert);
+        return allByCondition;
     }
 
 }
