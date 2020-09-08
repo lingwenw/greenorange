@@ -103,6 +103,8 @@ public class CategoryServiceImpl implements CategoryService {
         for (Category category : categories) {
             if (category.getParentId() == pid) {
                 HashMap<Object, Object> map = new HashMap<>();
+                map.put("id",category.getId());
+                map.put("pid",category.getParentId());
                 map.put("name", category.getName());
                 map.put("list", test(categories, category.getId()));
                 list.add(map);
