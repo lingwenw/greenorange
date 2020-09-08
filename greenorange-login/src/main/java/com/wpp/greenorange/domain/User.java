@@ -10,7 +10,7 @@ import java.util.Date;
  * @since 2020-09-04 02:28:43
  */
 public class User implements Serializable {
-    private static final long serialVersionUID = -32286290120620000L;
+    private static final Long serialVersionUID = -32286290120620000L;
     /**
      * 主键id
      */

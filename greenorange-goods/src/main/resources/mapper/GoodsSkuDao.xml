@@ -5,20 +5,29 @@
     <resultMap type="com.wpp.greenorange.domain.GoodsSku" id="goodsSkuMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="goodsId" column="goods_id" jdbcType="INTEGER"/>
-        <result property="colorId" column="color_id" jdbcType="INTEGER"/>
-        <result property="color" column="color" jdbcType="VARCHAR"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
         <result property="skuEdition" column="sku_edition" jdbcType="VARCHAR"/>
         <result property="price" column="price" jdbcType="NUMERIC"/>
         <result property="stock" column="stock" jdbcType="INTEGER"/>
         <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="showImg" column="show_img" jdbcType="VARCHAR"/>
     </resultMap>
+
+
+    <!--根据goodsId查询全部商品-->
+    <select id="findAllByGoodsId" resultMap="goodsSkuMap">
+        select
+          id, goods_id, title, sku_edition, price, stock, deleted, create_time, update_time, show_img
+        from greenorange.tb_goods_sku
+        where goods_id = #{goodsId}
+    </select>
 
     <!--查询单个-->
     <select id="findById" resultMap="goodsSkuMap">
         select
-          id, goods_id, color_id, color, sku_edition, price, stock, deleted, create_time, update_time
+          id, goods_id, title, sku_edition, price, stock, deleted, create_time, update_time, show_img
         from greenorange.tb_goods_sku
         where id = #{id}
     </select>
@@ -27,7 +36,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="findAllByCondition" resultMap="goodsSkuMap">
         select
-        id, goods_id, color_id, color, sku_edition, price, stock, deleted, create_time, update_time
+        id, goods_id, title, sku_edition, price, stock, deleted, create_time, update_time, show_img
         from greenorange.tb_goods_sku
         <where>
             <if test="id != null">
@@ -36,11 +45,8 @@
             <if test="goodsId != null">
                 and goods_id = #{goodsId}
             </if>
-            <if test="colorId != null">
-                and color_id = #{colorId}
-            </if>
-            <if test="color != null and color != ''">
-                and color = #{color}
+            <if test="title != null and title != ''">
+                and title = #{title}
             </if>
             <if test="skuEdition != null and skuEdition != ''">
                 and sku_edition = #{skuEdition}
@@ -60,13 +66,16 @@
             <if test="updateTime != null">
                 and update_time = #{updateTime}
             </if>
+            <if test="showImg != null and showImg != ''">
+                and show_img = #{showImg}
+            </if>
         </where>
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_goods_sku(goods_id, color_id, color, sku_edition, price, stock, deleted, create_time, update_time)
-        values (#{goodsId}, #{colorId}, #{color}, #{skuEdition}, #{price}, #{stock}, #{deleted}, #{createTime}, #{updateTime})
+        insert into greenorange.tb_goods_sku(goods_id, sku_edition, price, stock, deleted, create_time, update_time)
+        values (#{goodsId}, #{skuEdition}, #{price}, #{stock}, #{deleted}, #{createTime}, #{updateTime})
     </insert>
 
     <!--通过主键修改数据-->
@@ -75,12 +84,6 @@
         <set>
             <if test="goodsId != null">
                 goods_id = #{goodsId},
-            </if>
-            <if test="colorId != null">
-                color_id = #{colorId},
-            </if>
-            <if test="color != null and color != ''">
-                color = #{color},
             </if>
             <if test="skuEdition != null and skuEdition != ''">
                 sku_edition = #{skuEdition},

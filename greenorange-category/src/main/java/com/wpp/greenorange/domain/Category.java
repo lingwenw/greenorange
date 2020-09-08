@@ -2,6 +2,7 @@ package com.wpp.greenorange.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 商品类目(Category)实体类
@@ -36,6 +37,19 @@ public class Category implements Serializable {
      */
     private Date updateTime;
 
+    /**
+     *
+     * 级联子目录
+     */
+    private List<Category> categories;
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
 
     public Integer getId() {
         return id;
@@ -85,4 +99,16 @@ public class Category implements Serializable {
         this.updateTime = updateTime;
     }
 
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", name='" + name + '\'' +
+                ", deleted=" + deleted +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", categories=" + categories +
+                '}';
+    }
 }

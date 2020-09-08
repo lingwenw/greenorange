@@ -14,6 +14,15 @@ import java.util.List;
 @Mapper
 public interface GoodsSkuDao {
 
+
+
+    /**
+     * 根据goods id查到全部的sku
+     * @param goodsId 商品id
+     * @return
+     */
+    List<GoodsSku> findAllByGoodsId(Integer goodsId);
+
     /**
      * 通过ID查询单条数据
      *

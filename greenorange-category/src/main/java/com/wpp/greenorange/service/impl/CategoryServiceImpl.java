@@ -1,12 +1,17 @@
 package com.wpp.greenorange.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.dao.CategoryDao;
 import com.wpp.greenorange.domain.Category;
 import com.wpp.greenorange.service.CategoryService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品类目(Category)表服务实现类
@@ -72,5 +77,49 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Boolean deleteById(Integer id) {
         return this.categoryDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public PageInfo<Category> findCategoryLimit(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        Category category = new Category();
+        category.setDeleted(true);
+        List<Category> list = categoryDao.findAllByCondition(category);
+        return PageInfo.of(list, 3);
+    }
+
+    /*获取商品分类数据*/
+    @Override
+    public List<Map> findCategorys() {
+        List<Category> categories = categoryDao.findAllByCondition(null);
+        System.out.println(categories.size());
+        List<Map> test = test(categories, 0);
+//        return categoryDao.findCategorys(id);
+        return test;
+    }
+
+    private List<Map> test(List<Category> categories, int pid) {
+        List<Map> list = new ArrayList<>();
+        for (Category category : categories) {
+            if (category.getParentId() == pid) {
+                HashMap<Object, Object> map = new HashMap<>();
+                map.put("name", category.getName());
+                map.put("list", test(categories, category.getId()));
+                list.add(map);
+            }
+        }
+        return list;
+//        for (int i = 0; i < categories.size(); i++) {
+//            Category category = categories.get(i);
+//            if (category.getParentId()==pid){
+//                HashMap<Object, Object> map = new HashMap<>();
+//                map.put("name",category.getName());
+//                map.put("list'",test(categories,category.getId()) );
+//                categories.remove(i);
+//                i--;
+//                list.add(map);
+//            }
+//        }
+
     }
 }
