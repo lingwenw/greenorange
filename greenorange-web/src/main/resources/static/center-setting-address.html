@@ -131,24 +131,24 @@
 								<th>操作</th>
 							</tr>
 							</thead>
-							<tbody>
-							<tr>
-								<td>刘田田</td>
-								<td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-								<td>1774***********4</td>
+							<tbody class="add_data">
+							<tr title="1">
+								<td name="contact" title="1">刘田田</td>
+								<td name="address">北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
+								<td name="mobile">1774***********4</td>
 								<td>
-									<a href="#">编辑</a>
-									<a href="#">删除</a>
+									<a class="edit-modify XiuGai_1" data-toggle="modal" data-target=".edit" data-keyboard="false" href="#">编辑</a>
+									<a class="edit-modify ShanChu_1" href="#">删除</a>
 									默认地址
 								</td>
 							</tr>
-							<tr>
-								<td>沈沉</td>
-								<td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-								<td>1774***********4</td>
+							<tr title="2">
+								<td name="contact" title="1">沈沉</td>
+								<td name="address">北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
+								<td name="mobile">1774***********4</td>
 								<td>
-									<a href="#">编辑</a>
-									<a href="#">删除</a>
+									<a class="edit-modify XiuGai_1" data-toggle="modal" data-target=".edit" data-keyboard="false" href="#">编辑</a>
+									<a class="edit-modify ShanChu_1" href="#">删除</a>
 									<a href="#">设为默认</a>
 								</td>
 							</tr>
@@ -165,11 +165,11 @@
 									<h4 id="myModalLabel" class="modal-title">新增地址</h4>
 								</div>
 								<div class="modal-body">
-									<form action="/address/SetName" class="sui-form form-horizontal">
+									<form action="" class="sui-form form-horizontal">
 										<div class="control-group">
 											<label class="control-label">收货人：</label>
 											<div class="controls">
-												<input type="text" name="contact" class="input-medium">
+												<input type="text" name="contact" class="input-medium input_name">
 											</div>
 										</div>
 										<div class="control-group">
@@ -186,11 +186,11 @@
 												<!--                                                    <select class="form-control" id="district1"></select>-->
 												<!--                                                </div>-->
 												<div class="docs-methods">
-													<form class="form-inline">
+<!--													<form class="form-inline">-->
 														<div id="distpicker">
 															<div class="form-group">
 																<div style="position: relative;">
-																	<input id="city-picker3" class="form-control" readonly type="text" value="" data-toggle="city-picker">
+																	<input id="city-picker3" name="address" class="form-control" readonly type="text" value="" data-toggle="city-picker">
 																</div>
 															</div>
 															<div class="form-group">
@@ -198,7 +198,7 @@
 																<button class="btn btn-danger" id="destroy" type="button">确定</button>
 															</div>
 														</div>
-													</form>
+<!--													</form>-->
 												</div>
 											</div>
 										</div>
@@ -214,7 +214,7 @@
 												<input type="text" name="mobile" class="input-medium input-telephone">
 											</div>
 										</div>
-										<div class="control-group">
+										<div class="control-group control-development">
 										      <label class="control-label">备注：</label>
 										        <div class="controls">
 										           	<input type="text" name="notes" class="input-medium input-remarks">
@@ -388,15 +388,113 @@
 <script type="text/javascript" src="./js/pages/addressMain.js"></script>
 
 <script>
-	$(".container").hide();
-	$(".btn-primary").click(function () {
-		var names=$(".input-medium").val();
-		var dizi1=$("#city-picker3").val();
-		var dizi2=$(".input-large").val();
-		var dizi=dizi1+"/"+dizi2;
-		var dianhua=$(".input-telephone").val();
-		alert(names+":"+dizi +":"+dianhua);
+	$(function () {
+		//
+		$(document).ready(function(){
+			$.ajax({ url:"/address/getConditions", success: function(data){
+					inits(data);
+				}});
+		});
+		$(".btn-info").click(function () {
+			$(".modal-title").text("新增地址");
+			$(".sui-form").attr("action","/address/SetAddress");
+			$(".input_name").val("");
+			$(".placeholder").val("");
+			$(".input-large").val("");
+			$(".input-telephone").val("");
+			$(".input-remarks").attr("name","notes");
+			$(".input-remarks").val("");
+			$(".control-development").show();
+		});
+		//
+		// $(".XiuGai_1").click(function () {
+		// 	XiuGai();
+		// });
+		$(".btn-primary").click(function () {
+			var titles=$(".modal-title").text();
+			var names=$(".input_name").val();
+			var diZi1=$("#city-picker3").val();
+			var diZi2=$(".input-large").val();
+			var diZi=diZi1+"/"+diZi2;
+			var dianHua=$(".input-telephone").val();
+			var beiZu=$(".input-remarks").val();
+			//
+			alert(titles=="新增地址");
+			alert(titles=="修改地址");
+			if (titles=="新增地址"){
+				$.ajax({ url:"/address/SetAddress",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"notes":beiZu}, success: function(data){
+						if (data){
+							$(".sui-close").click();
+							$.ajax({ url:"/address/getConditions", success: function(data){
+									inits(data);
+								}});
+						}
+					}});
+			} else if (titles=="修改地址"){
+				$.ajax({ url:"/address/update",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"id":beiZu}, success: function(data){
+						if (data){
+							$(".sui-close").click();
+							$.ajax({ url:"/address/getConditions", success: function(data){
+									inits(data);
+								}});
+						}
+					}});
+			}
+		});
+		//
+
+		function inits(data) {
+			var tbody=$(".add_data");
+			tbody.empty();
+			var obj = eval(data);
+			$(obj).each(function (index) {
+				var val = obj[index];
+				tbody.append("<tr title="+val.id+">" +
+						"<td name='contact' title="+val.id+">"+val.contact+"</td>" +
+						"<td name='address'>"+val.address+"</td>" +
+						"<td name='mobile'>"+val.mobile+"</td>"+
+						"<td><a class='edit-modify XiuGai_1' data-toggle='modal' data-target='.edit' data-keyboard='false' href='#'>编辑</a>" +
+						"<a class='edit-modify ShanChu_1' href='#'> 删除</a>" +
+						"<a href='#'> 默认地址</a></td></tr>");
+				//
+				$(".XiuGai_1").click(function () {
+					//
+					$(".modal-title").text("修改地址");
+					$(".sui-form").attr("action","/address/update");
+					var id=$($(this).parent().parent().find("td").get(0)).attr("title");
+					var contact=$($(this).parent().parent().find("td").get(0)).text();
+					var address=$($(this).parent().parent().find("td").get(1)).text();
+					var address_s=address.split(" ");
+					var address_1=address_s[0].toString()+"/"+address_s[1].toString()+"/"+address_s[2].toString();
+					var address_2=address_s[3].toString();
+					var mobile=$($(this).parent().parent().find("td").get(2)).text();
+					$(".input_name").val(contact);
+					$(".placeholder").val(address_1);
+					$(".input-large").val(address_2);
+					$(".input-telephone").val(mobile);
+					$(".input-remarks").attr("name","id");
+					$(".input-remarks").val(id);
+					$(".control-development").hide();
+					//
+					$.ajax({ url:"/address/getConditions", success: function(data){
+							inits(data);
+						}});
+				});
+
+				$(".ShanChu_1").click(function () {
+					var id=$($(this).parent().parent().find("td").get(0)).attr("title");
+					$.ajax({ url:"/address/deleteById",data :{"id":id}, success: function(data){
+							if (data){
+								$.ajax({ url:"/address/getConditions", success: function(data){
+										inits(data);
+									}});
+							}
+						}});
+				});
+			});
+		}
 	})
+
 </script>
 
 </body>

@@ -7,6 +7,15 @@ spring:
     url: jdbc:mysql://121.89.197.100:3306/greenorange?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
     #mysql驱动8，需要加上时区
     #serverTimezone=GMT%2B8 GMT+8
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 10000
+      connection-test-query: SELECT 1
   profiles:
     active: dev
   redis:

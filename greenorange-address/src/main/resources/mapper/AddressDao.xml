@@ -23,7 +23,6 @@
         where id = #{id}
     </select>
 
-
     <!--通过实体作为筛选条件查询-->
     <select id="findAllByCondition" resultMap="addressMap">
         select
