@@ -132,26 +132,27 @@
 							</tr>
 							</thead>
 							<tbody class="add_data">
-							<tr title="1">
-								<td name="contact" title="1">刘田田</td>
-								<td name="address">北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-								<td name="mobile">1774***********4</td>
-								<td>
-									<a class="edit-modify XiuGai_1" data-toggle="modal" data-target=".edit" data-keyboard="false" href="#">编辑</a>
-									<a class="edit-modify ShanChu_1" href="#">删除</a>
-									默认地址
-								</td>
-							</tr>
-							<tr title="2">
-								<td name="contact" title="1">沈沉</td>
-								<td name="address">北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-								<td name="mobile">1774***********4</td>
-								<td>
-									<a class="edit-modify XiuGai_1" data-toggle="modal" data-target=".edit" data-keyboard="false" href="#">编辑</a>
-									<a class="edit-modify ShanChu_1" href="#">删除</a>
-									<a href="#">设为默认</a>
-								</td>
-							</tr>
+							<!--地址内容处!	-->
+<!--							<tr title="1">-->
+<!--								<td name="contact" title="1">刘田田</td>-->
+<!--								<td name="address">北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>-->
+<!--								<td name="mobile">1774***********4</td>-->
+<!--								<td>-->
+<!--									<a class="edit-modify XiuGai_1" data-toggle="modal" data-target=".edit" data-keyboard="false" href="#">编辑</a>-->
+<!--									<a class="edit-modify ShanChu_1" href="#">删除</a>-->
+<!--									默认地址-->
+<!--								</td>-->
+<!--							</tr>-->
+<!--							<tr title="2">-->
+<!--								<td name="contact" title="1">沈沉</td>-->
+<!--								<td name="address">北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>-->
+<!--								<td name="mobile">1774***********4</td>-->
+<!--								<td>-->
+<!--									<a class="edit-modify XiuGai_1" data-toggle="modal" data-target=".edit" data-keyboard="false" href="#">编辑</a>-->
+<!--									<a class="edit-modify ShanChu_1" href="#">删除</a>-->
+<!--									<a href="#">设为默认</a>-->
+<!--								</td>-->
+<!--							</tr>-->
 
 							</tbody>
 						</table>
@@ -455,7 +456,7 @@
 						"<td name='mobile'>"+val.mobile+"</td>"+
 						"<td><a class='edit-modify XiuGai_1' data-toggle='modal' data-target='.edit' data-keyboard='false' href='#'>编辑</a>" +
 						"<a class='edit-modify ShanChu_1' href='#'> 删除</a>" +
-						"<a href='#'> 默认地址</a></td></tr>");
+						"<a class='default_Sselection' href='#'> 默认地址</a></td></tr>");
 				//
 				$(".XiuGai_1").click(function () {
 					//
@@ -491,6 +492,11 @@
 							}
 						}});
 				});
+				
+				$(".default_Sselection").click(function () {
+					$(".default_Sselection").removeAttr("style");
+					$(this).attr("style","color: black");
+				})
 			});
 		}
 	})
