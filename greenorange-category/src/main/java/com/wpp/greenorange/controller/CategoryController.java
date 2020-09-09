@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/category")
-public class CategoryController implements ApplicationRunner {
+public class CategoryController /*implements ApplicationRunner*/ {
     /**
      * 服务对象
      */
@@ -55,13 +55,13 @@ public class CategoryController implements ApplicationRunner {
         return this.categoryService.findById(id);
     }
 
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        List<Map> categorys = categoryService.findCategorys();
-        String categorysStr = mapper.writeValueAsString(categorys);
-        redisTemplate.opsForValue().set("categorys",categorysStr);
-    }
+//    @Override
+//    public void run(ApplicationArguments args) throws Exception {
+//        ObjectMapper mapper = new ObjectMapper();
+//        List<Map> categorys = categoryService.findCategorys();
+//        String categorysStr = mapper.writeValueAsString(categorys);
+//        redisTemplate.opsForValue().set("categorys",categorysStr);
+//    }
 
     @RequestMapping("/findCategorys")
     public List<Map> findCategorys() throws JsonProcessingException {

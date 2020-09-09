@@ -40,6 +40,18 @@ public class UserController {
         return this.userService.findById(id);
     }
 
+    @RequestMapping("/findByemail")
+    public boolean findByemail(String email){
+        boolean b = userService.registerFindByemail(email);
+        System.out.println(b);
+        return b;
+    }
+
+    @RequestMapping("/findByphone")
+    public boolean findByphone(String phone){
+        return userService.registerFindByphone(phone);
+    }
+
     @RequestMapping("/findByIDemailOrUserNameOrphone")
     public boolean findByIDemailOrUserNameOrphone(
                                                User user,HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
