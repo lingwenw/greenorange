@@ -1,5 +1,6 @@
 package com.wpp.greenorange.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Category;
 
@@ -49,10 +50,10 @@ public interface CategoryService {
     /**
      * 通过主键删除数据
      *
-     * @param id 主键
+     * @param category
      * @return 是否成功
      */
-    Boolean deleteById(Integer id);
+    Boolean deleteById(Category category);
 
     /**
      *
@@ -68,4 +69,9 @@ public interface CategoryService {
      * @return
      */
     List<Map> findCategorys();
+
+    /**
+     * 加载商品分类导航缓存
+     */
+    void saveCategoryTreeToRedis() throws JsonProcessingException;
 }

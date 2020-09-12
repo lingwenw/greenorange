@@ -52,4 +52,11 @@ public interface AddressService {
      */
     Boolean deleteById(Integer id);
 
+    /**
+     * 通过用户名字查询id
+     * @param name 用户名
+     * @return id值
+     */
+    Integer findByuUserId(String name);
+
 }
