@@ -14,6 +14,7 @@ import java.util.List;
 @Mapper
 public interface AdvertDao {
 
+
     /**
      * 通过ID查询单条数据
      *
