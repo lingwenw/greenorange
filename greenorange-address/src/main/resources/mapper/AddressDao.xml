@@ -108,4 +108,9 @@
         delete from greenorange.tb_address where id = #{id}
     </delete>
 
+    <!--通过用户名查询id-->
+    <select id="findByuUserId" resultType="int">
+        select `id` from `tb_user` where `name`=#{name};
+    </select>
+
 </mapper>

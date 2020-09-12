@@ -130,9 +130,22 @@ public class AddressController {
      */
     @RequestMapping("/deleteById")
     public Boolean deleteById(Integer id){
-        System.out.println(id);
+//        System.out.println(id);
         Boolean aBoolean = this.addressService.deleteById(id);
 
         return aBoolean;
+    };
+
+    /**
+     * 查询user值
+     *
+     * @param name 实例对象name
+     * @return id值
+     */
+    @RequestMapping("/findByuUserId")
+    public Integer findByuUserId(String name){
+        Integer byuUserId = this.addressService.findByuUserId(name);
+
+        return byuUserId;
     };
 }
