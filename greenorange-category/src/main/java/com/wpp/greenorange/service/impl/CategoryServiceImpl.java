@@ -128,6 +128,7 @@ public class CategoryServiceImpl implements CategoryService {
         return map;
     }
 
+
     private List<Map> test(List<Category> categories, int pid) {
         List<Map> list = new ArrayList<>();
         for (Category category : categories) {
@@ -160,16 +161,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
-    private Map test2(List<Map> list, int id){
+    private Map test2(List<Map> list, int id) {
         Map categoryMap = new HashMap<>();
         for (Map map : list) {
             Integer this_id = (Integer) map.get("id");
             if (this_id == id) {
                 return map;
-            }else {
+            } else {
                 List<Map> children = (List<Map>) map.get("children");
-                categoryMap =  test2(children, id);
-                if (categoryMap != null){
+                categoryMap = test2(children, id);
+                if (categoryMap != null) {
                     return categoryMap;
                 }
             }
