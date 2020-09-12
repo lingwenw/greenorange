@@ -91,11 +91,10 @@ public class CategoryController{
      */
     @RequestMapping("/deleteCategory")
     public boolean deleteCategory(Category category) throws JsonProcessingException {
-        System.out.println(category);
-//        boolean aBoolean = categoryService.deleteById(category);
-//        redisTemplate.delete("categorys");
-//        categoryService.saveCategoryTreeToRedis();
-        return false;
+        boolean aBoolean = categoryService.deleteById(category);
+        redisTemplate.delete("categorys");
+        categoryService.saveCategoryTreeToRedis();
+        return aBoolean;
     }
 
 }

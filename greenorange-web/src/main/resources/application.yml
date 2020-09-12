@@ -2,9 +2,9 @@ spring:
   #数据库配置
   datasource:
     username: root
-    password: 147258w
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://121.89.197.100:3306/greenorange?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/greenorange?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
     #mysql驱动8，需要加上时区
     #serverTimezone=GMT%2B8 GMT+8
     hikari:

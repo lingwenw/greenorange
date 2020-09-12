@@ -85,9 +85,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Boolean deleteById(Category category) {
-        System.out.println(category);
-//        categoryDao.deleteById(category.getId());
-//        categoryDao.updateParentId(category.getId(),category.getParentId());
+        categoryDao.deleteById(category.getId());
+        categoryDao.updateParentId(category.getId(), category.getParentId());
         return true;
     }
 
@@ -108,15 +107,25 @@ public class CategoryServiceImpl implements CategoryService {
         return test;
     }
 
+    /*加载缓存数据*/
     @Override
     public void saveCategoryTreeToRedis() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String categorysStr = redisTemplate.opsForValue().get("categorys");
-        if (categorysStr == null){
+        if (categorysStr == null) {
             List<Map> categorys = findCategorys();
             categorysStr = mapper.writeValueAsString(categorys);
             redisTemplate.opsForValue().set("categorys", categorysStr);
         }
+    }
+
+    @Override
+    public Map findMap(Integer id) throws JsonProcessingException {
+        String categorysStr = redisTemplate.opsForValue().get("categorys");
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map> list = mapper.readValue(categorysStr, List.class);
+        Map map = test2(list, id);
+        return map;
     }
 
     private List<Map> test(List<Category> categories, int pid) {
@@ -124,25 +133,49 @@ public class CategoryServiceImpl implements CategoryService {
         for (Category category : categories) {
             if (category.getParentId() == pid) {
                 HashMap<Object, Object> map = new HashMap<>();
-                map.put("id",category.getId());
-                map.put("pId",category.getParentId());
+                map.put("id", category.getId());
+                map.put("pId", category.getParentId());
                 map.put("name", category.getName());
                 map.put("children", test(categories, category.getId()));
                 list.add(map);
             }
         }
-        return list;
 //        for (int i = 0; i < categories.size(); i++) {
 //            Category category = categories.get(i);
+//            if (category.getId()==1204){
+//                System.out.println(category);
+//            }
 //            if (category.getParentId()==pid){
 //                HashMap<Object, Object> map = new HashMap<>();
-//                map.put("name",category.getName());
-//                map.put("list'",test(categories,category.getId()) );
+//                map.put("id", category.getId());
+//                map.put("pId", category.getParentId());
+//                map.put("name", category.getName());
+//                map.put("children", test(categories, category.getId()));
 //                categories.remove(i);
 //                i--;
 //                list.add(map);
 //            }
 //        }
+        return list;
 
     }
+
+    private Map test2(List<Map> list, int id){
+        Map categoryMap = new HashMap<>();
+        for (Map map : list) {
+            Integer this_id = (Integer) map.get("id");
+            if (this_id == id) {
+                return map;
+            }else {
+                List<Map> children = (List<Map>) map.get("children");
+                categoryMap =  test2(children, id);
+                if (categoryMap != null){
+                    return categoryMap;
+                }
+            }
+        }
+        return null;
+    }
+
+
 }
