@@ -153,7 +153,6 @@
 <!--									<a href="#">设为默认</a>-->
 <!--								</td>-->
 <!--							</tr>-->
-
 							</tbody>
 						</table>
 					</div>
@@ -390,12 +389,22 @@
 
 <script>
 	$(function () {
-		//
+		//页面加载时，查询数据添加到页面
 		$(document).ready(function(){
 			$.ajax({ url:"/address/getConditions", success: function(data){
 					inits(data);
 				}});
 		});
+		//从页面地址中获取用户登录时，传出的用户名!
+		// $(function () {
+		// 	function GetQueryString(name) {
+		// 		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		// 		var r = window.location.search.substr(1).match(reg);
+		// 		if(r!=null)return  unescape(r[2]); return null;
+		// 	}
+		// 	// 调用方法
+		// 	var gqs=GetQueryString("tel");
+		//点击新增地址按钮时产生的页面样式
 		$(".btn-info").click(function () {
 			$(".modal-title").text("新增地址");
 			$(".sui-form").attr("action","/address/SetAddress");
@@ -407,11 +416,25 @@
 			$(".input-remarks").val("");
 			$(".control-development").show();
 		});
-		//
-		// $(".XiuGai_1").click(function () {
-		// 	XiuGai();
-		// });
+		//判断电话号码是否符合规格
+		$(".input-telephone").blur(function (){
+				var telephone=/^\d{11,}$/;
+				var telephones=$(this).val();
+				if (!telephone.test(telephones)){
+					alert("电话号码不对");
+					$(this).val("");
+				}
+
+		});
+		//完成后的判断与传输
 		$(".btn-primary").click(function () {
+			//用户名获取用户id
+			// var userName=null;
+			// var userID;
+			// $.ajax({ url:"/address/findByuUserId",data:{"name":userName}, success: function(data){
+			// 		userID=data;
+			// 	}});
+			//获取新增数据
 			var titles=$(".modal-title").text();
 			var names=$(".input_name").val();
 			var diZi1=$("#city-picker3").val();
@@ -419,31 +442,33 @@
 			var diZi=diZi1+"/"+diZi2;
 			var dianHua=$(".input-telephone").val();
 			var beiZu=$(".input-remarks").val();
-			//
-			alert(titles=="新增地址");
-			alert(titles=="修改地址");
-			if (titles=="新增地址"){
-				$.ajax({ url:"/address/SetAddress",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"notes":beiZu}, success: function(data){
-						if (data){
-							$(".sui-close").click();
-							$.ajax({ url:"/address/getConditions", success: function(data){
-									inits(data);
-								}});
-						}
-					}});
-			} else if (titles=="修改地址"){
-				$.ajax({ url:"/address/update",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"id":beiZu}, success: function(data){
-						if (data){
-							$(".sui-close").click();
-							$.ajax({ url:"/address/getConditions", success: function(data){
-									inits(data);
-								}});
-						}
-					}});
+			//判断数据是否为空
+			if (names==null||diZi==null||dianHua==null||beiZu==null){
+				alert("请将内容填完才可完成！")
+			} else {
+				//判断是否是添加还是修改
+				if (titles=="新增地址"){
+					$.ajax({ url:"/address/SetAddress",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"notes":beiZu}, success: function(data){
+							if (data){
+								$(".sui-close").click();
+								$.ajax({ url:"/address/getConditions", success: function(data){
+										inits(data);
+									}});
+							}
+						}});
+				} else if (titles=="修改地址"){
+					$.ajax({ url:"/address/update",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"id":beiZu}, success: function(data){
+							if (data){
+								$(".sui-close").click();
+								$.ajax({ url:"/address/getConditions", success: function(data){
+										inits(data);
+									}});
+							}
+						}});
+				}
 			}
 		});
-		//
-
+		//页面样式设置
 		function inits(data) {
 			var tbody=$(".add_data");
 			tbody.empty();
@@ -451,18 +476,18 @@
 			$(obj).each(function (index) {
 				var val = obj[index];
 				tbody.append("<tr title="+val.id+">" +
-						"<td name='contact' title="+val.id+">"+val.contact+"</td>" +
-						"<td name='address'>"+val.address+"</td>" +
+						"<td name='contact' title="+val.userId+">"+val.contact+"</td>" +
+						"<td name='address' title="+val.id+">"+val.address+"</td>" +
 						"<td name='mobile'>"+val.mobile+"</td>"+
 						"<td><a class='edit-modify XiuGai_1' data-toggle='modal' data-target='.edit' data-keyboard='false' href='#'>编辑</a>" +
 						"<a class='edit-modify ShanChu_1' href='#'> 删除</a>" +
 						"<a class='default_Sselection' href='#'> 默认地址</a></td></tr>");
-				//
+				//点击修改时，进行判断修改
 				$(".XiuGai_1").click(function () {
 					//
 					$(".modal-title").text("修改地址");
 					$(".sui-form").attr("action","/address/update");
-					var id=$($(this).parent().parent().find("td").get(0)).attr("title");
+					var id=$($(this).parent().parent().find("td").get(1)).attr("title");
 					var contact=$($(this).parent().parent().find("td").get(0)).text();
 					var address=$($(this).parent().parent().find("td").get(1)).text();
 					var address_s=address.split(" ");
@@ -481,9 +506,9 @@
 							inits(data);
 						}});
 				});
-
+				//点击删除时，进行数据删除操作！
 				$(".ShanChu_1").click(function () {
-					var id=$($(this).parent().parent().find("td").get(0)).attr("title");
+					var id=$($(this).parent().parent().find("td").get(1)).attr("title");
 					$.ajax({ url:"/address/deleteById",data :{"id":id}, success: function(data){
 							if (data){
 								$.ajax({ url:"/address/getConditions", success: function(data){
@@ -492,7 +517,7 @@
 							}
 						}});
 				});
-				
+				//点击默认时，修改颜色，没有任何意义！
 				$(".default_Sselection").click(function () {
 					$(".default_Sselection").removeAttr("style");
 					$(this).attr("style","color: black");
