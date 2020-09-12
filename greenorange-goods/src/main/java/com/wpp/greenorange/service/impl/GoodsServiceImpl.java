@@ -1,7 +1,10 @@
 package com.wpp.greenorange.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.dao.GoodsDao;
 import com.wpp.greenorange.domain.Goods;
+import com.wpp.greenorange.domain.select.GoodsSelect;
 import com.wpp.greenorange.service.GoodsService;
 import org.springframework.stereotype.Service;
 
@@ -72,5 +75,12 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public Boolean deleteById(Integer id) {
         return this.goodsDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public PageInfo<Goods> findAllLimit(GoodsSelect goodsSelect) {
+        PageHelper.startPage(goodsSelect.getPageNum(), goodsSelect.getPageSize());
+        List<Goods> list = goodsDao.findAllByCondition(null);
+        return PageInfo.of(list,3);
     }
 }

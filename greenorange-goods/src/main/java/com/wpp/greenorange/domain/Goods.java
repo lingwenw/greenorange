@@ -69,6 +69,25 @@ public class Goods implements Serializable {
      */
     private List<GoodsSku> skuList;
 
+    @Override
+    public String toString() {
+        return "Goods{" +
+                "id=" + id +
+                ", categoryId=" + categoryId +
+                ", name='" + name + '\'' +
+                ", sellPoint='" + sellPoint + '\'' +
+                ", saleCount=" + saleCount +
+                ", params='" + params + '\'' +
+                ", introduceData='" + introduceData + '\'' +
+                ", goodEvaluate=" + goodEvaluate +
+                ", badEvaluate=" + badEvaluate +
+                ", minPrice=" + minPrice +
+                ", deleted=" + deleted +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
+
     public List<GoodsSku> getSkuList() {
         return skuList;
     }

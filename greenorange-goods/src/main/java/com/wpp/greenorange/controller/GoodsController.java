@@ -1,7 +1,10 @@
 package com.wpp.greenorange.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Goods;
+import com.wpp.greenorange.domain.select.GoodsSelect;
 import com.wpp.greenorange.service.GoodsService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +24,12 @@ public class GoodsController {
      */
     @Resource
     private GoodsService goodsService;
+
+    @RequestMapping("/getAllLimit")
+    public PageInfo<Goods> getAllLimit(@RequestBody GoodsSelect goodsSelect){
+        System.out.println(goodsSelect);
+        return goodsService.findAllLimit(goodsSelect);
+    }
 
     /**
      * 通过主键查询单条数据

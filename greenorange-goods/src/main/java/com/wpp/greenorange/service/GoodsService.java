@@ -1,6 +1,8 @@
 package com.wpp.greenorange.service;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Goods;
+import com.wpp.greenorange.domain.select.GoodsSelect;
 
 import java.util.List;
 
@@ -52,4 +54,9 @@ public interface GoodsService {
      */
     Boolean deleteById(Integer id);
 
+    /**
+     * 分页方法
+     * @return
+     */
+    PageInfo<Goods> findAllLimit(GoodsSelect goodsSelect);
 }
