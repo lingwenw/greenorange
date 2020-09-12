@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wpp.greenorange.domain.Goods;
 import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.service.GoodsService;
+import com.wpp.webutil.exception.MyException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +45,11 @@ public class ItemController {
 
         //获取sku集合
         Goods goods = goodsService.findById(goodsId);
+        if (goods==null||goods.getDeleted()==true){
+            throw new MyException("商品不存在或已停用");
+        }
         List<GoodsSku> skuList = goods.getSkuList();
+
         //获取sku中的版本参数组成editionMap
         //editionMap: 商品的全部版本
         //[{"选择颜色":["金色","银色","黑色"]},{"内存容量":["16GB","64GB","黑色"]}]
@@ -93,7 +97,8 @@ public class ItemController {
                         //value是set集合中的元素，也就是与我们当前选中的规格不同的地方
                         temp.put(key,value);
                         String url = urlMap.get(json.writeValueAsString(temp));
-                        hashMap.put("url",url);
+                        hashMap.put("url",
+                                url);
 
                     }
                     newSet.add(hashMap);
@@ -109,8 +114,8 @@ public class ItemController {
             data.put("sku",sku);
             data.put("editionMap",editionMap);
             data.put("imgs",json.readValue(sku.getShowImg(),List.class));
-            data.put("params",json.readValue(goods.getParams(),Map.class));
-            data.put("introduces",json.readValue(goods.getIntroduceData(),List.class));
+            data.put("params",json.readValue(sku.getParams(),Map.class));
+            data.put("introduces",json.readValue(sku.getIntroduceData(),List.class));
             context.setVariables(data);
             //准备文件
             File dir = new File(pagePath);

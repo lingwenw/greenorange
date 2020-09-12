@@ -4,6 +4,7 @@ import com.wpp.greenorange.domain.GoodsSku;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (GoodsSku)表数据库访问层
@@ -64,4 +65,17 @@ public interface GoodsSkuDao {
      */
     Integer deleteById(Integer id);
 
+    /**
+     * 获得该数组中存在的第一个分类
+     * @param splits
+     * @return
+     */
+    String getCategoryNameIn(List<String> splits);
+
+    /**
+     * 获得该数组中存在的第一个品牌
+     * @param splits
+     * @return
+     */
+    String[] getBrandNameIn(List<String> splits);
 }
