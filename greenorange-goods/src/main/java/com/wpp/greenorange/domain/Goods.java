@@ -8,10 +8,10 @@ import java.util.List;
  * (Goods)实体类
  *
  * @author 吴鹏鹏ppp
- * @since 2020-09-08 22:11:31
+ * @since 2020-09-06 23:13:34
  */
 public class Goods implements Serializable {
-    private static final long serialVersionUID = 428245354153813199L;
+    private static final long serialVersionUID = -97445866589391238L;
     /**
      * 主键id
      */
@@ -134,6 +134,7 @@ public class Goods implements Serializable {
     public void setSellPoint(String sellPoint) {
         this.sellPoint = sellPoint;
     }
+
 
     public Boolean getDeleted() {
         return deleted;

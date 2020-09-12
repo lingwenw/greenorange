@@ -23,7 +23,6 @@
         where id = #{id}
     </select>
 
-
     <!--通过实体作为筛选条件查询-->
     <select id="findAllByCondition" resultMap="addressMap">
         select
@@ -108,5 +107,10 @@
     <delete id="deleteById">
         delete from greenorange.tb_address where id = #{id}
     </delete>
+
+    <!--通过用户名查询id-->
+    <select id="findByuUserId" resultType="int">
+        select `id` from `tb_user` where `name`=#{name};
+    </select>
 
 </mapper>

@@ -26,6 +26,7 @@ import java.util.Map;
  * @since 2020-09-04 01:46:31
  */
 @RestController
+@RequestMapping("/goodsSku")
 public class GoodsSkuController {
     /**
      * 服务对象
@@ -48,6 +49,7 @@ public class GoodsSkuController {
         if (pageNum==null||pageNum<1){
             pageNum = 1;
         }
+        System.out.println(111);
         ModelAndView modelAndView = new ModelAndView("search");
         //从es中获得数据
         Map<String, Object>  search = goodsSkuService.search(input, brand, category, pageNum);

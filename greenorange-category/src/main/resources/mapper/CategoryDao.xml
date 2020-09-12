@@ -9,10 +9,6 @@
         <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-<!--        <collection property="categories"-->
-<!--                    select="findCategorys"-->
-<!--                    column="id">-->
-<!--        </collection>-->
     </resultMap>
 
     <!--级联查询所有数据-->
@@ -87,6 +83,15 @@
             </if>
         </set>
         where id = #{id}
+    </update>
+
+    <!--通过parentId修改数据-->
+    <update id="updateParentId">
+        update greenorange.tb_category
+        <set>
+                parent_id = #{updetePid},
+        </set>
+        where parent_id = #{pid}
     </update>
 
     <!--通过主键删除-->
