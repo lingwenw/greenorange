@@ -1,10 +1,6 @@
 package com.wpp.greenorange.controller;
 
-import com.github.pagehelper.PageInfo;
-import com.wpp.greenorange.domain.GoodsSku;
-import com.wpp.greenorange.domain.SkuEs;
 import com.wpp.greenorange.service.GoodsSkuService;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,11 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -26,7 +19,6 @@ import java.util.Map;
  * @since 2020-09-04 01:46:31
  */
 @RestController
-@RequestMapping("/goodsSku")
 public class GoodsSkuController {
     /**
      * 服务对象
@@ -45,29 +37,50 @@ public class GoodsSkuController {
      * @return
      */
     @RequestMapping("/search")
-    public ModelAndView search(String input, String[] brand, String category, Integer pageNum, HttpServletRequest req) throws IOException {
+    public ModelAndView search(String input, String[] brand, String category, Integer pageNum,
+                               String sort, String order,String[] params, String price, HttpServletRequest req) throws IOException {
         if (pageNum==null||pageNum<1){
             pageNum = 1;
         }
-        System.out.println(111);
         ModelAndView modelAndView = new ModelAndView("search");
         //从es中获得数据
-        Map<String, Object>  search = goodsSkuService.search(input, brand, category, pageNum);
+        Map<String, Object>  search = goodsSkuService.search(input, brand, category, pageNum, sort, order, params, price);
         //组织url
         String queryString = req.getQueryString();
         if (queryString==null){
             queryString = "";
         }
         String url = req.getRequestURL().append("?").append(queryString).toString();
+        //处理page
         if (!url.contains("pageNum=")) {
             url += "&pageNum=1";
         }
+        //处理sort
+        if (sort==null){
+            sort="";
+        }
+        if (!url.contains("sort=")){
+            url += "&sort=null";
+        }
+        //处理order
+        if (order==null){
+            order="";
+        }
+        if (!url.contains("order=")){
+            url += "&order=null";
+        }
+        //处理category
         if (category==null){
             category="";
         }
         if (!url.contains("category=")){
             url += "&category=null";
         }
+        //处理价格筛选
+        if (price==null){
+            price="";
+        }
+        //处理url
         url = url.replaceAll("null","");
         url = URLDecoder.decode(url, "UTF-8");
         url = url.replaceAll("&{2,}","&");
@@ -77,8 +90,10 @@ public class GoodsSkuController {
         modelAndView.addObject("url",url);
         modelAndView.addObject("input",input==null?"":input);
         modelAndView.addObject("brands",brand);
-//        modelAndView.addObject("brandStr",Arrays.toString((String[]) search.get("brand")));
         modelAndView.addObject("category",category);
+        modelAndView.addObject("sort",sort);
+        modelAndView.addObject("order",order);
+        modelAndView.addObject("price",price.split("-"));
         return modelAndView;
     }
 
@@ -88,9 +103,9 @@ public class GoodsSkuController {
             pageNum = 1;
         }
         //从es中获得数据
-        Map<String, Object>  search = goodsSkuService.search(input, brand, category, pageNum);
+//        Map<String, Object>  search = goodsSkuService.search(input, brand, category, pageNum, sort, order, params);
 
-        return search;
+        return null;
     }
 
 

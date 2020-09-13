@@ -70,7 +70,7 @@ public interface GoodsSkuDao {
      * @param splits
      * @return
      */
-    String getCategoryNameIn(List<String> splits);
+    Map<String,Object> getCategoryNameIn(List<String> splits);
 
     /**
      * 获得该数组中存在的第一个品牌

@@ -32,8 +32,8 @@
     </select>
 
     <!--根据字符串数组查找category-->
-    <select id="getCategoryNameIn" resultType="string" >
-        SELECT NAME
+    <select id="getCategoryNameIn" resultType="java.util.Map" >
+        SELECT id,`name`
         FROM tb_category
         WHERE NAME IN
         <foreach collection="list" item="item" open="(" separator="," close=")">

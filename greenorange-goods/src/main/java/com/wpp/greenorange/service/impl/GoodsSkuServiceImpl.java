@@ -8,6 +8,7 @@ import com.wpp.greenorange.dao.GoodsSkuDao;
 import com.wpp.greenorange.domain.Goods;
 import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.domain.SkuEs;
+import com.wpp.greenorange.service.CategoryService;
 import com.wpp.greenorange.service.GoodsSkuService;
 import com.wpp.webutil.util.MyUtil;
 import org.apache.commons.io.IOUtils;
@@ -18,14 +19,17 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.*;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -49,32 +53,69 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
     @Resource
     private RestClientBuilder builder;
 
+    @Resource
+    private CategoryService categoryService;
+
     @Override
-    public Map<String, Object> search(String input, String[] brand, String category, Integer pageNum) throws IOException {
+    public Map<String, Object> search(String input, String[] brand, String category, Integer pageNum, String sort, String order, String[] params, String price) throws IOException {
         //封装请求对象
         RestHighLevelClient client = new RestHighLevelClient(builder);
         SearchRequest searchRequest = new SearchRequest("greenorange");
         SearchSourceBuilder searchSource = new SearchSourceBuilder();
 
+        //排序
+        if (MyUtil.isEmptyString(order)){
+            order = "ASC";
+        }
+        if (!MyUtil.isEmptyString(sort)){
+            searchSource.sort(sort, SortOrder.valueOf(order));
+        }
+        //高亮
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        //设置高亮字段和标签
+        highlightBuilder.field("name").preTags("<font style='color:red'>").postTags("</font>");
+        searchSource.highlighter(highlightBuilder);
         //判断分类或品牌是否为null
         //有空的进行分词
         boolean flag =  MyUtil.isEmptyString(category) || MyUtil.isEmptyStrArr(brand);
+        //分类的map
+        Map<String, Object> categoryMap = new HashMap<>();
         if ( flag && !MyUtil.isEmptyString(input) ){
             List<String> splits = splitInput(input);
             //从数据库查用户输入的分类和品牌
-            if (MyUtil.isEmptyString(category) && splits!=null){
-                category = goodsSkuDao.getCategoryNameIn(splits);
+            //判断是否为空
+            if (MyUtil.isEmptyString(category) && splits!=null && !splits.isEmpty()){
+                categoryMap = goodsSkuDao.getCategoryNameIn(splits);
+                category = (String) categoryMap.get("name");
             }
-            if (MyUtil.isEmptyStrArr(brand) && splits!=null){
+            if (MyUtil.isEmptyStrArr(brand) && splits!=null && !splits.isEmpty()){
                 brand = goodsSkuDao.getBrandNameIn(splits);
             }
         }
         //构建查询
         //布尔查询
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        //价格
+        if (!MyUtil.isEmptyString(price)){
+            String[] priceArr = price.split("-");
+            if (priceArr.length>0 && !MyUtil.isEmptyString(priceArr[0])){
+                RangeQueryBuilder gte = QueryBuilders.rangeQuery("price").gte(priceArr[0]);
+                boolQuery.filter(gte);
+            }
+            if (priceArr.length>1 && !MyUtil.isEmptyString(priceArr[1])){
+                RangeQueryBuilder lte = QueryBuilders.rangeQuery("price").lte(priceArr[0]);
+                boolQuery.filter(lte);
+            }
+        }
         //分类
         if (!MyUtil.isEmptyString(category)){
             boolQuery.must( QueryBuilders.termQuery("categoryName",category) );
+            Map<String, Object> map = categoryService.findMap((Integer) categoryMap.get("id"));
+            List<String> aggList = this.paramTypeToAggList((String) map.get("paramType"));
+            for (String str : aggList) {
+                TermsAggregationBuilder agg = AggregationBuilders.terms(str).field("params." + str + ".keyword");
+                searchSource.aggregation(agg);
+            }
         }
         //品牌
         if (!MyUtil.isEmptyStrArr(brand)){
@@ -96,6 +137,8 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         searchSource.size(size);
         searchRequest.source(searchSource);
 
+        System.out.println(searchSource);
+
         //查询结果
         SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
         //结果中的全部aggr
@@ -110,16 +153,18 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         pageInfo.setPageNum(pageNum);
         pageInfo.setSize(size);
         pageInfo.setNavigatePages(5);
-        this.getPageInfoFromEs(SkuEs.class, hits, pageInfo);
+        this.getPageInfoFromEs(hits, pageInfo);
         this.setNav(pageInfo);
         map.put("brand",brand);
         map.put("pageInfo",pageInfo);
-        map.put("params",packAggregations(aggregations));
+        Map<String, List> aggMap = packAggregations(aggregations);
+        System.out.println(aggMap);
+        map.put("params",aggMap);
         return map;
     }
 
-    private Map<String, List<String> > packAggregations(Aggregations agg){
-        Map<String, List<String>> map = new HashMap<>();
+    private Map<String, List > packAggregations(Aggregations agg){
+        Map<String, List> map = new HashMap<>();
         Set<String> keySet = agg.getAsMap().keySet();
         for (String key : keySet) {
             Terms terms = agg.get(key);
@@ -128,19 +173,46 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
             for (Terms.Bucket bucket : buckets) {
                 temp.add(bucket.getKeyAsString());
             }
+            System.out.println(temp);
             map.put(key,temp);
         }
         return map;
     }
 
+
     /**
-     * 将SearchResponse的查询结果转为pageInfo
-     * @param clazz
-     * @param hits
-     * @param <T>
+     * 将paramType转为list数组
+     * @param params
      * @return
      */
-    private <T>void getPageInfoFromEs(Class<T> clazz, SearchHits hits, PageInfo<T> pageInfo){
+    private List<String> paramTypeToAggList(String params){
+        List<String> list = new ArrayList<>();
+        if (MyUtil.isEmptyString(params)){
+            return list;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = null;
+        //json字符串转换为map
+        try {
+            map = mapper.readValue(params, Map.class);
+        } catch (JsonProcessingException e) {
+            return list;
+        }
+        //迭代map
+        for (String key : map.keySet()) {
+            if (map.get(key).equals(true)){
+                list.add(key);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 将SearchResponse的查询结果转为pageInfo
+     * @param hits
+     * @return
+     */
+    private void getPageInfoFromEs(SearchHits hits, PageInfo<SkuEs> pageInfo){
         ObjectMapper mapper = new ObjectMapper();
         //设置总数据数
         long total = hits.getTotalHits().value;
@@ -150,10 +222,16 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         pageInfo.setPages(pageCount);
         //设置集合
         SearchHit[] searchHits = hits.getHits();
-        List<T> list = new ArrayList<>();
+        List<SkuEs> list = new ArrayList<>();
         for (SearchHit hit : searchHits) {
-            T t = mapper.convertValue(hit.getSourceAsMap(), clazz);
-            list.add(t);
+            SkuEs skuEs = mapper.convertValue(hit.getSourceAsMap(), SkuEs.class);
+            //取出高亮
+            Map<String, HighlightField> map = hit.getHighlightFields();
+            if (!map.isEmpty()){
+                HighlightField lightName = hit.getHighlightFields().get("name");
+                skuEs.setName(lightName.getFragments()[0].toString());
+            }
+            list.add(skuEs);
         }
         pageInfo.setList(list);
 

@@ -1,10 +1,6 @@
 package com.wpp.greenorange.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.GoodsSku;
-import com.wpp.greenorange.domain.SkuEs;
-import org.springframework.data.domain.Page;
 
 import java.io.IOException;
 import java.util.List;
@@ -70,5 +66,5 @@ public interface GoodsSkuService {
      * 处理控制器的搜索
      * @return
      */
-    Map<String, Object> search(String input, String[] brand, String category, Integer pageNum) throws IOException;
+    Map<String, Object> search(String input, String[] brand, String category, Integer pageNum, String sort, String order, String[] params, String price) throws IOException;
 }

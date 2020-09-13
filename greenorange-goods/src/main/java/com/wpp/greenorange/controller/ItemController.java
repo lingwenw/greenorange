@@ -114,7 +114,11 @@ public class ItemController {
             data.put("sku",sku);
             data.put("editionMap",editionMap);
             data.put("imgs",json.readValue(sku.getShowImg(),List.class));
-            data.put("params",json.readValue(sku.getParams(),Map.class));
+            Map params = json.readValue(sku.getParams(), Map.class);
+            params.remove("屏幕尺寸");
+            params.remove("电池容量");
+            params.remove("分辨率");
+            data.put("params",params);
             data.put("introduces",json.readValue(sku.getIntroduceData(),List.class));
             context.setVariables(data);
             //准备文件
