@@ -59,8 +59,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_category(parent_id, name, deleted, create_time, update_time,param_type)
-        values (#{parentId}, #{name}, #{deleted}, #{createTime}, #{updateTime},#{paramType})
+        insert into greenorange.tb_category(parent_id,name,param_type)
+        values (#{parentId}, #{name}, #{paramType})
     </insert>
 
     <!--通过主键修改数据-->
