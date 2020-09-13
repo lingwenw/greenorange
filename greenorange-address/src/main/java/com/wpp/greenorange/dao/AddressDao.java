@@ -22,7 +22,6 @@ public interface AddressDao {
      */
     Address findById(Integer id);
 
-
     /**
      * 通过实体作为筛选条件查询
      *
@@ -54,5 +53,12 @@ public interface AddressDao {
      * @return 影响行数
      */
     Integer deleteById(Integer id);
+
+    /**
+     * 通过用户名字查询id
+     * @param name 用户名
+     * @return id值
+     */
+    Integer findByuUserId(String name);
 
 }

@@ -41,6 +41,8 @@ public class AddressServiceImpl implements AddressService {
         return this.addressDao.findById(id);
     }
 
+
+
     /**
      * 新增数据
      *
@@ -73,4 +75,16 @@ public class AddressServiceImpl implements AddressService {
     public Boolean deleteById(Integer id) {
         return this.addressDao.deleteById(id) > 0;
     }
+
+    /**
+     * 通过用户名字查询id
+     *
+     * @param name 用户名
+     * @return id值
+     */
+    @Override
+    public Integer findByuUserId(String name) {
+        return this.addressDao.findByuUserId(name);
+    }
+
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -54,13 +55,18 @@ public class UserController {
 
     @RequestMapping("/findByIDemailOrUserNameOrphone")
     public boolean findByIDemailOrUserNameOrphone(
-                                               User user,HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+                                               User user,HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         System.out.println(user);
         User byUser = userService.findByemail(user.getEmail(), user.getPassword());
         session.setAttribute("loginUser",byUser);
+
         System.out.println(byUser);
+        String name = user.getName();
+
+        System.out.println(111);
         boolean flag = user.getPassword().equals(byUser.getPassword());
         System.out.println(flag);
+//        request.getRequestDispatcher("/home.html").forward(request,response);
         return flag;
     }
 

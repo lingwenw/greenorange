@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/category")
-public class CategoryController /*implements ApplicationRunner*/ {
+public class CategoryController{
     /**
      * 服务对象
      */

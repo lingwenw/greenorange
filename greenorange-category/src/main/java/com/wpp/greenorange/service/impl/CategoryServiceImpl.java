@@ -1,11 +1,15 @@
 package com.wpp.greenorange.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.dao.CategoryDao;
 import com.wpp.greenorange.domain.Category;
 import com.wpp.greenorange.service.CategoryService;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -23,6 +27,9 @@ import java.util.Map;
 public class CategoryServiceImpl implements CategoryService {
     @Resource
     private CategoryDao categoryDao;
+
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 通过实体作为筛选条件查询
@@ -71,12 +78,17 @@ public class CategoryServiceImpl implements CategoryService {
     /**
      * 通过主键删除数据
      *
-     * @param id 主键
+     * @param category
      * @return 是否成功
      */
+
     @Override
-    public Boolean deleteById(Integer id) {
-        return this.categoryDao.deleteById(id) > 0;
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    public Boolean deleteById(Category category) {
+        System.out.println(category);
+//        categoryDao.deleteById(category.getId());
+//        categoryDao.updateParentId(category.getId(),category.getParentId());
+        return true;
     }
 
     @Override
@@ -92,10 +104,19 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Map> findCategorys() {
         List<Category> categories = categoryDao.findAllByCondition(null);
-        System.out.println(categories.size());
         List<Map> test = test(categories, 0);
-//        return categoryDao.findCategorys(id);
         return test;
+    }
+
+    @Override
+    public void saveCategoryTreeToRedis() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        String categorysStr = redisTemplate.opsForValue().get("categorys");
+        if (categorysStr == null){
+            List<Map> categorys = findCategorys();
+            categorysStr = mapper.writeValueAsString(categorys);
+            redisTemplate.opsForValue().set("categorys", categorysStr);
+        }
     }
 
     private List<Map> test(List<Category> categories, int pid) {
@@ -103,8 +124,10 @@ public class CategoryServiceImpl implements CategoryService {
         for (Category category : categories) {
             if (category.getParentId() == pid) {
                 HashMap<Object, Object> map = new HashMap<>();
+                map.put("id",category.getId());
+                map.put("pId",category.getParentId());
                 map.put("name", category.getName());
-                map.put("list", test(categories, category.getId()));
+                map.put("children", test(categories, category.getId()));
                 list.add(map);
             }
         }
