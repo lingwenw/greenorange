@@ -42,7 +42,6 @@ spring:
   devtools:
     livereload:
       enabled: false
-
 #logback配置
 logging:
   config: classpath:logback/logback.xml
@@ -55,3 +54,5 @@ mybatis:
 imgPath: file:E:/greenorange/img/
 pagePath: E:/greenorange/pages/
 bottomPackage: com.wpp
+
+

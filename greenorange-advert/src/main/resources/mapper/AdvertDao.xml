@@ -65,7 +65,7 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_advert(img_url, position_id, describe, href, index, deleted, create_time, update_time)
+        insert into greenorange.tb_advert(`img_url`, `position_id`, `describe`, `href`, `index`, `deleted`, `create_time`, `update_time`)
         values (#{imgUrl}, #{positionId}, #{describe}, #{href}, #{index}, #{deleted}, #{createTime}, #{updateTime})
     </insert>
 
@@ -80,13 +80,13 @@
                 position_id = #{positionId},
             </if>
             <if test="describe != null and describe != ''">
-                describe = #{describe},
+                `describe` = #{describe},
             </if>
             <if test="href != null and href != ''">
-                href = #{href},
+                `href` = #{href},
             </if>
             <if test="index != null">
-                index = #{index},
+                `index` = #{index},
             </if>
             <if test="deleted != null">
                 deleted = #{deleted},

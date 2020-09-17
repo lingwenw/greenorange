@@ -28,35 +28,35 @@
 </head>
 
 <body>
-<div class=" clearfix" id="advertising">
+<div class=" clearfix" id="advertising" >
        <div id="scrollsidebar" class="left_Treeview">
-    <div class="show_btn" id="rightArrow"><span></span></div>
-    <div class="widget-box side_content" >
-    <div class="side_title"><a title="隐藏" class="close_btn"><span></span></a></div>
-     <div class="side_list">
-      <div class="widget-header header-color-green2">
-          <h4 class="lighter smaller">广告图分类</h4>
-      </div>
-      <div class="widget-body" >
-         <ul class="b_P_Sort_list" id="position">
-             <li>
-                 <i class="orange  fa fa-user-secret"></i>
-                 <a href="#">全部 {{positionList.length}}</a>
-             </li>
-             <li  v-for="po in positionList">
-                 <i class="fa fa-image pink ">
-                     <a href="#">{{po.position}}</a>
-                 </i>
-             </li>
-         </ul>
-    </div>
+            <div class="show_btn" id="rightArrow"><span></span></div>
+            <div class="widget-box side_content" >
+                <div class="side_title"><a title="隐藏" class="close_btn"><span></span></a></div>
+                <div class="side_list">
+                     <div class="widget-header header-color-green2">
+                        <h4 class="lighter smaller">广告图分类</h4>
+                     </div>
+                    <div class="widget-body" >
+                        <ul class="b_P_Sort_list position">
+                            <li class="li-dian">
+                                <i class="orange  fa fa-user-secret"></i>
+                                <a href="#">全部 {{positionList.length}}</a>
+                            </li>
+                            <li class="li-dian" v-for="po in positionList">
+                                <i class="fa fa-image pink ">
+                                    <a href="#"> {{po.position}}</a>
+                                </i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
   </div>
-  </div>  
-  </div><div class="Ads_list" id="Ads_list">
+    <div class="Ads_list" id="Ads_list">
    <div class="border clearfix">
        <span class="l_f">
-        <a href="javascript:void(0)" id="ads_add" class="btn btn-warning"><i class="fa fa-plus"></i> 添加广告</a>
-        <a href="javascript:void(0)" class="btn btn-danger"><i class="fa fa-trash"></i> 批量删除</a>
+        <a href="javascript:void(0)" onclick="addClick()" id="ads_add" class="btn btn-warning"><i class="fa fa-plus"></i> 添加广告</a>
        </span>
        <span class="r_f">共：<b>{{advertList.length}}</b>条广告</span>
      </div>
@@ -64,41 +64,31 @@
        <table class="table table-striped table-bordered table-hover" id="sample-table">
 		<thead>
 		 <tr>
-				<th width="25"><label><input type="checkbox" class="ace"><span class="lbl"></span></label></th>
 				<th width="80">ID</th>
-                <th>排序</th>
 				<th width="100">分类</th>
 				<th width="240px">图片</th>
-<!--                <th width="150px">尺寸（大小）</th>-->
 				<th width="250px">链接地址</th>
 				<th width="180">加入时间</th>
-				<th width="70">状态</th>                
+                <th width="180">修改时间</th>
 				<th width="250">操作</th>
 			</tr>
 		</thead>
 	<tbody>
       <tr v-for="adList in advertList">
-       <td>
-           <label>
-               <input type="checkbox" class="ace">
-               <span class="lbl"></span>
-           </label>
-       </td>
-       <td>{{adList.id}}</td>
-       <td><input name="" type="text"  style=" width:50px" placeholder="1"/></td>
+       <td class="Radvert">{{adList.id}}</td>
        <td>{{adList.describe}}</td>
        <td><span class="ad_img">
            <img :src="'..'+adList.imgUrl"  width="100%" height="100%"/>
        </span>
        </td>
 <!--       <td>1890x1080</td>-->
-       <td><a href="#" target="_blank">{{adList.imgUrl}}</a></td>
-       <td>{{adList.createTime}}</td>
-       <td class="td-status"><span class="label label-success radius">显示</span></td>
-      <td class="td-manage">
-        <a onClick="member_stop(this,'10001')"  href="javascript:;" title="停用"  class="btn btn-xs btn-success"><i class="fa fa-check  bigger-120"></i></a>   
-        <a title="编辑" onclick="member_edit('编辑','member-add.html','4','','510')" href="javascript:;"  class="btn btn-xs btn-info" ><i class="fa fa-edit bigger-120"></i></a>      
-        <a title="删除" href="javascript:;"  onclick="member_del(this,'1')" class="btn btn-xs btn-warning" ><i class="fa fa-trash  bigger-120"></i></a>
+       <td><a href="#" target="_blank">{{adList.href}}</a></td>
+       <td class="txt">{{adList.createTime}}</td>
+       <td class="txt">{{adList.updateTime}}</td>
+       <td class="td-manage">
+        <a title="编辑" @click="clickBtn(adList.id)" href="javascript:(void 0);"  class="btn btn-xs btn-info" ><i class="fa fa-edit bigger-120"></i></a>
+        <a title="删除" href="javascript:(void 0);"  onclick="member_del(this,'1')" class="btn btn-xs btn-warning" ><i class="fa fa-trash  bigger-120"></i></a>
+
        </td>
       </tr>
     </tbody>
@@ -106,54 +96,101 @@
      </div>
  </div>
 </div>
+
+<div id="position">
+<!--改变广告-->
+<div class="fix" style="display: none; width: 500px;height: 200px;margin: 0 auto;background: #f9f9f9;color: black;position: fixed;top: 50px;left: 30%;">
+    <a id="shows" href="javascript:(void 0);" style="float: right;margin: 5px;border: 1px solid #6fb3e0;">关闭</a>
+    <div style="height: 20px;width: 100%;"></div>
+    <form id="setad" action="/advert/setAdvert" method="post" enctype="multipart/form-data">
+    <div style="margin: 0 auto;width: 300px;">
+        <select name="positions" class="form-control">
+            <option v-for="po in positions">{{po.position}}</option>
+        </select>
+        <span style="display: block;">
+            图片:<input name="upload" style="margin: 0;" class="form-control" type="file"/>
+        </span>
+        <span style="display: block;">
+            连接地址:<input name="herf" style="margin: 0;" class="form-control" type="text"/>
+        </span>
+        <input id="uid" name="id" type="text" value="" style="height: 0;padding: 0;margin: 0;"/>
+        <a id="but" href="javascript:(void 0);" style="display: block;background-color: #6fb3e0;margin-top: 10px; border: 1px solid #6fb3e0;text-align: center;">提交</a>
+    </div>
+    </form>
+    <script>
+        $(function () {
+            $("#shows").click(function () {
+                $(".fix").css("display","none")
+
+            })
+            $("#but").click(function () {
+                var sid=$(".fix").data("sid");
+                var id=$("#uid").val(sid)
+                var position=$("#positions").val();
+                var img_Url=$("#img_Url").val();
+                var herf=$("#herf").val();
+                if (id!="" && position!="" && img_Url!="" && herf!=""){
+                        $("#setad").submit()
+                }
+            })
+        })
+    </script>
+</div>
 <!--添加广告样式-->
 <div id="add_ads_style"  style="display:none">
  <div class="add_adverts">
+ <form id="uploads" action="/advert/uploadImg" method="post" enctype="multipart/form-data">
  <ul>
-  <li>
-  <label class="label_name">所属分类</label>
-  <span class="cont_style">
-  <select class="form-control" id="form-field-select-1">
-    <option value="">选择分类</option>
-    <option value="AL">首页大幻灯片</option>
-    <option value="AK">首页小幻灯片</option>
-    <option value="AZ">单广告图</option>
-    <option value="AR">其他广告</option>
-    <option value="CA">板块栏目广告</option>
-  </select></span>
+  <li >
+      <label class="label_name">所属分类</label>
+      <span class="cont_style">
+        <select class="form-control" id="form-field-select-1"  name="option">
+            <option v-for="pos in positions">{{pos.position}}</option>
+        </select>
+      </span>
   </li>
-  <li><label class="label_name">图片尺寸</label><span class="cont_style">
-  <input name="长" type="text" id="form-field-1" placeholder="0" class="col-xs-10 col-sm-5" style="width:80px">
-  <span class="l_f" style="margin-left:10px;">x</span><input name="宽" type="text" id="form-field-1" placeholder="0" class="col-xs-10 col-sm-5" style="width:80px"></span></li>
-  <li><label class="label_name">显示排序</label><span class="cont_style"><input name="排序" type="text" id="form-field-1" placeholder="0" class="col-xs-10 col-sm-5" style="width:50px"></span></li>
-  <li><label class="label_name">链接地址</label><span class="cont_style"><input name="地址" type="text" id="form-field-1" placeholder="地址" class="col-xs-10 col-sm-5" style="width:450px"></span></li>
-   <li><label class="label_name">状&nbsp;&nbsp;态：</label>
-   <span class="cont_style">
-     &nbsp;&nbsp;<label><input name="form-field-radio1" type="radio" checked="checked" class="ace"><span class="lbl">显示</span></label>&nbsp;&nbsp;&nbsp;
-     <label><input name="form-field-radio1" type="radio" class="ace"><span class="lbl">隐藏</span></label></span><div class="prompt r_f"></div>
+     <li>
+         <label class="label_name">连接地址</label>
+         <span class="cont_style">
+             <input class="" name="herf" type="text" placeholder="连接地址"/>
+         </span>
      </li>
-     <li><label class="label_name">图片</label><span class="cont_style">
- <div class="demo">
-	           <div class="logobox"><div class="resizebox"><img src="images/image.png" width="100px" alt="" height="100px"/></div></div>	
-               <div class="logoupload">
-                  <div class="btnbox"><a id="uploadBtnHolder" class="uploadbtn" href="javascript:;">上传替换</a></div>
-                  <div style="clear:both;height:0;overflow:hidden;"></div>
-                  <div class="progress-box" style="display:none;">
-                    <div class="progress-num">上传进度：<b>0%</b></div>
-                    <div class="progress-bar"><div style="width:0%;" class="bar-line"></div></div>
-                  </div>  <div class="prompt"><p>图片大小小于5MB,支持.jpg;.gif;.png;.jpeg格式的图片</p></div>  
-              </div>                                
-           </div>           
-   </span>
-  </li>
- 
-  
+     <li>
+         <label class="label_name">图片</label>
+         <span class="cont_style">
+             <div class="demo">
+                   <div class="logobox">
+                       <div class="resizebox">
+                           <img id="imges" src="images/image.png" width="100px" alt="" height="100px"/>
+                           <input class="files" name="upload" type="file" style="width: 100%;height: 120px;position: relative;top: -100px;opacity: 0.8;"/>
+                       </div>
+                   </div>
+                   <div class="logoupload">
+                      <div style="clear:both;height:0;overflow:hidden;"></div>
+                      <div class="progress-box" style="display:none;">
+                        <div class="progress-bar">
+                            <div style="width:0%;" class="bar-line"></div>
+                        </div>
+                      </div>
+                       <div class="prompt">
+                           <p>支持.jpg;.gif;.png;.jpeg格式的图片</p>
+                       </div>
+                  </div>
+               </div>
+         </span>
+   </li>
  </ul>
+ </form>
  </div>
+
 </div>
+</div>
+
 </body>
 </html>
 <script>
+
+
 //初始化宽度、高度  
  $(".widget-box").height($(window).height()); 
  $(".Ads_list").width($(window).width()-220);
@@ -196,47 +233,57 @@ function member_start(obj,id){
 /*广告图片-删除*/
 function member_del(obj,id){
 	layer.confirm('确认要删除吗？',{icon:0,},function(index){
-		$(obj).parents("tr").remove();
-		layer.msg('已删除!',{icon:1,time:1000});
+	    var ids=$(obj).parents(".td-manage").siblings(".Radvert").text()
+		$.post("/advert/removeAdvert",{"ids":ids},function (date) {
+                if (date){
+                    $(obj).parents("tr").remove();
+                    layer.msg('已删除!',{icon:1,time:1000});
+                }else {
+                    layer.msg('删除失败!',{icon:1,time:1000});
+                }
+        })
 	});
 }
 /*******添加广告*********/
- $('#ads_add').on('click', function(){
-     console.log(111)
-	  layer.open({
+
+function addClick(){
+    // $("#add_ads_style").show();
+
+    layer.open({
         type: 1,
         title: '添加广告',
-		maxmin: true, 
-		shadeClose: false, //点击遮罩关闭层
+        maxmin: true,
+        shadeClose: false, //点击遮罩关闭层
         area : ['800px' , ''],
         content:$('#add_ads_style'),
-		btn:['提交','取消'],
-		yes:function(index,layero){	
-		 var num=0;
-		 var str="";
-     $(".add_adverts input[type$='text']").each(function(n){
-          if($(this).val()=="")
-          {
-               
-			   layer.alert(str+=""+$(this).attr("name")+"不能为空！\r\n",{
-                title: '提示框',				
-				icon:0,								
-          }); 
-		    num++;
-            return false;            
-          } 
-		 });
-		  if(num>0){  return false;}	 	
-          else{
-			  layer.alert('添加成功！',{
-               title: '提示框',				
-			icon:1,		
-			  });
-			   layer.close(index);	
-		  }		  		     				
-		}
+        btn:['提交','取消'],
+        yes:function(index,layero){
+            var num=0;
+            var str="";
+            $(".add_adverts input[type$='file']").each(function(n){
+                if($(this).val()==""){
+                    layer.alert(str+=""+$(this).attr("name")+"不能为空！\r\n",{
+                        title: '提示框',
+                        icon:0,
+                    });
+                    num++;
+                    return false;
+                }
+            });
+            if(num>0){  return false;}
+            else{
+                $("#uploads").submit();
+                layer.alert('添加成功！',{
+                    title: '提示框',
+                    icon:1,
+                });
+
+                layer.close(index);
+            }
+        }
     });
-})
+}
+
 </script>
 <script type="text/javascript">
 function updateProgress(file) {
@@ -331,8 +378,8 @@ jQuery(function($) {
 		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
 		  {"orderable":false,"aTargets":[0,2,3,4,5,7,8,]}// 制定列不参与排序
 		] } );
-				
-				
+
+
 				$('table th input:checkbox').on('click' , function(){
 					var that = this;
 					$(this).closest('table').find('tr > td:first-child input:checkbox')
@@ -340,10 +387,10 @@ jQuery(function($) {
 						this.checked = that.checked;
 						$(this).closest('tr').toggleClass('selected');
 					});
-						
+
 				});
-			
-			
+
+
 				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
 				function tooltip_placement(context, source) {
 					var $source = $(source);
@@ -363,7 +410,7 @@ jQuery(function($) {
 <script type="text/javascript" src="../js/axios-0.18.0.js"></script>
 <script>
     new Vue({
-        el : "#position",
+        el : ".position",
         //声明数据
         data : {
             positionList : []
@@ -388,7 +435,33 @@ jQuery(function($) {
             this.getposition();
         }
     })
+    new Vue({
+        el : "#position",
+        //声明数据
+        data : {
+            positions: []
+        },
+        methods : {
+            getposition : function () {
+                var _this = this;
+                //异步请求
+                axios.get("/position")
+                    //成功
+                    .then(function (resp) {
+                        console.log(resp.data)
+                        _this.positions = resp.data;
+                    })
+                    .catch(function (resp) {
+                        console.log("服务器繁忙")
+                    })
+            }
 
+        },
+        //vue创建时
+        created : function () {
+            this.getposition();
+        }
+    })
     // 查询所有
     new Vue({
         el : "#Ads_list",
@@ -409,6 +482,12 @@ jQuery(function($) {
                     .catch(function (resp) {
                         console.log("服务器繁忙")
                     })
+            },
+            clickBtn : function  (sid){
+                $(".fix").css("display","block")
+                // var sid=$(this).parents(".td-manage").siblings(".Radvert").text()
+                console.log(sid)
+                $(".fix").data("sid",sid);
             }
         },
         //vue创建时
