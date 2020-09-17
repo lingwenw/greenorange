@@ -39,6 +39,7 @@ public interface CategoryDao {
      */
     Integer insert(Category category);
 
+
     /**
      * 修改数据
      *
@@ -46,6 +47,14 @@ public interface CategoryDao {
      * @return 影响行数
      */
     Integer update(Category category);
+
+    /**
+     * 修改数据
+     * @param pid 原本的parentId
+     * @param updetePid 修改后的parentId
+     * @return 影响行数
+     */
+    Integer updateParentId(Integer pid,Integer updetePid);
 
     /**
      * 通过主键删除数据

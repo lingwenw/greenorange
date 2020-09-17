@@ -21,37 +21,25 @@ public class Goods implements Serializable {
      */
     private Integer categoryId;
     /**
+     * 分类名称
+     */
+    private String categoryName;
+    /**
      * 商品名
      */
     private String name;
     /**
+     * 品牌id
+     */
+    private Integer brandId;
+    /**
+     * 品牌名
+     */
+    private String brandName;
+    /**
      * 卖点
      */
     private String sellPoint;
-    /**
-     * 销量
-     */
-    private Integer saleCount;
-    /**
-     * 参数列表
-     */
-    private String params;
-    /**
-     * 介绍图片(介绍资源)
-     */
-    private String introduceData;
-    /**
-     * 好评数
-     */
-    private Integer goodEvaluate;
-    /**
-     * 差评数
-     */
-    private Integer badEvaluate;
-    /**
-     * 最低价
-     */
-    private Float minPrice;
     /**
      * 是否删除（逻辑删除）
      */
@@ -64,29 +52,40 @@ public class Goods implements Serializable {
      * 最近一次修改时间
      */
     private Date updateTime;
-    /**
-     * sku列表
-     */
-    private List<GoodsSku> skuList;
 
     @Override
     public String toString() {
         return "Goods{" +
                 "id=" + id +
                 ", categoryId=" + categoryId +
+                ", categoryName='" + categoryName + '\'' +
                 ", name='" + name + '\'' +
+                ", brandId=" + brandId +
+                ", brandName='" + brandName + '\'' +
                 ", sellPoint='" + sellPoint + '\'' +
-                ", saleCount=" + saleCount +
-                ", params='" + params + '\'' +
-                ", introduceData='" + introduceData + '\'' +
-                ", goodEvaluate=" + goodEvaluate +
-                ", badEvaluate=" + badEvaluate +
-                ", minPrice=" + minPrice +
                 ", deleted=" + deleted +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
     }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    private List<GoodsSku> skuList;
 
     public List<GoodsSku> getSkuList() {
         return skuList;
@@ -120,6 +119,14 @@ public class Goods implements Serializable {
         this.name = name;
     }
 
+    public Integer getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Integer brandId) {
+        this.brandId = brandId;
+    }
+
     public String getSellPoint() {
         return sellPoint;
     }
@@ -128,53 +135,6 @@ public class Goods implements Serializable {
         this.sellPoint = sellPoint;
     }
 
-    public Integer getSaleCount() {
-        return saleCount;
-    }
-
-    public void setSaleCount(Integer saleCount) {
-        this.saleCount = saleCount;
-    }
-
-    public String getParams() {
-        return params;
-    }
-
-    public void setParams(String params) {
-        this.params = params;
-    }
-
-    public String getIntroduceData() {
-        return introduceData;
-    }
-
-    public void setIntroduceData(String introduceData) {
-        this.introduceData = introduceData;
-    }
-
-    public Integer getGoodEvaluate() {
-        return goodEvaluate;
-    }
-
-    public void setGoodEvaluate(Integer goodEvaluate) {
-        this.goodEvaluate = goodEvaluate;
-    }
-
-    public Integer getBadEvaluate() {
-        return badEvaluate;
-    }
-
-    public void setBadEvaluate(Integer badEvaluate) {
-        this.badEvaluate = badEvaluate;
-    }
-
-    public Float getMinPrice() {
-        return minPrice;
-    }
-
-    public void setMinPrice(Float minPrice) {
-        this.minPrice = minPrice;
-    }
 
     public Boolean getDeleted() {
         return deleted;

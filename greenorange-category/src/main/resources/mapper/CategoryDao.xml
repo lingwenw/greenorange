@@ -9,12 +9,13 @@
         <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="paramType" column="param_type" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--级联查询所有数据-->
     <select id="findCategorys" resultMap="categoryMap" >
         select
-          id, parent_id, name, deleted, create_time, update_time
+          id, parent_id, name, deleted, create_time, update_time,param_type
         from greenorange.tb_category
 --         where parent_id = #{id}
 --         and deleted = false
@@ -22,7 +23,7 @@
     <!--查询单个-->
     <select id="findById" resultMap="categoryMap">
         select
-          id, parent_id, name, deleted, create_time, update_time
+          id, parent_id, name, deleted, create_time, update_time,param_type
         from greenorange.tb_category
         where id = #{id}
     </select>
@@ -31,7 +32,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="findAllByCondition" resultMap="categoryMap">
         select
-        id, parent_id, name, deleted, create_time, update_time
+        id, parent_id, name, deleted, create_time, update_time,param_type
         from greenorange.tb_category
         <where>
             <if test="id != null">
@@ -58,8 +59,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_category(parent_id, name, deleted, create_time, update_time)
-        values (#{parentId}, #{name}, #{deleted}, #{createTime}, #{updateTime})
+        insert into greenorange.tb_category(parent_id,name,param_type)
+        values (#{parentId}, #{name}, #{paramType})
     </insert>
 
     <!--通过主键修改数据-->
@@ -80,6 +81,9 @@
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime},
+            </if>
+            <if test="paramType != null">
+                param_type = #{paramType},
             </if>
         </set>
         where id = #{id}

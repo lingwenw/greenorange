@@ -2,7 +2,9 @@ package com.wpp.greenorange.service;
 
 import com.wpp.greenorange.domain.GoodsSku;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (GoodsSku)表服务接口
@@ -11,6 +13,14 @@ import java.util.List;
  * @since 2020-09-04 01:46:31
  */
 public interface GoodsSkuService {
+
+//    boolean
+
+    /**
+     * 把一个sku保存到elasticsearch
+     * @param sku
+     */
+    void saveSkuEsToElasticSearch(GoodsSku sku) throws IOException;
 
     /**
      * 通过实体作为筛选条件查询
@@ -52,4 +62,9 @@ public interface GoodsSkuService {
      */
     Boolean deleteById(Integer id);
 
+    /**
+     * 处理控制器的搜索
+     * @return
+     */
+    Map<String, Object> search(String input, String[] brand, String category, Integer pageNum, String sort, String order, String[] params, String price) throws IOException;
 }

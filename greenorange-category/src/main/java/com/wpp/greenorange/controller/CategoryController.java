@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/category")
-public class CategoryController{
+public class CategoryController {
     /**
      * 服务对象
      */
@@ -70,14 +70,13 @@ public class CategoryController{
     }
 
     /**
-     *
      * @param category
      * @return Category 修改数据
      */
     @RequestMapping("/updateCategory")
     public boolean updateCategory(Category category) throws JsonProcessingException {
         boolean isUpdate = categoryService.update(category);
-        if (isUpdate){
+        if (isUpdate) {
             redisTemplate.delete("categorys");
             categoryService.saveCategoryTreeToRedis();
         }
@@ -85,17 +84,26 @@ public class CategoryController{
     }
 
     /**
-     *
      * @param category 删除数据
      * @return
      */
     @RequestMapping("/deleteCategory")
     public boolean deleteCategory(Category category) throws JsonProcessingException {
+        boolean aBoolean = categoryService.deleteById(category);
+        redisTemplate.delete("categorys");
+        categoryService.saveCategoryTreeToRedis();
+        return aBoolean;
+    }
+
+    @RequestMapping("/addCategory")
+    public boolean addCategory(Category category) throws JsonProcessingException {
         System.out.println(category);
-//        boolean aBoolean = categoryService.deleteById(category);
-//        redisTemplate.delete("categorys");
-//        categoryService.saveCategoryTreeToRedis();
-        return false;
+        Boolean insert = categoryService.insert(category);
+        if (insert){
+            redisTemplate.delete("categorys");
+            categoryService.saveCategoryTreeToRedis();
+        }
+        return insert;
     }
 
 }
