@@ -52,10 +52,24 @@ public class AdminController {
             return false;
         }
     }
-
+    /*
+     * 分页
+     *
+     */
     @RequestMapping("/findUserByInfo")
     public PageInfo<User> findUserByInfo(int pageNo, int pagesize){
         PageInfo<User> userByInfo = adminService.findUserByInfo(pageNo, pagesize);
         return userByInfo;
+    }
+    /*
+     * 获取sisson
+     *
+     */
+    @RequestMapping("/getLoginName")
+    public String getLoginName(HttpSession session){
+        Admin admin = (Admin) session.getAttribute("loginAdmin");
+        String name = admin.getName();
+        System.out.println(name);
+        return name;
     }
 }
