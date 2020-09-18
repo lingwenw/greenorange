@@ -109,9 +109,4 @@ public class GoodsSkuController {
         return null;
     }
 
-    //查询页面
-    @RequestMapping("/searchJson")
-    public GoodsSku findById(Integer id){
-        return goodsSkuService.findById(id);
-    }
 }

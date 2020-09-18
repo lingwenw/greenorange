@@ -462,10 +462,11 @@
 		$(".chooseAll").click(function(){
 			$("input[name='chk_list']").prop("checked", $(this).prop("checked"));
 		});
+		var userId=1;
 		//页面加载时，根据登录号用户id从数据库拿取这个用户所有商品数据
-		// $.ajax({ url:"/goods/getAllLimit",data:{"userid":userid},success: function(data){
-		// 	exhibit(data);
-		// }});
+		$.ajax({ url:"/goodsFavourite/findAllByCondition",data:{"userId":userId,"statusId":1},success: function(data){
+			alert(data.skuId);
+		}});
 		//删除点击时
 		$(".cut_out").click(function () {
 			var id=$(this).parent().parent().find("input[name='chk_list']").val();

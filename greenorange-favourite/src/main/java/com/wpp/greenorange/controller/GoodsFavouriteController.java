@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (GoodsFavourite)表控制层
@@ -33,4 +34,8 @@ public class GoodsFavouriteController {
         return this.goodsFavouriteService.findById(id);
     }
 
+    @RequestMapping("/findAllByCondition")
+    public List<GoodsFavourite> findAllByCondition(GoodsFavourite goodsFavourite){
+        return this.goodsFavouriteService.findAllByCondition(goodsFavourite);
+    }
 }
