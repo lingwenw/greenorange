@@ -10,7 +10,7 @@
 //**************************************************************
 
 (function($){
-
+	// alert(1);
 		$.fn.jqueryzoom = function(options){
 		var settings = {
 				xzoom: 200,//zoomed width default width

@@ -6,9 +6,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 	<title>结算页</title>
-
+	<!-- 原样式-->
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-getOrderInfo.css" />
+	<!-- 三级联动插件样式-->
+	<link rel="stylesheet" type="text/css" href="./css/pages-addresscity-picker.css"/>
+	<link rel="stylesheet" type="text/css" href="./css/pages-addressmain.css"/>
 </head>
 
 <body>
@@ -64,37 +67,10 @@
 				<div class="step-cont">
 					<div class="addressInfo">
 						<ul class="addr-detail">
-							<li class="addr-item">
-							
-							  <div>
-								<div class="con name selected"><a href="javascript:;" >张默<span title="点击取消选择">&nbsp;</a></div>
-								<div class="con address">张默 北京市海淀区三环内 中关村软件园9号楼 <span>159****3201</span>
-									<span class="base">默认地址</span>
-									<span class="edittext"><a data-toggle="modal" data-target=".edit" data-keyboard="false" >编辑</a>&nbsp;&nbsp;<a href="javascript:;">删除</a></span>
-								</div>
-								<div class="clearfix"></div>
-							  </div>
-							  <div>
-								<div class="con name"><a href="javascript:;">李煜<span title="点击取消选择">&nbsp;</a></div>
-								<div class="con address">李煜 北京市海淀区三环内 中关村软件园8号楼 <span>187****4201</span>
-								<span class="edittext"><a data-toggle="modal" data-target=".edit" data-keyboard="false" >编辑</a>&nbsp;&nbsp;<a href="javascript:;">删除</a></span>
-								</div>
-								<div class="clearfix"></div>
-							  </div>
-							  
-							  <div>
-								<div class="con name"><a href="javascript:;">王希<span title="点击取消选择">&nbsp;</a></div>
-								<div class="con address">王希 北京市海淀区三环内 中关村软件园6号楼  <span>156****5681</span>
-								<span class="edittext"><a data-toggle="modal" data-target=".edit" data-keyboard="false" >编辑</a>&nbsp;&nbsp;<a href="javascript:;">删除</a></span>
-								</div>
-								<div class="clearfix"></div>
-							  </div>
-							</li>
-							
-							
+							<li class="addr-item"></li>
 						</ul>
 						<!--添加地址-->
-                          <div  tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade edit">
+                          <div  tabindex="-1" role="dialog" data-hasfoot="true" class="sui-modal hide fade edit">
 						  <div class="modal-dialog">
 						    <div class="modal-content">
 						      <div class="modal-header">
@@ -106,10 +82,25 @@
 						      		 <div class="control-group">
 									    <label class="control-label">收货人：</label>
 									    <div class="controls">
-									      <input type="text" class="input-medium">
+									      <input type="text" class="input-medium input_name">
 									    </div>
 									  </div>
-									   
+									   <div class="control-group">
+							  				<label class="control-label">所在地区：</label>
+											<div class="controls">
+											   <div id="distpicker">
+												   <div class="form-group">
+													   <div style="position: relative;">
+														   <input id="city-picker3" name="address" class="form-control" readonly type="text" value="" data-toggle="city-picker">
+													   </div>
+												   </div>
+												   <div class="form-group">
+													   <button class="btn btn-warning" id="reset" type="button">重置</button>
+													   <button class="btn btn-danger" id="destroy" type="button">确定</button>
+												   </div>
+											   </div>
+										   </div>
+									   </div>
 									   <div class="control-group">
 									    <label class="control-label">详细地址：</label>
 									    <div class="controls">
@@ -119,25 +110,15 @@
 									   <div class="control-group">
 									    <label class="control-label">联系电话：</label>
 									    <div class="controls">
-									      <input type="text" class="input-medium">
+									      <input type="text" class="input-medium input-telephone">
 									    </div>
 									  </div>
-									   <div class="control-group">
-									    <label class="control-label">邮箱：</label>
+									   <div class="control-group control-development" style="display:none;">
+									    <label class="control-label">备注：</label>
 									    <div class="controls">
-									      <input type="text" class="input-medium">
+									      <input type="text" class="input-medium input-remarks">
 									    </div>
 									  </div>
-									   <div class="control-group">
-									    <label class="control-label">地址别名：</label>
-									    <div class="controls">
-									      <input type="text" class="input-medium">
-									    </div>
-									    <div class="othername">
-									    	建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
-									    </div>
-									  </div>
-									  
 						      	</form>
 						      	
 						      	
@@ -376,12 +357,210 @@
 	</div>
 </div>
 <!--页面底部END-->
-
+<script type="text/javascript" src="js/jquery.js"></script>
+<!--	三级联动插件样式-->
+<script type="text/javascript" src="./js/pages/addressBootstrap.js"></script>
+<script type="text/javascript" src="./js/pages/addressCity-picker.data.js"></script>
+<script type="text/javascript" src="./js/pages/addressCity-picker.js"></script>
+<script type="text/javascript" src="./js/pages/addressMain.js"></script>
+<!--	原样式-->
 <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
 <script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
 <script type="text/javascript" src="components/ui-modules/nav/nav-portal-top.js"></script>
 <script type="text/javascript" src="js/pages/getOrderInfo.js"></script>
+	<script>
+		$(function () {
+			//页面加载时，查询数据添加到页面
+			$(document).ready(function(){
+				$.ajax({ url:"/address/getConditions", success: function(data){
+						inits(data);
+					}});
+                    //商品订单
+                    // $.ajax({ url:"",data:{"userid":userid}, success: function(data){
+                    //     exhibit(data);
+                    // }});
+			});
+			//从页面地址中获取用户登录时，传出的用户名!
+			// $(function () {
+			// 	function GetQueryString(name) {
+			// 		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+			// 		var r = window.location.search.substr(1).match(reg);
+			// 		if(r!=null)return  unescape(r[2]); return null;
+			// 	}
+			// 	// 调用方法
+			// 	var gqs=GetQueryString("tel");
+			//点击新增地址按钮时产生的页面样式
+			$(".newadd").click(function () {
+				$(".modal-title").text("新增地址");
+				$(".sui-form").attr("action","/address/SetAddress");
+				$(".input_name").val("");
+				$(".placeholder").val("");
+				$(".input-large").val("");
+				$(".input-telephone").val("");
+				$(".input-remarks").attr("name","notes");
+				$(".input-remarks").val("");
+				//
+				$(".sui-modal").attr("style","display:block !important;");
+				$(".sui-modal").show();
+				//
+				$(".control-development").hide();
+			});
+			//判断电话号码是否符合规格
+			$(".input-telephone").blur(function (){
+				var telephone=/^\d{11,}$/;
+				var telephones=$(this).val();
+				if (!telephone.test(telephones)){
+					alert("电话号码不对");
+					$(this).val("");
+				}
+
+			});
+			//完成后的判断与传输
+			$(".btn-primary").click(function () {
+				//用户名获取用户id
+				// var userName=null;
+				// var userID;
+				// $.ajax({ url:"/address/findByuUserId",data:{"name":userName}, success: function(data){
+				// 		userID=data;
+				// 	}});
+				//获取新增数据input-medium
+				var titles=$(".modal-title").text();
+				var names=$(".input_name").val();
+				var diZi1=$("#city-picker3").val();
+				var diZi2=$(".input-large").val();
+				var diZi=diZi1+"/"+diZi2;
+				var dianHua=$(".input-telephone").val();
+				var beiZu=$(".input-remarks").val();
+				//判断数据是否为空
+				if (names==null||diZi==null||dianHua==null){
+					alert("请将内容填完才可完成！")
+				} else {
+					//判断是否是添加还是修改
+					if (titles=="新增地址"){
+						$.ajax({ url:"/address/SetAddress",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"notes":null}, success: function(data){
+								if (data){
+									$(".sui-close").click();
+									$.ajax({ url:"/address/getConditions", success: function(data){
+											inits(data);
+										}});
+								}
+							}});
+					} else if (titles=="修改地址"){
+						$.ajax({ url:"/address/update",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"id":beiZu}, success: function(data){
+								if (data){
+								$(".sui-close").click();
+									$.ajax({ url:"/address/getConditions", success: function(data){
+											inits(data);
+										}});
+								}
+							}});
+					}
+				}
+			});
+			//页面样式设置
+			function inits(data) {
+				var tbody=$(".addr-item");
+				tbody.empty();
+				var obj = eval(data);
+				$(obj).each(function (index) {
+					var val = obj[index];
+					tbody.append("<div data-title="+val.id+">" +
+							"<div class='con name' name='contact' data-title="+val.userId+"><a data-title="+val.contact+" href='javascript:;'>"+val.contact+"<span title='点击取消选择'>&nbsp;</a></div>"+
+							"<div class='con address' name='address' data-title="+val.address+">"+val.address+"<span name='mobile'>"+val.mobile+"</span>"+
+							"<span class='edittext'><a class='edit-modify XiuGai_1' data-toggle='modal' data-target='.edit' data-keyboard='false' >编辑</a>&nbsp;&nbsp;<a class='edit-modify ShanChu_1' href='javascript:;'>删除</a></span>" +
+							"</div>" +
+							"<div class='clearfix'></div>");
+					//点击修改时，进行判断修改
+					$(".XiuGai_1").click(function () {
+						//
+						$(".modal-title").text("修改地址");
+						$(".sui-form").attr("action","/address/update");
+						var id=$($(this).parent().parent().parent()).attr("data-title");
+						var contact=$($(this).parent().parent().prev().find("a")).attr("data-title");
+						var address=$($(this).parent().parent()).text();
+						var address_s=address.split(" ");
+						var address_1=address_s[0].toString()+"/"+address_s[1].toString()+"/"+address_s[2].toString();
+						var address_2=address_s[3].toString();
+						var mobile=$($(this).parent().prev()).text();
+						$(".input_name").val(contact);
+						$(".placeholder").val(address_1);
+						$(".input-large").val(address_2);
+						$(".input-telephone").val(mobile);
+						$(".input-remarks").attr("name","id");
+						$(".input-remarks").val(id);
+						$(".sui-modal").css("display","block");
+						$(".control-development").hide();
+						//
+						$.ajax({ url:"/address/getConditions", success: function(data){
+								inits(data);
+							}});
+					});
+					//点击删除时，进行数据删除操作！
+					$(".ShanChu_1").click(function () {
+						var id=$($(this).parent().parent().parent()).attr("data-title");
+						$.ajax({ url:"/address/deleteById",data :{"id":id}, success: function(data){
+								if (data){
+									$.ajax({ url:"/address/getConditions", success: function(data){
+											inits(data);
+										}});
+								}
+							}});
+					});
+					//触屏显现
+					$(".addr-item div").mousemove(function () {
+						$(this).find(".edittext").css("visibility","visible");
+					});
+					$(".addr-item div").mouseleave(function () {
+						$(this).find(".edittext").css("visibility","hidden");
+					});
+					$(".name").click(function () {
+						$(".name").removeClass("selected");
+						$(this).addClass("selected");
+						var id=$(this).parent().attr("data-title");
+						$.ajax({ url:"/address/getOne",data:{"id":id}, success: function(data){
+								$(".trade .fc-receiverInfo").text("寄送至:"+data.address+" 收货人:"+data.mobile+" "+data.contact);
+							}});
+
+					});
+				});
+			}
+			// $(".submit").click(function () {
+			//
+			// })
+            //根据用户id从数据库中获取商品订单
+			function exhibit(data) {
+				var tbody=$(".send-detail");
+				var nums=0;
+				tbody.empty();
+				var obj = eval(data);
+				$(obj).each(function (index) {
+					var val = obj[index];
+					tbody.append("<li><div class='sendGoods'>"+
+							"<ul class='yui3-g'>"+
+							"<li class='yui3-u-1-6'>"+
+							"<span><img src='img/goods.png'/></span>"+
+							"</li>"+
+							"<li class='yui3-u-7-12'>"+
+							"<div class='desc'>Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</div>"+
+							"<div class='seven'>7天无理由退货</div></li>"+
+							"<li class='yui3-u-1-12'>"+
+							"<div class='price' data-number='8848'>￥8848.00</div></li>"+
+							"<li class='yui3-u-1-12'>"+
+							"<div class='num'>X1</div></li>"+
+							"<li class='yui3-u-1-12'>"+
+							"<div class='exit'>有货</div>"+
+							"</li></ul></div></li>");
+							var num=$(tbody).find(".price");
+							nums=nums+parseFloat(num.attr("data-number"));
+				});
+							// $(".list .number").text(data.size);
+							// $(".list .allprice").text("￥"+nums);
+							// $(".trade .price").text("￥"+nums);
+			}
+		})
+
+	</script>
 </body>
 
 </html>

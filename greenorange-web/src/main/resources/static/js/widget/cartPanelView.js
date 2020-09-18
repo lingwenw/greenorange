@@ -27,6 +27,7 @@ var cartPanelView = {
 
     // 侧栏按钮点击
     tabItemClick : function (typeName) {
+        // alert(1);
         if($('.toolbar-wrap').hasClass('toolbar-open')){
             cartPanelView.tbar_panel_close(typeName);
         }else{

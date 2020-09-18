@@ -1,5 +1,6 @@
 package com.wpp.greenorange.controller;
 
+import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.service.GoodsSkuService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -108,6 +109,9 @@ public class GoodsSkuController {
         return null;
     }
 
-
-
+    //查询页面
+    @RequestMapping("/searchJson")
+    public GoodsSku findById(Integer id){
+        return goodsSkuService.findById(id);
+    }
 }
