@@ -21,7 +21,7 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //配置图片的外部路径
-        registry.addResourceHandler("/img/**").addResourceLocations(imgPath);
+        registry.addResourceHandler("/img/**").addResourceLocations("file:"+imgPath);
         //配置商品文件的路径
         registry.addResourceHandler("/goodsPage/**").addResourceLocations("file:"+pagePath);
     }

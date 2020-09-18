@@ -170,10 +170,6 @@
 
     $(document).ready(function () {
         $.post("/category/findCategorys", function (data) {
-            // data.forEach(function (e) {
-            //     getChildrens(e);
-            // })
-            console.log(data)
             zNodes.push({id: 0, pId: -1, name: "商城分类列表", open: true});
             var t = $("#treeDemo");
             zNodes = data;
@@ -188,19 +184,6 @@
 
     var zNodes = [];
 
-    function getChildrens(category) {
-        var childrens = category.categories;
-
-        if (childrens == undefined) {
-            zNodes.push(category);
-            return;
-        } else {
-            zNodes.push(category);
-            childrens.forEach(function (e) {
-                getChildrens(e);
-            })
-        }
-    }
 
     function errorAlert(str) {
         layer.alert(str, {

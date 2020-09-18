@@ -128,6 +128,11 @@ public class CategoryServiceImpl implements CategoryService {
         return map;
     }
 
+    @Override
+    public String findCidsByCid(Integer categoryId) {
+        return categoryDao.findCidsByCid(categoryId);
+    }
+
 
     private List<Map> test(List<Category> categories, int pid) {
         List<Map> list = new ArrayList<>();

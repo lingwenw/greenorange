@@ -1,0 +1,109 @@
+<!-- 头部栏位 -->
+<!--页面顶部-->
+<div id="nav-bottom">
+    <!--顶部-->
+    <div class="nav-top">
+        <div class="top">
+            <div class="py-container">
+                <div class="shortcut">
+                    <ul class="fl">
+                        <li class="f-item">青橙欢迎您！</li>
+                        <li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+                    </ul>
+                    <div class="fr typelist">
+                        <ul class="types">
+                            <li class="f-item"><span>我的订单</span></li>
+
+                            <li class="f-item"><span><a href="cart.html" target="_blank">我的购物车</a></span></li>
+                            <li class="f-item"><span><a href="home.html" target="_blank">我的青橙</a></span></li>
+                            <li class="f-item"><span>青橙会员</span></li>
+                            <li class="f-item"><span>企业采购</span></li>
+                            <li class="f-item"><span>关注青橙</span></li>
+                            <li class="f-item"><span><a href="cooperation.html" target="_blank">合作招商</a></span></li>
+                            <li class="f-item"><span><a href="shoplogin.html" target="_blank">商家后台</a></span></li>
+                            <li class="f-item"><span>网站导航</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--头部-->
+        <div class="header">
+            <div class="py-container">
+                <div class="yui3-g Logo">
+                    <div class="yui3-u Left logoArea">
+                        <a class="logo-bd" title="青橙" href="index.html" target="_blank"></a>
+                    </div>
+                    <div class="yui3-u Rit searchArea">
+                        <div class="search">
+                            <form class="sui-form form-inline" onsubmit="return false">
+                                <!--searchAutoComplete-->
+                                <div class="input-append">
+                                    <input type="text" id="autocomplete" class="input-error input-xxlarge" />
+                                    <button id="search-btn" type="button" class="sui-btn btn-xlarge btn-danger">搜索</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/util.js"></script>
+<script>
+    $(function () {
+        let url = decodeURI(location.href);
+        //匹配正则的
+        let temp = null;
+
+        //没有任何参数
+        if (url.indexOf("?")==-1){
+            url+="?";
+        }
+
+        //去掉url上的input
+        //用户没有输入关键字搜索
+        if (url.indexOf("input=")==-1) {
+
+        }else if (temp = /input=[^&]*&/.exec(url)) {
+            //关键字后面还有参数
+            url = url.replace(temp[0],'&');
+            // console.log(temp)
+        }else if (temp = /input=[\s\S]*/.exec(url)){
+            //关键字后面没有参数
+            url = url.replace(temp[0],'');
+            // console.log(temp)
+        }
+        // console.log(url)
+
+        //给输入框赋值
+        if (temp!=null){
+            //从url上拿的input
+            let input = temp[0].replace("input=",'').replace("&",'');
+            $("#autocomplete").val(input);
+        }
+
+        //点击搜索按钮
+        $("#search-btn").click(function () {
+            let keyWord = $("#autocomplete").val();
+            if ($.emptyString(keyWord)){
+                layer.alert("您的文本框没有内容!",{icon:5})
+                return;
+            }
+            location.href = url+"&input="+keyWord;
+        })
+
+        //按回车键进行搜索
+        $("#autocomplete").keydown(function (e) {
+            if(e.keyCode==13){
+                $("#search-btn").trigger("click");
+            }
+        })
+    })
+
+</script>

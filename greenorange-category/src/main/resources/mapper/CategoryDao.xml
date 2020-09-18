@@ -12,6 +12,10 @@
         <result property="paramType" column="param_type" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <select id="findCidsByCid" resultType="string">
+        SELECT getChildList(#{cid})
+    </select>
+
     <!--级联查询所有数据-->
     <select id="findCategorys" resultMap="categoryMap" >
         select

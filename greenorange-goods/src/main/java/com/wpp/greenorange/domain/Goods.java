@@ -52,6 +52,11 @@ public class Goods implements Serializable {
      * 最近一次修改时间
      */
     private Date updateTime;
+    /**
+     * 可选择的版本信息
+     */
+    private String editionChoice;
+
 
     @Override
     public String toString() {
@@ -66,7 +71,16 @@ public class Goods implements Serializable {
                 ", deleted=" + deleted +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", editionChoice='" + editionChoice + '\'' +
                 '}';
+    }
+
+    public String getEditionChoice() {
+        return editionChoice;
+    }
+
+    public void setEditionChoice(String editionChoice) {
+        this.editionChoice = editionChoice;
     }
 
     public String getCategoryName() {

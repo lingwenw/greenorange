@@ -2,17 +2,22 @@ package com.wpp.greenorange.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.dao.GoodsDao;
 import com.wpp.greenorange.dao.GoodsSkuDao;
 import com.wpp.greenorange.domain.Goods;
 import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.domain.SkuEs;
+import com.wpp.greenorange.domain.select.GoodsSkuSelect;
 import com.wpp.greenorange.service.CategoryService;
+import com.wpp.greenorange.service.GoodsService;
 import com.wpp.greenorange.service.GoodsSkuService;
+import com.wpp.webutil.exception.MyException;
 import com.wpp.webutil.util.MyUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -30,7 +35,9 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -56,6 +63,25 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
     @Resource
     private CategoryService categoryService;
 
+    @Resource
+    private GoodsService goodsService;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    /**
+     * 搜索方法
+     * @param input 用户输入的文本框
+     * @param brand 商品品牌
+     * @param category 商品分类
+     * @param pageNum 页码
+     * @param sort 排序规则
+     * @param order 升降序
+     * @param params 参数过滤
+     * @param price 价格区间
+     * @return
+     * @throws IOException
+     */
     @Override
     public Map<String, Object> search(String input, String[] brand, String category, Integer pageNum, String sort, String order, String[] params, String price) throws IOException {
         //封装请求对象
@@ -79,18 +105,24 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         //有空的进行分词
         boolean flag =  MyUtil.isEmptyString(category) || MyUtil.isEmptyStrArr(brand);
         //分类的map
-        Map<String, Object> categoryMap = new HashMap<>();
+        Map<String, Object> categoryMap = new HashMap<>(4);
+        //如果用户有品牌或者分类没有输入就进行分词
+        List<String> splits = new ArrayList<>();
         if ( flag && !MyUtil.isEmptyString(input) ){
-            List<String> splits = splitInput(input);
-            //从数据库查用户输入的分类和品牌
-            //判断是否为空
-            if (MyUtil.isEmptyString(category) && splits!=null && !splits.isEmpty()){
-                categoryMap = goodsSkuDao.getCategoryNameIn(splits);
-                category = (String) categoryMap.get("name");
-            }
-            if (MyUtil.isEmptyStrArr(brand) && splits!=null && !splits.isEmpty()){
-                brand = goodsSkuDao.getBrandNameIn(splits);
-            }
+            splits = splitInput(input);
+        }
+        //如果用户选择了分类，就将分类添加到分词集合中
+        if (!MyUtil.isEmptyString(category)){
+            splits.add(category);
+        }
+        //从数据库查用户输入的分类
+        if ( splits!=null && !splits.isEmpty()){
+            categoryMap = goodsSkuDao.getCategoryNameIn(splits);
+            category = (String) categoryMap.get("name");
+        }
+        //从数据库查用户输入的品牌
+        if (MyUtil.isEmptyStrArr(brand) && splits!=null && !splits.isEmpty()){
+            brand = goodsSkuDao.getBrandNameIn(splits);
         }
         //构建查询
         //布尔查询
@@ -107,14 +139,31 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
                 boolQuery.filter(lte);
             }
         }
+        //params参数筛选
+        List<String> paramNames = new ArrayList<>();
+        if (!MyUtil.isEmptyStrArr(params)){
+            for (String param : params) {
+                String[] split = param.split("：");
+                if (split.length==2){
+                    boolQuery.must( QueryBuilders.termQuery("params."+split[0]+".keyword",split[1]) );
+                    //聚合分组需要排除的
+                    paramNames.add(split[0]);
+                }
+            }
+        }
         //分类
         if (!MyUtil.isEmptyString(category)){
             boolQuery.must( QueryBuilders.termQuery("categoryName",category) );
-            Map<String, Object> map = categoryService.findMap((Integer) categoryMap.get("id"));
+            Integer categoryId = (Integer) categoryMap.get("id");
+            Map<String, Object> map = categoryService.findMap(categoryId);
             List<String> aggList = this.paramTypeToAggList((String) map.get("paramType"));
+            //根据分类的参数进行聚合
             for (String str : aggList) {
-                TermsAggregationBuilder agg = AggregationBuilders.terms(str).field("params." + str + ".keyword");
-                searchSource.aggregation(agg);
+                //聚合时排除一下参数
+                if (!paramNames.contains(str)){
+                    TermsAggregationBuilder agg = AggregationBuilders.terms(str).field("params." + str + ".keyword");
+                    searchSource.aggregation(agg);
+                }
             }
         }
         //品牌
@@ -137,8 +186,6 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         searchSource.size(size);
         searchRequest.source(searchSource);
 
-        System.out.println(searchSource);
-
         //查询结果
         SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
         //结果中的全部aggr
@@ -158,24 +205,48 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         map.put("brand",brand);
         map.put("pageInfo",pageInfo);
         Map<String, List> aggMap = packAggregations(aggregations);
-        System.out.println(aggMap);
         map.put("params",aggMap);
         return map;
     }
 
+    /**
+     * 分页方法
+     * @param sku
+     * @return
+     */
+    @Override
+    public PageInfo<GoodsSku> getAllLimit(GoodsSkuSelect sku) {
+        PageHelper.startPage(sku.getPageNum(), sku.getPageSize());
+        List<GoodsSku> list = goodsSkuDao.findAllByCondition(sku);
+        return PageInfo.of(list,5);
+    }
+
     private Map<String, List > packAggregations(Aggregations agg){
+        //最终返回出去的map
         Map<String, List> map = new HashMap<>();
+        //存放params的数组
+        List<Map> params = new ArrayList<>();
         Set<String> keySet = agg.getAsMap().keySet();
         for (String key : keySet) {
             Terms terms = agg.get(key);
+            //拿到全部桶
             List<? extends Terms.Bucket> buckets = terms.getBuckets();
             List<String> temp = new ArrayList<>();
             for (Terms.Bucket bucket : buckets) {
                 temp.add(bucket.getKeyAsString());
             }
-            System.out.println(temp);
-            map.put(key,temp);
+            //如果是分类和品牌，直接放入map
+            if ("categoryNames".equals(key) || "brandNames".equals(key)){
+                map.put(key,temp);
+            }else {
+                //如果是params，存入tempMap
+                HashMap<String, Object> tempMap = new HashMap<>(1);
+                tempMap.put("paramName",key);
+                tempMap.put("list",temp);
+                params.add(tempMap);
+            }
         }
+        map.put("params",params);
         return map;
     }
 
@@ -254,17 +325,15 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         int before = size-after-1;
 
         int start = pageInfo.getPageNum()-before;
-        int end = pageInfo.getPageNum()-after;
-
+        int end = pageInfo.getPageNum()+after;
         if (start<1){
             start = 1;
             end = start+size-1;
         }
         if (end>pageInfo.getPages()){
             end = pageInfo.getPages();
-            start = end-size-1;
+            start = end-size+1;
         }
-
         for (int i = start, j = 0; i <= end; i++, j++) {
             navArr[j] = i;
         }
@@ -369,8 +438,31 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
      * @return 是否成功
      */
     @Override
-    public Boolean insert(GoodsSku goodsSku) {
-        return this.goodsSkuDao.insert(goodsSku) > 0;
+    @Transactional(rollbackFor = {Exception.class,MyException.class})
+    public Boolean insert(GoodsSku goodsSku) throws IOException {
+        //获得他所属的goods
+        Goods goods = goodsService.findById(goodsSku.getGoodsId());
+        //新增时启用状态和goods一致
+        goodsSku.setDeleted( goods.getDeleted() );
+        //保存到数据库
+        this.goodsSkuDao.insert(goodsSku);
+        //如果商品启用中，更新静态页面
+        if (!goods.getDeleted()){
+            goodsService.createPage(goodsSku.getGoodsId());
+            //添加到elasticsearch
+            this.saveSkuEsToElasticSearch(goodsSku);
+        }else{
+
+        }
+        return true;
+    }
+
+    @Override
+    public boolean removeFromEs(String id) throws IOException {
+        RestHighLevelClient client = new RestHighLevelClient(builder);
+        DeleteRequest deleteRequest = new DeleteRequest("greenorange", id);
+        client.delete(deleteRequest,RequestOptions.DEFAULT);
+        return true;
     }
 
     /**
@@ -380,19 +472,110 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
      * @return 是否成功
      */
     @Override
-    public Boolean update(GoodsSku goodsSku) {
-        return this.goodsSkuDao.update(goodsSku) > 0;
+    @Transactional(rollbackFor = {RuntimeException.class,MyException.class})
+    public Boolean update(GoodsSku goodsSku) throws IOException {
+
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class,MyException.class})
+    public Boolean enableSku(GoodsSku sku) throws IOException {
+        //改变数据库
+        goodsSkuDao.update(sku);
+        //获得goods
+        Goods goods = goodsDao.findById(sku.getGoodsId());
+
+        //停用sku
+        if (sku.getDeleted()){
+            //标志商品至少有一个sku启动
+            boolean flag = false;
+            for (GoodsSku baseSku : goods.getSkuList()) {
+                if (!baseSku.getDeleted()){
+                    flag = true;
+                }
+            }
+            //如果全部sku都没有启用,停用商品
+            if (!flag){
+                goods.setDeleted( true );
+                goodsService.enableGoods(goods);
+            }else {
+                //如果至少有一个sku启用
+                //重新生成页面
+                goodsService.createPage(goods.getId());
+                //删除静态页面
+//                boolean b = MyUtil.deletePage(sku.getId() + ".html");
+                //删除静态页面
+                MyUtil.deletePage(sku.getId()+".html");
+//                System.out.println(b);
+                //改变为停用，删除自己这单条es
+                removeFromEs(sku.getId().toString());
+            }
+        }else{
+            //启用sku
+            //如果商品是启用状态
+            if (!goods.getDeleted()){
+                //重新生成页面
+                goodsService.createPage(goods.getId());
+                GoodsSku baseSku = goodsSkuDao.findById(sku.getId());
+                //保存到es
+                saveSkuEsToElasticSearch(baseSku);
+            }else {
+                //商品是停用状态,不做操作
+
+            }
+        }
+        return true;
     }
 
     /**
      * 通过主键删除数据
      *
      * @param id 主键
+     * @param goodsId
      * @return 是否成功
      */
     @Override
-    public Boolean deleteById(Integer id) {
-        return this.goodsSkuDao.deleteById(id) > 0;
+    public Boolean deleteById(Integer id, Integer goodsId) throws IOException {
+        Goods goods = goodsService.findById(goodsId);
+        boolean flag = false;
+        for (GoodsSku sku : goods.getSkuList()) {
+            if (!sku.getDeleted()){
+                flag = true;
+            }
+        }
+        //该商品全部都未启用
+        if (!flag){
+            //停用商品
+            goods.setDeleted( true );
+            goodsService.enableGoods(goods);
+        }else{
+            //删除页面
+            MyUtil.deletePage(id+".html");
+            //删除es
+            removeFromEs(id.toString());
+        }
+        //删除数据库
+        this.goodsSkuDao.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public void saveSkuToRedis() {
+        Map<Object, Object> skuPriceStock = redisTemplate.opsForHash().entries("skuPriceStock");
+        if (skuPriceStock==null || skuPriceStock.isEmpty()){
+            //从数据库查询
+            List<GoodsSku> skus = goodsSkuDao.findAllByCondition(null);
+            System.out.println(skus.size());
+            HashMap<String, Double> map = new HashMap<>(16);
+            //添加到缓存
+            for (GoodsSku sku : skus) {
+                map.put("price"+sku.getId(),sku.getPrice());
+                map.put("stock"+sku.getId(),sku.getStock().doubleValue());
+            }
+            System.out.println(map.size());
+            redisTemplate.opsForHash().putAll("skuPriceStock",map);
+        }
     }
 
 }

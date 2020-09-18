@@ -2183,8 +2183,7 @@
 								<ul class="goods-intro unstyled">
 									<li th:each="param:${params}" th:text="${param.key}+' : '+${param.value}"></li>
 								</ul>
-								<div class="intro-detail" style="text-align: center">
-									<img th:each="introduce:${introduces}" th:src="'../img/goods_img/'+${introduce}" />
+								<div class="intro-detail" style="text-align: center" th:utext="${introduces}">
 								</div>
 							</div>
 							<div id="two" class="tab-pane">
