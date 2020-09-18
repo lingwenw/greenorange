@@ -140,6 +140,6 @@
     </select>
     <!--注册时通过手机查询-->
     <select id="registerFindByphone" resultType="int" parameterType="string">
-        select COUNT(*) from tb_user where email=#{Phone}
+        select COUNT(*) from tb_user where phone=#{Phone}
     </select>
 </mapper>

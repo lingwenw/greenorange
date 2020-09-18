@@ -1,6 +1,8 @@
 package com.wpp.greenorange.service;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Admin;
+import com.wpp.greenorange.domain.User;
 
 import java.util.List;
 
@@ -52,4 +54,14 @@ public interface AdminService {
      */
     Boolean deleteById(Integer id);
 
+    /*
+     * admin登录验证
+     *
+     */
+    Admin AdminLogin(String accountNumber,String password);
+
+    /*
+     * 分页
+     */
+    PageInfo<User> findUserByInfo(int pageNo,int pagesize);
 }

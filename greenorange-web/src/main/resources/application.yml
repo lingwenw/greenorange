@@ -1,4 +1,9 @@
 spring:
+  ##elasticsearch配置
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
+      username: elasticsearch
   #数据库配置
   datasource:
     username: root
@@ -18,6 +23,7 @@ spring:
       connection-test-query: SELECT 1
   profiles:
     active: dev
+  #redis配置
   redis:
     host: 121.89.197.100
     port: 6379

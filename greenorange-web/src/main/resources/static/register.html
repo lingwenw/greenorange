@@ -81,37 +81,143 @@
 					<div class="control-group">
 						<label for="inputPassword" class="control-label">姓名：</label>
 						<div class="controls">
-							<input type="text" name="name" placeholder="姓名" class="input-xfat input-xlarge">
+							<input type="text" name="name" id="name" placeholder="姓名" class="input-xfat input-xlarge">
+							<div id="nameTips" style="color: red" ></div>
+							<script>
+								$("#name").blur(function () {
+									if ($("#name").val()==null){
+										$("#nameTips").html("姓名不能为空");
+										return false;
+									} else if ($("#name").val().length<2 || $("#name").val().length>16) {
+										$("#nameTips").html("姓名长度必须为2-16位");
+										return false
+									}else {
+										$("#nameTips").html("");
+										return true
+									}
+								})
+
+							</script>
 						</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label">手机号：</label>
 						<div class="controls">
-							<input type="text" name="phone" placeholder="请输入你的手机号" class="input-xfat input-xlarge">
+							<input type="text" name="phone" id="phone" placeholder="请输入你的手机号" class="input-xfat input-xlarge">
+							<div id="phoneTips" style="color: red"></div>
+							<script>
+								$("#phone").blur(function () {
+									if ($("#phone").val()==null){
+										$("#phoneTips").html("手机号不能为空");
+										return false;
+									} else if ($("#phone").val().length!=11) {
+										$("#phoneTips").html("请输入正确的手机号码");
+										return false
+									}else {
+										$.post("/user/findByphone",{"phone":$("#phone").val()},function (data) {
+											if (data==true){
+												$("#phoneTips").html("该手机号已经被注册");
+												return false
+											} else {
+												$("#phoneTips").html("");
+												return true
+											}
+										})
+									}
+								})
+							</script>
 						</div>
 					</div>
 					<div class="control-group">
 						<label for="inputPassword" class="control-label">验证码：</label>
 						<div class="controls">
-							<input type="text" placeholder="验证码" class="input-xfat input-xlarge">
+							<input type="text" placeholder="验证码" id="yzm" class="input-xfat input-xlarge">
+							<div id="yzmTips" style="color: red"></div>
+							<script>
+								$("#yzm").blur(function () {
+									if ($("#yzm").val()==null){
+										$("#yzmTips").html("验证码不能为空");
+										return false;
+									} else if ($("#yzm").val()!=123) {
+										$("#yzmTips").html("请输入正确验证码");
+										return false
+									}else {
+										$("#yzmTips").html("");
+										return true
+									}
+								})
+							</script>
 						</div>
 					</div>
 					<div class="control-group">
 						<label for="inputPassword" class="control-label">邮箱：</label>
 						<div class="controls">
-							<input type="text" name="email" placeholder="邮箱" class="input-xfat input-xlarge">
+							<input type="text" name="email" id="email" placeholder="邮箱" class="input-xfat input-xlarge">
+							<div id="emailTips" style="color: red"></div>
+							<script>
+								$("#email").blur(function () {
+									var myreg = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+									if ($("#email").val()==null){
+										$("#emailTips").html("邮箱不能为空");
+										return false;
+									} else if (!myreg.test($("#email").val())) {
+										$("#emailTips").html("请输入正确邮箱");
+										return false
+									}else {
+										$.post("/user/findByemail",{"email":$("#email").val()},function (data) {
+											if (data==true){
+												$("#emailTips").html("该邮箱已经被注册");
+												return false
+											} else {
+												$("#emailTips").html("");
+												return true
+											}
+										})
+									}
+								})
+							</script>
 						</div>
 					</div>
 					<div class="control-group">
 						<label for="inputPassword" class="control-label">登录密码：</label>
 						<div class="controls">
-							<input type="password" name="password" placeholder="设置登录密码" class="input-xfat input-xlarge">
+							<input type="password" name="password" id="password" placeholder="设置登录密码" class="input-xfat input-xlarge">
+							<div id="passwordTips" style="color: red"></div>
+							<script>
+								$("#password").blur(function () {
+									if ($("#password").val()==null){
+										$("#passwordTips").html("密码不能为空");
+										return false;
+									} else if ($("#password").val()!=123) {
+										$("#passwordTips").html("密码必须由6-12位数字和字母组成");
+										return false
+									}else {
+										$("#passwordTips").html("");
+										return true
+									}
+								})
+							</script>
 						</div>
 					</div>
 					<div class="control-group">
 						<label for="inputPassword" class="control-label">确认密码：</label>
 						<div class="controls">
-							<input type="password"  placeholder="再次确认密码" class="input-xfat input-xlarge">
+							<input type="password" id="passwordTo"  placeholder="再次确认密码" class="input-xfat input-xlarge">
+							<div id="passwordToTips" style="color: red"></div>
+							<script>
+								$("#passwordTo").blur(function () {
+									if ($("#passwordTo").val()==null){
+										$("#passwordToTips").html("请再次输入密码");
+										return false;
+									} else if ($("#passwordTo").val()!=$("#password").val()) {
+										$("#passwordToTips").html("两次密码不一样");
+										return false
+									}else {
+										$("#passwordToTips").html("");
+										return true
+									}
+								})
+							</script>
 						</div>
 					</div>
 					<div class="control-group">
@@ -127,6 +233,7 @@
 							<script>
 								$(function () {
 									console.log($("#registerForm").serialize())
+
 									$(".sui-btn").click(function () {
 										$.post("/user/insertUser",$("#registerForm").serialize(),function (data) {
 											if (data==false){

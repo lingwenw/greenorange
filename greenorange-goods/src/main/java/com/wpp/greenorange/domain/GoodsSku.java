@@ -7,10 +7,10 @@ import java.util.Date;
  * (GoodsSku)实体类
  *
  * @author 吴鹏鹏ppp
- * @since 2020-09-06 12:17:40
+ * @since 2020-09-08 22:11:32
  */
 public class GoodsSku implements Serializable {
-    private static final long serialVersionUID = -25101515350189499L;
+    private static final long serialVersionUID = -47793556165979269L;
     /**
      * 主键id
      */
@@ -51,6 +51,42 @@ public class GoodsSku implements Serializable {
      * 展示图片
      */
     private String showImg;
+    /**
+     * 销量
+     */
+    private Integer saleCount;
+    /**
+     * 好评数
+     */
+    private Integer goodEvaluate;
+    /**
+     * 差评数
+     */
+    private Integer badEvaluate;
+    /**
+     * 商品参数
+     */
+    private String params;
+    /**
+     * 介绍图片，资源
+     */
+    private String introduceData;
+
+    public String getIntroduceData() {
+        return introduceData;
+    }
+
+    public void setIntroduceData(String introduceData) {
+        this.introduceData = introduceData;
+    }
+
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
 
     @Override
     public String toString() {
@@ -65,6 +101,9 @@ public class GoodsSku implements Serializable {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", showImg='" + showImg + '\'' +
+                ", saleCount=" + saleCount +
+                ", goodEvaluate=" + goodEvaluate +
+                ", badEvaluate=" + badEvaluate +
                 '}';
     }
 
@@ -146,6 +185,30 @@ public class GoodsSku implements Serializable {
 
     public void setShowImg(String showImg) {
         this.showImg = showImg;
+    }
+
+    public Integer getSaleCount() {
+        return saleCount;
+    }
+
+    public void setSaleCount(Integer saleCount) {
+        this.saleCount = saleCount;
+    }
+
+    public Integer getGoodEvaluate() {
+        return goodEvaluate;
+    }
+
+    public void setGoodEvaluate(Integer goodEvaluate) {
+        this.goodEvaluate = goodEvaluate;
+    }
+
+    public Integer getBadEvaluate() {
+        return badEvaluate;
+    }
+
+    public void setBadEvaluate(Integer badEvaluate) {
+        this.badEvaluate = badEvaluate;
     }
 
 }

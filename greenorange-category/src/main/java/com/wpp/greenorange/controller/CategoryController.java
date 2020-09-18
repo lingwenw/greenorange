@@ -55,19 +55,47 @@ public class CategoryController{
         return this.categoryService.findById(id);
     }
 
-//    @Override
-//    public void run(ApplicationArguments args) throws Exception {
-//        ObjectMapper mapper = new ObjectMapper();
-//        List<Map> categorys = categoryService.findCategorys();
-//        String categorysStr = mapper.writeValueAsString(categorys);
-//        redisTemplate.opsForValue().set("categorys",categorysStr);
-//    }
 
+    /**
+     * 获取所有商品分类信息
+     *
+     * @return tree
+     * @throws JsonProcessingException
+     */
     @RequestMapping("/findCategorys")
     public List<Map> findCategorys() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String categorys = redisTemplate.opsForValue().get("categorys");
         return mapper.readValue(categorys, List.class);
+    }
+
+    /**
+     *
+     * @param category
+     * @return Category 修改数据
+     */
+    @RequestMapping("/updateCategory")
+    public boolean updateCategory(Category category) throws JsonProcessingException {
+        boolean isUpdate = categoryService.update(category);
+        if (isUpdate){
+            redisTemplate.delete("categorys");
+            categoryService.saveCategoryTreeToRedis();
+        }
+        return isUpdate;
+    }
+
+    /**
+     *
+     * @param category 删除数据
+     * @return
+     */
+    @RequestMapping("/deleteCategory")
+    public boolean deleteCategory(Category category) throws JsonProcessingException {
+        System.out.println(category);
+//        boolean aBoolean = categoryService.deleteById(category);
+//        redisTemplate.delete("categorys");
+//        categoryService.saveCategoryTreeToRedis();
+        return false;
     }
 
 }

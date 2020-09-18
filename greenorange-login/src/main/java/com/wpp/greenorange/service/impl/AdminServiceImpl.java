@@ -1,7 +1,10 @@
 package com.wpp.greenorange.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.dao.AdminDao;
 import com.wpp.greenorange.domain.Admin;
+import com.wpp.greenorange.domain.User;
 import com.wpp.greenorange.service.AdminService;
 import org.springframework.stereotype.Service;
 
@@ -72,5 +75,22 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Boolean deleteById(Integer id) {
         return this.adminDao.deleteById(id) > 0;
+    }
+
+    /*
+     * admin登录验证
+     *
+     */
+    @Override
+    public Admin AdminLogin(String accountNumber, String password) {
+        return adminDao.AdminLogin(accountNumber,password);
+    }
+
+    @Override
+    public PageInfo<User> findUserByInfo(int pageNo,int pagesize) {
+        PageHelper.startPage(pageNo,pagesize);
+        List<User> l = adminDao.findUserByInfo();
+        PageInfo<User> userPageInfo = new PageInfo<>(l);
+        return userPageInfo;
     }
 }

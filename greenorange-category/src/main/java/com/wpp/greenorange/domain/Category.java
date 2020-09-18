@@ -37,18 +37,14 @@ public class Category implements Serializable {
      */
     private Date updateTime;
 
-    /**
-     *
-     * 级联子目录
-     */
-    private List<Category> categories;
+    private String paramType;
 
-    public List<Category> getCategories() {
-        return categories;
+    public String getParamType() {
+        return paramType;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setParamType(String paramType) {
+        this.paramType = paramType;
     }
 
     public Integer getId() {
@@ -108,7 +104,7 @@ public class Category implements Serializable {
                 ", deleted=" + deleted +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                ", categories=" + categories +
+                ", paramType='" + paramType + '\'' +
                 '}';
     }
 }

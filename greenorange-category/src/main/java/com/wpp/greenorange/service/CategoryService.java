@@ -74,4 +74,12 @@ public interface CategoryService {
      * 加载商品分类导航缓存
      */
     void saveCategoryTreeToRedis() throws JsonProcessingException;
+
+    /**
+     * 根据id获取缓存中的map
+     * @param id
+     * @return
+     */
+    Map findMap(Integer id) throws JsonProcessingException;
+
 }

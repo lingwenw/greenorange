@@ -6,14 +6,11 @@
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="brandId" column="brand_id" jdbcType="INTEGER"/>
         <result property="sellPoint" column="sell_point" jdbcType="VARCHAR"/>
-        <result property="saleCount" column="sale_count" jdbcType="INTEGER"/>
-        <result property="params" column="params" jdbcType="VARCHAR"/>
-        <result property="introduceData" column="introduce_data" jdbcType="VARCHAR"/>
-        <result property="goodEvaluate" column="good_evaluate" jdbcType="INTEGER"/>
-        <result property="badEvaluate" column="bad_evaluate" jdbcType="INTEGER"/>
-        <result property="minPrice" column="min_price" jdbcType="NUMERIC"/>
         <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
+        <result property="categoryName" column="category_name" jdbcType="VARCHAR" />
+        <result property="brandName" column="brand_name" jdbcType="VARCHAR" />
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <collection property="skuList" column="id"
@@ -24,66 +21,60 @@
 
     <!--查询单个-->
     <select id="findById" resultMap="goodsMap">
-        select
-          id, category_id, name, sell_point, sale_count, params, introduce_data, good_evaluate, bad_evaluate, min_price, deleted, create_time, update_time
-        from greenorange.tb_goods
-        where id = #{id}
+        SELECT
+            g.id, g.category_id, g.name, g.brand_id, g.sell_point, g.deleted, g.create_time,
+            g.update_time, b.name brand_name, c.name category_name
+        FROM greenorange.tb_goods g
+        LEFT JOIN tb_brand b
+        ON g.brand_id = b.id
+        LEFT JOIN tb_category c
+        ON g.category_id = c.id
+        where g.id = #{id}
     </select>
 
 
     <!--通过实体作为筛选条件查询-->
     <select id="findAllByCondition" resultMap="goodsMap">
-        select
-        id, category_id, name, sell_point, sale_count, params, introduce_data, good_evaluate, bad_evaluate, min_price,
-        deleted, create_time, update_time
-        from greenorange.tb_goods
+        SELECT
+        g.id, g.category_id, g.name, g.brand_id, g.sell_point, g.deleted, g.create_time,
+        g.update_time, b.name brand_name, c.name category_name
+        FROM greenorange.tb_goods g
+        LEFT JOIN tb_brand b
+        ON g.brand_id = b.id
+        LEFT JOIN tb_category c
+        ON g.category_id = c.id
         <where>
             <if test="id != null">
-                and id = #{id}
+                and g.id = #{id}
             </if>
             <if test="categoryId != null">
-                and category_id = #{categoryId}
+                and g.category_id = #{categoryId}
             </if>
             <if test="name != null and name != ''">
-                and name = #{name}
+                and g.name = #{name}
+            </if>
+            <if test="brandId != null">
+                and g.brand_id = #{brandId}
             </if>
             <if test="sellPoint != null and sellPoint != ''">
-                and sell_point = #{sellPoint}
-            </if>
-            <if test="saleCount != null">
-                and sale_count = #{saleCount}
-            </if>
-            <if test="params != null and params != ''">
-                and params = #{params}
-            </if>
-            <if test="introduceData != null and introduceData != ''">
-                and introduce_data = #{introduceData}
-            </if>
-            <if test="goodEvaluate != null">
-                and good_evaluate = #{goodEvaluate}
-            </if>
-            <if test="badEvaluate != null">
-                and bad_evaluate = #{badEvaluate}
-            </if>
-            <if test="minPrice != null">
-                and min_price = #{minPrice}
+                and g.sell_point = #{sellPoint}
             </if>
             <if test="deleted != null">
-                and deleted = #{deleted}
+                and g.deleted = #{deleted}
             </if>
             <if test="createTime != null">
-                and create_time = #{createTime}
+                and g.create_time = #{createTime}
             </if>
             <if test="updateTime != null">
-                and update_time = #{updateTime}
+                and g.update_time = #{updateTime}
             </if>
         </where>
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_goods(category_id, name, sell_point, sale_count, params, introduce_data, good_evaluate, bad_evaluate, min_price, deleted, create_time, update_time)
-        values (#{categoryId}, #{name}, #{sellPoint}, #{saleCount}, #{params}, #{introduceData}, #{goodEvaluate}, #{badEvaluate}, #{minPrice}, #{deleted}, #{createTime}, #{updateTime})
+        insert into greenorange.tb_goods(category_id, name, brand_id, sell_point,  deleted, create_time, update_time)
+        values (#{categoryId}, #{name}, #{brandId}, #{sellPoint}, #{deleted}, #{createTime}, #{updateTime})
     </insert>
 
     <!--通过主键修改数据-->
@@ -96,26 +87,11 @@
             <if test="name != null and name != ''">
                 name = #{name},
             </if>
+            <if test="brandId != null">
+                brand_id = #{brandId},
+            </if>
             <if test="sellPoint != null and sellPoint != ''">
                 sell_point = #{sellPoint},
-            </if>
-            <if test="saleCount != null">
-                sale_count = #{saleCount},
-            </if>
-            <if test="params != null and params != ''">
-                params = #{params},
-            </if>
-            <if test="introduceData != null and introduceData != ''">
-                introduce_data = #{introduceData},
-            </if>
-            <if test="goodEvaluate != null">
-                good_evaluate = #{goodEvaluate},
-            </if>
-            <if test="badEvaluate != null">
-                bad_evaluate = #{badEvaluate},
-            </if>
-            <if test="minPrice != null">
-                min_price = #{minPrice},
             </if>
             <if test="deleted != null">
                 deleted = #{deleted},

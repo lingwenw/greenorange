@@ -50,28 +50,33 @@ public class UserController {
 
     @RequestMapping("/findByphone")
     public boolean findByphone(String phone){
-        return userService.registerFindByphone(phone);
+        boolean b = userService.registerFindByphone(phone);
+        System.out.println(b);
+        return b;
     }
 
     @RequestMapping("/findByIDemailOrUserNameOrphone")
     public boolean findByIDemailOrUserNameOrphone(
                                                User user,HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println(user);
+        System.out.println("登录的user:"+user);
         User byUser = userService.findByemail(user.getEmail(), user.getPassword());
         session.setAttribute("loginUser",byUser);
 
-        System.out.println(byUser);
-        String name = user.getName();
+        System.out.println("数据库查的user:"+byUser);
 
-        System.out.println(111);
-        boolean flag = user.getPassword().equals(byUser.getPassword());
-        System.out.println(flag);
-//        request.getRequestDispatcher("/home.html").forward(request,response);
-        return flag;
+        if (byUser!=null){
+            boolean flag = user.getPassword().equals(byUser.getPassword());
+            System.out.println(flag);
+            return flag;
+        }else {
+            return false;
+        }
+
     }
 
     @RequestMapping("/insertUser")
     public boolean insertUser(User user){
+
         User registerUser=new User();
         boolean flag=true;
         boolean registerFlag = userService.registerFindByemail(user.getEmail());

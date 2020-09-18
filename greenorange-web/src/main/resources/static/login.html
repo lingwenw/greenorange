@@ -118,9 +118,9 @@
 											$(".sui-btn").click(function () {
 												$.post("/user/findByIDemailOrUserNameOrphone",$("#myform").serialize(),function (data) {
 													if (data==false){
-														layer.open({
-															title:"Tips"
-															,content:"密码错误"
+														layer.alert('密码错误！',{
+															title: '提示框',
+															icon:1,
 														})
 													}else if (data==true) {
 														location.href="home.html"
