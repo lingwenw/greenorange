@@ -133,12 +133,12 @@ public class PayController {
 
                 Order order = new Order();
                 order.setId(Integer.parseInt(out_trade_no));
-                order.setStatusId(2);
+                order.setStatusId(4);
                 order.setTradeNo(trade_no);
                 order.setPaymentTime(new Date());
 
                 OrderGoods orderGoods = new OrderGoods();
-                orderGoods.setStatusId(2);
+                orderGoods.setStatusId(4);
                 orderGoods.setOrderId(Integer.parseInt(out_trade_no));
 
                 orderService.update(order);
@@ -152,12 +152,12 @@ public class PayController {
                 //支付成功，改变数据库
                 Order order = new Order();
                 order.setId(Integer.parseInt(out_trade_no));
-                order.setStatusId(2);
+                order.setStatusId(4);
                 order.setTradeNo(trade_no);
                 order.setPaymentTime(new Date());
 
                 OrderGoods orderGoods = new OrderGoods();
-                orderGoods.setStatusId(2);
+                orderGoods.setStatusId(4);
                 orderGoods.setOrderId(Integer.parseInt(out_trade_no));
 
                 orderService.update(order);
@@ -221,12 +221,12 @@ public class PayController {
 
         Order order = new Order();
         order.setId(Integer.parseInt(out_trade_no));
-        order.setStatusId(2);
+        order.setStatusId(4);
         order.setTradeNo(trade_no);
         order.setPaymentTime(new Date());
 
         OrderGoods orderGoods = new OrderGoods();
-        orderGoods.setStatusId(2);
+        orderGoods.setStatusId(4);
         orderGoods.setOrderId(Integer.parseInt(out_trade_no));
 
         orderService.update(order);
