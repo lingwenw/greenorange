@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
         }
         subject = subject.substring(0, subject.length() - 1);
         Integer addressId = (Integer) orderData.get("addressId");
-        Order order = new Order(user.getId(), addressId, 1, price,subject);
+        Order order = new Order(user.getId(), addressId, 3, price,subject);
         orderDao.insert(order);
 
         //订单商品表
