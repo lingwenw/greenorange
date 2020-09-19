@@ -9,13 +9,13 @@
 	<link rel="icon" href="./img/favicon.ico">
 
 
-    <link rel="stylesheet" type="text/css" href="./css/all.css" />
-    <link rel="stylesheet" type="text/css" href="./css/pages-register.css" />
+	<link rel="stylesheet" type="text/css" href="./css/all.css" />
+	<link rel="stylesheet" type="text/css" href="./css/pages-register.css" />
 	<script src="js/jquery.js"></script>
 </head>
 
 <body>
-	<!--页面顶部-->
+<!--页面顶部-->
 <div id="nav-bottom">
 	<!--顶部-->
 	<div class="nav-top">
@@ -29,18 +29,18 @@
 					<div class="fr typelist">
 						<ul class="types">
 							<li class="f-item"><span>我的订单</span></li>
-							
+
 							<li class="f-item"><span><a href="cart.html" target="_blank">我的购物车</a></span></li>
-							<li class="f-item"><span><a href="home.html" target="_blank">我的青橙</a></span></li>			
-							<li class="f-item"><span>青橙会员</span></li>						
-							<li class="f-item"><span>企业采购</span></li>						
+							<li class="f-item"><span><a href="home.html" target="_blank">我的青橙</a></span></li>
+							<li class="f-item"><span>青橙会员</span></li>
+							<li class="f-item"><span>企业采购</span></li>
 							<li class="f-item"><span>关注青橙</span></li>
 							<li class="f-item"><span><a href="cooperation.html" target="_blank">合作招商</a></span></li>
-							<li class="f-item"><span><a href="shoplogin.html" target="_blank">商家后台</a></span></li>				
+							<li class="f-item"><span><a href="shoplogin.html" target="_blank">商家后台</a></span></li>
 							<li class="f-item"><span>网站导航</span></li>
 						</ul>
 					</div>
-					
+
 				</div>
 			</div>
 		</div>
@@ -63,7 +63,7 @@
 							</form>
 						</div>
 					</div>
-					
+
 				</div>
 
 			</div>
@@ -71,203 +71,213 @@
 	</div>
 </div>
 
-	<div class="register py-container ">
-		
-		<!--register-->
-		<div class="registerArea">
-			<h3>注册新用户<span class="go">我有账号，去<a href="login.html" target="_blank">登陆</a></span></h3>
-			<div class="info">
-				<form class="sui-form form-horizontal" id="registerForm">
-					<div class="control-group">
-						<label for="inputPassword" class="control-label">姓名：</label>
-						<div class="controls">
-							<input type="text" name="name" id="name" placeholder="姓名" class="input-xfat input-xlarge">
-							<div id="nameTips" style="color: red" ></div>
-							<script>
-								$("#name").blur(function () {
-									if ($("#name").val()==null){
-										$("#nameTips").html("姓名不能为空");
-										return false;
-									} else if ($("#name").val().length<2 || $("#name").val().length>16) {
-										$("#nameTips").html("姓名长度必须为2-16位");
-										return false
-									}else {
-										$("#nameTips").html("");
-										return true
-									}
-								})
+<div class="register py-container ">
 
-							</script>
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">手机号：</label>
-						<div class="controls">
-							<input type="text" name="phone" id="phone" placeholder="请输入你的手机号" class="input-xfat input-xlarge">
-							<div id="phoneTips" style="color: red"></div>
-							<script>
-								$("#phone").blur(function () {
-									if ($("#phone").val()==null){
-										$("#phoneTips").html("手机号不能为空");
-										return false;
-									} else if ($("#phone").val().length!=11) {
-										$("#phoneTips").html("请输入正确的手机号码");
-										return false
-									}else {
-										$.post("/user/findByphone",{"phone":$("#phone").val()},function (data) {
-											if (data==true){
-												$("#phoneTips").html("该手机号已经被注册");
-												return false
-											} else {
-												$("#phoneTips").html("");
-												return true
-											}
-										})
-									}
-								})
-							</script>
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="inputPassword" class="control-label">验证码：</label>
-						<div class="controls">
-							<input type="text" placeholder="验证码" id="yzm" class="input-xfat input-xlarge">
-							<div id="yzmTips" style="color: red"></div>
-							<script>
-								$("#yzm").blur(function () {
-									if ($("#yzm").val()==null){
-										$("#yzmTips").html("验证码不能为空");
-										return false;
-									} else if ($("#yzm").val()!=123) {
-										$("#yzmTips").html("请输入正确验证码");
-										return false
-									}else {
-										$("#yzmTips").html("");
-										return true
-									}
-								})
-							</script>
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="inputPassword" class="control-label">邮箱：</label>
-						<div class="controls">
-							<input type="text" name="email" id="email" placeholder="邮箱" class="input-xfat input-xlarge">
-							<div id="emailTips" style="color: red"></div>
-							<script>
-								$("#email").blur(function () {
-									var myreg = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
-									if ($("#email").val()==null){
-										$("#emailTips").html("邮箱不能为空");
-										return false;
-									} else if (!myreg.test($("#email").val())) {
-										$("#emailTips").html("请输入正确邮箱");
-										return false
-									}else {
-										$.post("/user/findByemail",{"email":$("#email").val()},function (data) {
-											if (data==true){
-												$("#emailTips").html("该邮箱已经被注册");
-												return false
-											} else {
-												$("#emailTips").html("");
-												return true
-											}
-										})
-									}
-								})
-							</script>
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="inputPassword" class="control-label">登录密码：</label>
-						<div class="controls">
-							<input type="password" name="password" id="password" placeholder="设置登录密码" class="input-xfat input-xlarge">
-							<div id="passwordTips" style="color: red"></div>
-							<script>
-								$("#password").blur(function () {
-									if ($("#password").val()==null){
-										$("#passwordTips").html("密码不能为空");
-										return false;
-									} else if ($("#password").val()!=123) {
-										$("#passwordTips").html("密码必须由6-12位数字和字母组成");
-										return false
-									}else {
-										$("#passwordTips").html("");
-										return true
-									}
-								})
-							</script>
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="inputPassword" class="control-label">确认密码：</label>
-						<div class="controls">
-							<input type="password" id="passwordTo"  placeholder="再次确认密码" class="input-xfat input-xlarge">
-							<div id="passwordToTips" style="color: red"></div>
-							<script>
-								$("#passwordTo").blur(function () {
-									if ($("#passwordTo").val()==null){
-										$("#passwordToTips").html("请再次输入密码");
-										return false;
-									} else if ($("#passwordTo").val()!=$("#password").val()) {
-										$("#passwordToTips").html("两次密码不一样");
-										return false
-									}else {
-										$("#passwordToTips").html("");
-										return true
-									}
-								})
-							</script>
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="inputPassword" class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-						<div class="controls">
-							<input name="m1" type="checkbox" value="2" checked=""><span>同意协议并注册《品优购用户协议》</span>
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label"></label>
-						<div class="controls btn-reg">
-							<a class="sui-btn btn-block btn-xlarge btn-danger"  target="_blank">完成注册</a>
-							<script>
-								$(function () {
-									console.log($("#registerForm").serialize())
+	<!--register-->
+	<div class="registerArea">
+		<h3>注册新用户<span class="go">我有账号，去<a href="login.html" target="_blank">登陆</a></span></h3>
+		<div class="info">
+			<form class="sui-form form-horizontal" id="registerForm">
+				<div class="control-group">
+					<label for="inputPassword" class="control-label">姓名：</label>
+					<div class="controls">
+						<input type="text" name="name" id="name" placeholder="姓名" class="input-xfat input-xlarge">
+						<div id="nameTips" style="color: red" ></div>
 
-									$(".sui-btn").click(function () {
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">手机号：</label>
+					<div class="controls">
+						<input type="text" name="phone" id="phone" placeholder="请输入你的手机号" class="input-xfat input-xlarge">
+						<div id="phoneTips" style="color: red"></div>
+
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="inputPassword" class="control-label">验证码：</label>
+					<div class="controls">
+						<input type="text" placeholder="验证码" id="yzm" class="input-xfat input-xlarge">
+						<div id="yzmTips" style="color: red"></div>
+
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="inputPassword" class="control-label">邮箱：</label>
+					<div class="controls">
+						<input type="text" name="email" id="email" placeholder="邮箱" class="input-xfat input-xlarge">
+						<div id="emailTips" style="color: red"></div>
+
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="inputPassword" class="control-label">登录密码：</label>
+					<div class="controls">
+						<input type="password" name="password" id="password" placeholder="设置登录密码" class="input-xfat input-xlarge">
+						<div id="passwordTips" style="color: red"></div>
+
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="inputPassword" class="control-label">确认密码：</label>
+					<div class="controls">
+						<input type="password" id="passwordTo"  placeholder="再次确认密码" class="input-xfat input-xlarge">
+						<div id="passwordToTips" style="color: red"></div>
+						<script>
+
+
+						</script>
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="inputPassword" class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<div class="controls">
+						<input name="m1" type="checkbox" value="2" checked=""><span>同意协议并注册《品优购用户协议》</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label"></label>
+					<div class="controls btn-reg">
+						<a class="sui-btn btn-block btn-xlarge btn-danger"  target="_blank">完成注册</a>
+						<script>
+							var loginflag=false;
+							$("#name").blur(function () {
+								if ($("#name").val()==null || $("#name").val()==""){
+									$("#nameTips").html("姓名不能为空");
+									loginflag=false
+								} else if ($("#name").val().length<2 || $("#name").val().length>16) {
+									$("#nameTips").html("姓名长度必须为2-16位");
+									loginflag=false
+								}else {
+									$("#nameTips").html("");
+									loginflag=true
+								}
+							})
+							$("#phone").blur(function () {
+								if ($("#phone").val()==null || $("#phone").val()==""){
+									$("#phoneTips").html("手机号不能为空");
+									loginflag=false
+								} else if ($("#phone").val().length!=11) {
+									$("#phoneTips").html("请输入正确的手机号码");
+									loginflag=false
+								}else {
+									$.post("/user/findByphone",{"phone":$("#phone").val()},function (data) {
+										if (data==true){
+											$("#phoneTips").html("该手机号已经被注册");
+											loginflag=false
+										} else {
+											$("#phoneTips").html("");
+											loginflag=true
+										}
+									})
+								}
+							})
+							$("#yzm").blur(function () {
+								if ($("#yzm").val()==null || $("#yzm").val()==""){
+									$("#yzmTips").html("验证码不能为空");
+									loginflag=false
+								} else if ($("#yzm").val()!=123) {
+									$("#yzmTips").html("请输入正确验证码");
+									loginflag=false
+								}else {
+									$("#yzmTips").html("");
+									loginflag=true
+								}
+							})
+							$("#email").blur(function () {
+								var myreg = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+								if ($("#email").val()==null || $("#email").val()==""){
+									$("#emailTips").html("邮箱不能为空");
+									loginflag=false
+								} else if (!myreg.test($("#email").val())) {
+									$("#emailTips").html("请输入正确邮箱");
+									loginflag=false
+								}else {
+									$.post("/user/findByemail",{"email":$("#email").val()},function (data) {
+										if (data==true){
+											$("#emailTips").html("该邮箱已经被注册");
+											loginflag=false
+										} else {
+											$("#emailTips").html("");
+											loginflag=true
+										}
+									})
+								}
+							})
+							$("#password").blur(function () {
+								if ($("#password").val()==null || $("#password").val()==""){
+									$("#passwordTips").html("密码不能为空");
+									loginflag=false
+								} else if ($("#password").val().length<6 || $("#password").val().length>12) {
+									$("#passwordTips").html("密码必须由6-12位数字和字母组成");
+									loginflag=false
+								}else {
+									$("#passwordTips").html("");
+									loginflag=true
+								}
+							})
+							$("#passwordTo").blur(function () {
+								if ($("#passwordTo").val()==null || $("#passwordTo").val()==""){
+									$("#passwordToTips").html("请输入密码");
+									loginflag=false
+								} else if ($("#passwordTo").val()!=$("#password").val()) {
+									$("#passwordToTips").html("两次密码不一样");
+									loginflag=false
+								}else {
+									$("#passwordToTips").html("");
+									loginflag=true
+								}
+							})
+							$(function () {
+								console.log($("#registerForm").serialize())
+
+								$(".sui-btn").click(function () {
+									if (loginflag!=false){
 										$.post("/user/insertUser",$("#registerForm").serialize(),function (data) {
 											if (data==false){
-												alert("错误")
+												layer.alert('注册失败咯哦！',{
+													title: '提示框',
+													icon:1,
+
+												});
 											} else {
 												location.href="login.html"
 											}
 										})
-									})
+									} else {
+										layer.alert('你在想屁吃！',{
+											title: '提示框',
+											icon:1,
+
+										});
+									}
+
 								})
-							</script>
-						</div>
+							})
+						</script>
 					</div>
-				</form>
-				<div class="clearfix"></div>
-			</div>
-		</div>
-		<!--foot-->
-		<div class="py-container copyright">
-			<ul>
-				<li>关于我们</li>
-				<li>联系我们</li>
-				<li>联系客服</li>
-				<li>商家入驻</li>
-				<li>营销中心</li>
-				<li>手机品优购</li>
-				<li>销售联盟</li>
-				<li>品优购社区</li>
-			</ul>
-			<div class="address">地址：北京市昌平区建材城西路金燕龙办公楼一层 邮编：100096 电话：400-618-4000 传真：010-82935100</div>
-			<div class="beian">京ICP备08001421号京公网安备110108007702
-			</div>
+				</div>
+			</form>
+			<div class="clearfix"></div>
 		</div>
 	</div>
+	<!--foot-->
+	<div class="py-container copyright">
+		<ul>
+			<li>关于我们</li>
+			<li>联系我们</li>
+			<li>联系客服</li>
+			<li>商家入驻</li>
+			<li>营销中心</li>
+			<li>手机品优购</li>
+			<li>销售联盟</li>
+			<li>品优购社区</li>
+		</ul>
+		<div class="address">地址：北京市昌平区建材城西路金燕龙办公楼一层 邮编：100096 电话：400-618-4000 传真：010-82935100</div>
+		<div class="beian">京ICP备08001421号京公网安备110108007702
+		</div>
+	</div>
+</div>
 
 
 

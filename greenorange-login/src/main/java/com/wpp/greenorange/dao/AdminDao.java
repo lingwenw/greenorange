@@ -65,5 +65,20 @@ public interface AdminDao {
     /*
      * 分页
      */
-        List<User> findUserByInfo();
+    List<User> findUserByInfo();
+
+    /*
+     * 封号
+     */
+    int startUser(int id);
+
+    /*
+     * 封号
+     */
+    int StopUser(int id);
+
+    /*
+     * 永封
+     */
+    int foreverStop(int id);
 }

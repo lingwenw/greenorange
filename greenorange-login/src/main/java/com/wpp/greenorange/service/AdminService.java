@@ -64,4 +64,23 @@ public interface AdminService {
      * 分页
      */
     PageInfo<User> findUserByInfo(int pageNo,int pagesize);
+
+    /*
+     * 分页
+     *
+     * @return 是否修改成功
+     */
+    boolean startUser(int id);
+
+    /*
+     * 封号
+     * @return 是否修改成功
+     */
+    boolean StopUser(int id);
+
+    /*
+     * 永封
+     * @return 是否删除成功
+     */
+    boolean foreverStop(int id);
 }

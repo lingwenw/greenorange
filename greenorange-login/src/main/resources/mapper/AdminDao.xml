@@ -109,5 +109,18 @@
         select * from tb_user 
     </select>
 
+    <!--解封-->
+    <update id="startUser" parameterType="int">
+        update tb_user set deleted=0 where id=#{id}
+    </update>
 
+    <!--封号-->
+    <update id="StopUser" parameterType="int">
+        update tb_user set deleted=2 where id=#{id}
+    </update>
+
+    <!--永封-->
+    <delete id="foreverStop" parameterType="int">
+        delete from tb_user where id=#{id}
+    </delete>
 </mapper>

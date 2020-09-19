@@ -93,4 +93,22 @@ public class AdminServiceImpl implements AdminService {
         PageInfo<User> userPageInfo = new PageInfo<>(l);
         return userPageInfo;
     }
+
+    @Override
+    public boolean startUser(int id) {
+        int i = adminDao.startUser(id);
+        return i==1;
+    }
+
+    @Override
+    public boolean StopUser(int id) {
+        int i = adminDao.StopUser(id);
+        return i==1;
+    }
+
+    @Override
+    public boolean foreverStop(int id) {
+        int i = adminDao.foreverStop(id);
+        return i==1;
+    }
 }

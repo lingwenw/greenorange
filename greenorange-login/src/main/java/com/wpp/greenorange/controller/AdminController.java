@@ -71,5 +71,36 @@ public class AdminController {
         String name = admin.getName();
         System.out.println(name);
         return name;
+
+    }
+
+    /*
+     * 解封
+     *
+     */
+    @RequestMapping("/startUser")
+    public boolean startUser(int id){
+        System.out.println(id);
+        return adminService.startUser(id);
+    }
+
+    /*
+     * 解封
+     *
+     */
+    @RequestMapping("/StopUser")
+    public boolean StopUser(int id){
+        System.out.println(id);
+        return adminService.StopUser(id);
+    }
+
+    /*
+     * 永封
+     *
+     */
+    @RequestMapping("/foreverStop")
+    public boolean foreverStop(int id){
+        System.out.println(id);
+        return adminService.foreverStop(id);
     }
 }
