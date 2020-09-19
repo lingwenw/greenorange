@@ -119,8 +119,8 @@
     <update id="update">
         update greenorange.tb_goods_sku
         <set>
-            <if test="goodsId != null">
-                goods_id = #{goodsId},
+            <if test="title != null and title != ''">
+                title = #{title},
             </if>
             <if test="skuEdition != null and skuEdition != ''">
                 sku_edition = #{skuEdition},
@@ -139,6 +139,15 @@
             </if>
             <if test="deleted != null">
                 deleted = #{deleted},
+            </if>
+            <if test="goodEvaluate != null">
+                good_evaluate = #{goodEvaluate},
+            </if>
+            <if test="badEvaluate != null">
+                bad_evaluate = #{badEvaluate},
+            </if>
+            <if test="saleCount != null">
+                sale_count = #{saleCount},
             </if>
         </set>
         where id = #{id}

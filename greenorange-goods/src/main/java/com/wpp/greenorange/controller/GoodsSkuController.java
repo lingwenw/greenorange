@@ -28,6 +28,25 @@ public class GoodsSkuController {
     @Resource
     private GoodsSkuService goodsSkuService;
 
+    @PutMapping("/sku/updateSku")
+    public boolean updateSku(@RequestBody GoodsSku sku) throws IOException {
+        return goodsSkuService.update(sku);
+    }
+
+    @GetMapping("/sku/getSkuInfo")
+    public Map<String, Object> getSkuInfo(Integer id, Integer goodsId) throws IOException {
+        return goodsSkuService.getSkuInfo(id, goodsId);
+    }
+
+    @PutMapping("/sku/updatePriceStock")
+    public boolean updatePriceStock(@RequestBody GoodsSku sku) throws IOException {
+        return goodsSkuService.updatePriceStock(sku);
+    }
+
+    @RequestMapping("/sku/getPriceAndStock")
+    public Map<String, Double> getPriceAndStock(Integer skuId){
+        return goodsSkuService.getPriceAndStock(skuId);
+    }
 
     @DeleteMapping("/sku/deleteSku")
     public boolean deleteSku(Integer id, Integer goodsId) throws IOException {

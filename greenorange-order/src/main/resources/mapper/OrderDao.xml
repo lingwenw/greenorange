@@ -74,8 +74,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_order(user_id, address_id, status_id, price, create_time, payment_time, receiving_time, subject, trade_no, deleted, update_time)
-        values (#{userId}, #{addressId}, #{statusId}, #{price}, #{createTime}, #{paymentTime}, #{receivingTime}, #{subject}, #{tradeNo}, #{deleted}, #{updateTime})
+        insert into greenorange.tb_order(user_id, address_id, status_id, price, create_time, payment_time, subject, trade_no, deleted)
+        values (#{userId}, #{addressId}, #{statusId}, #{price}, #{createTime}, #{paymentTime}, #{subject}, #{tradeNo}, #{deleted}
     </insert>
 
     <!--通过主键修改数据-->
@@ -100,9 +100,7 @@
             <if test="paymentTime != null">
                 payment_time = #{paymentTime},
             </if>
-            <if test="receivingTime != null">
-                receiving_time = #{receivingTime},
-            </if>
+
             <if test="subject != null and subject != ''">
                 subject = #{subject},
             </if>
@@ -112,9 +110,7 @@
             <if test="deleted != null">
                 deleted = #{deleted},
             </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
-            </if>
+
         </set>
         where id = #{id}
     </update>

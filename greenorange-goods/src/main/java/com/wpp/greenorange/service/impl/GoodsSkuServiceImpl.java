@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wpp.greenorange.dao.GoodsDao;
 import com.wpp.greenorange.dao.GoodsSkuDao;
 import com.wpp.greenorange.domain.Goods;
 import com.wpp.greenorange.domain.GoodsSku;
@@ -53,9 +52,6 @@ import java.util.*;
 public class GoodsSkuServiceImpl implements GoodsSkuService {
     @Resource
     private GoodsSkuDao goodsSkuDao;
-
-    @Resource
-    private GoodsDao goodsDao;
 
     @Resource
     private RestClientBuilder builder;
@@ -219,6 +215,38 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         PageHelper.startPage(sku.getPageNum(), sku.getPageSize());
         List<GoodsSku> list = goodsSkuDao.findAllByCondition(sku);
         return PageInfo.of(list,5);
+    }
+
+    @Override
+    public Map<String, Double> getPriceAndStock(Integer skuId) {
+        Double price = (Double) redisTemplate.opsForHash().get("skuPriceStock", "price" + skuId);
+        Double stock = (Double) redisTemplate.opsForHash().get("skuPriceStock", "stock" + skuId);
+        Map<String, Double> map = new HashMap<>(2);
+        map.put("price",price);
+        map.put("stock",stock);
+        return map;
+    }
+
+    @Override
+    public boolean updatePriceStock(GoodsSku sku) throws IOException {
+        //更新数据库
+        goodsSkuDao.update(sku);
+        //更新缓存
+        redisTemplate.opsForHash().put("skuPriceStock","price"+sku.getId(),sku.getPrice());
+        redisTemplate.opsForHash().put("skuPriceStock","stock"+sku.getId(),sku.getStock().doubleValue());
+        //更新es
+        this.saveSkuEsToElasticSearch(sku);
+        return true;
+    }
+
+    @Override
+    public Map<String, Object> getSkuInfo(Integer id, Integer goodsId) throws JsonProcessingException {
+        HashMap<String, Object> map = new HashMap<>(2);
+        GoodsSku sku = goodsSkuDao.findById(id);
+        map.put("sku",sku);
+        Goods goods = goodsService.findById(goodsId);
+        map.put("goods",goods);
+        return map;
     }
 
     private Map<String, List > packAggregations(Aggregations agg){
@@ -389,7 +417,7 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
     private SkuEs goodsToSkuEs(GoodsSku sku) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         //获得goods对象
-        Goods goods = goodsDao.findById(sku.getGoodsId());
+        Goods goods = goodsService.findById(sku.getGoodsId());
         //组织SkuEs对象
         SkuEs skuEs = new SkuEs();
         skuEs.setId(sku.getId().toString());
@@ -474,6 +502,12 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
     @Override
     @Transactional(rollbackFor = {RuntimeException.class,MyException.class})
     public Boolean update(GoodsSku goodsSku) throws IOException {
+        //更新数据库
+        goodsSkuDao.update(goodsSku);
+        //更新es
+        this.saveSkuEsToElasticSearch(goodsSku);
+        //更新静态页面
+        goodsService.createPage(goodsSku.getGoodsId());
 
         return true;
     }
@@ -484,7 +518,7 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         //改变数据库
         goodsSkuDao.update(sku);
         //获得goods
-        Goods goods = goodsDao.findById(sku.getGoodsId());
+        Goods goods = goodsService.findById(sku.getGoodsId());
 
         //停用sku
         if (sku.getDeleted()){

@@ -4,6 +4,18 @@ var skuListVue = new Vue({
         pageInfo : {}
     },
     methods : {
+        //更新价格和库存
+        updatePriceStock: function(sku){
+            let _this = this;
+            axios.put("../sku/updatePriceStock",sku)
+            .then( resp => {
+                let data = resp.data;
+                $.errorAjax(data,function () {
+                    layer.msg("更新成功",{icon:1,time: 1500})
+                    _this.getAllLimit(_this.pageInfo.pageNum);
+                })
+            } )
+        },
         //删除一个sku
         deleteSku : function(id, goodsId){
             let _this = this;
@@ -41,6 +53,7 @@ var skuListVue = new Vue({
                 _this.pageInfo = resp.data;
             })
         },
+        //启用禁用sku
         enableSku : function (id, goodsId,deleted) {
             let _this = this;
             axios.put("../sku/enableSku",{
@@ -55,6 +68,10 @@ var skuListVue = new Vue({
                     layer.msg("操作成功",{icon: 1,time:1000})
                 })
             } )
+        },
+        /*产品-编辑*/
+        member_edit : function (title, url, w, h) {
+            layer_show(title, url, w, h);
         },
         replaceEdition : function (edition) {
             let jsonEdition = JSON.parse(edition);

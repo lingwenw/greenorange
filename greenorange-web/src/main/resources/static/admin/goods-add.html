@@ -24,6 +24,15 @@
     <link href="Widget/icheck/icheck.css" rel="stylesheet" type="text/css"/>
 
     <title>新增商品</title>
+    <style>
+        #form-article-add .edition .Add_p_s{
+            float: none;
+            position: initial;
+        }
+        #form-article-add .edition .formControls{
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
 <div class="clearfix" id="add_picture">
@@ -63,7 +72,15 @@
                 </div>
 
             </div>
-
+            <div class="clearfix cl edition">
+                <label class="form-label col-2">添加可选择项：</label>
+                <div class="formControls col-2" ><input type="text" class="input-text edition-input" maxlength="10"></div>
+                <div class="Add_p_s">
+                    <button style="margin-left: 110px" id="more-edition" class="btn btn-primary" type="button">
+                        更多选择项
+                    </button>
+                </div>
+            </div>
             <div class="clearfix cl">
                 <label class="form-label col-2">卖点介绍：</label>
                 <div id="editor" class="formControls col-10">
@@ -103,6 +120,12 @@
 
 
 $(function () {
+    //更多选择项
+    $("#more-edition").click(function () {
+        let clone = $('<div class="formControls col-2"><input type="text" class="input-text edition-input" maxlength="10"></div>');
+        $(this).parent().before(clone);
+    })
+    
     //获得品牌信息
     $.get("../goods/getAllBrand",function (data) {
         if (data.error){
@@ -122,9 +145,6 @@ $(function () {
 
         var E = window.wangEditor
         var editor = new E('#editor')
-        // 配置服务器端地址
-        editor.customConfig.uploadImgServer = '../goods/uploadGoods';
-        editor.customConfig.uploadFileName = 'file';
 
         //控件
         editor.customConfig.menus = [
@@ -135,20 +155,6 @@ $(function () {
             'foreColor'
         ]
 
-        //上传图片的回调函数
-        editor.customConfig.uploadImgHooks = {
-
-            success: function (xhr, editor, result) {
-                // 图片上传并返回结果，图片插入成功之后触发
-                // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
-                response = xhr.response;
-            },
-            customInsert: function (insertImg, result, editor) {
-                console.log(result)
-                var url = result.data
-                insertImg("../img/goods_img/"+url)
-            }
-        }
         editor.create();
 
         //提交保存goods
@@ -162,15 +168,20 @@ $(function () {
             }
             //判断是否有内容是空的
             if ( $.emptyString(goods.brandId) || $.emptyString(goods.name) || $.emptyString(editor.txt.text()) ){
-                layer.alert('请填写完表单!', {icon: 5,time:1000});
+                layer.alert('请填写完表单!', {icon: 5});
                 return;
             }
             //判断是否选中分类
             if ($.emptyString(goods.categoryId)){
-                layer.alert('请选择分类!', {icon: 5,time:1000});
+                layer.alert('请选择分类!', {icon: 5});
                 return;
             }
-            console.log(goods)
+            //获得可选项
+            let editionChoice = {}
+            $(".edition-input").each(function () {
+                editionChoice[this.value] = "";
+            })
+            goods.editionChoice = JSON.stringify(editionChoice);
             //发送请求
             $.post("../goods/addGoods",goods,function (resp) {
                 $.errorAjax(resp,function () {

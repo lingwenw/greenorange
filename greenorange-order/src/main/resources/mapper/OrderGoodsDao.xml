@@ -54,19 +54,14 @@
             <if test="deleted != null">
                 and deleted = #{deleted}
             </if>
-            <if test="createTime != null">
-                and create_time = #{createTime}
-            </if>
-            <if test="updateTime != null">
-                and update_time = #{updateTime}
-            </if>
+
         </where>
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_order_goods(sku_id, original_price, paid_price, order_id, status_id, count, deleted, create_time, update_time)
-        values (#{skuId}, #{originalPrice}, #{paidPrice}, #{orderId}, #{statusId}, #{count}, #{deleted}, #{createTime}, #{updateTime})
+        insert into greenorange.tb_order_goods(sku_id, original_price, paid_price, order_id, status_id, count, deleted)
+        values (#{skuId}, #{originalPrice}, #{paidPrice}, #{orderId}, #{statusId}, #{count}, #{deleted})
     </insert>
 
     <!--通过主键修改数据-->
@@ -93,12 +88,6 @@
             </if>
             <if test="deleted != null">
                 deleted = #{deleted},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
             </if>
         </set>
         where id = #{id}

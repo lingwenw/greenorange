@@ -1,5 +1,9 @@
 Vue.prototype.parseJson = function(str){
-    return JSON.parse(str);
+    if (!$.emptyString(str)){
+        return JSON.parse(str);
+    }else{
+        return null;
+    }
 }
 /**
  * 格式化日期

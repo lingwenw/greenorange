@@ -150,9 +150,10 @@
             paste: '#uploader',
             swf: '../../dist/Uploader.swf',
             chunked: true,
-            chunkSize: 512 * 1024,
+            // chunkSize: 1024 * 1024 * 30,
             server: '../goods/uploadGoods',
             method:'POST',
+            compress: false,//不启用压缩
             // runtimeOrder: 'flash',
 
             accept: {
@@ -164,8 +165,8 @@
             // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。
             disableGlobalDnd: true,
             fileNumLimit: 300,
-            fileSizeLimit: 2000 * 1024 * 1024,    // 200 M
-            fileSingleSizeLimit: 500 * 1024 * 1024    // 50 M
+            fileSizeLimit: 3 * 1024 * 1024,    // 3 M
+            fileSingleSizeLimit: 60 * 1024 * 1024    // 50 M
         });
 
         // 拖拽时不接受 js, txt 文件。

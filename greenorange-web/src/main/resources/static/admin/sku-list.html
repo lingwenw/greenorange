@@ -118,8 +118,10 @@
                                :href="'../goodsPage/'+item.id+'.html'">{{item.title}}</a></td>
                         <td><img class="showImg" :src="'../img/goods_img/'+parseJson(item.showImg)[0]"/></td>
                         <td v-html="replaceEdition(item.skuEdition)"></td>
-                        <td class="text-l">{{item.price}}</td>
-                        <td class="text-l">{{item.stock}}</td>
+                        <td class="text-l"><input v-model="item.price" type="text" style="width: 70%;"
+                                                  oninput="value=value.replace(/[^\d]/g,'')"/></td>
+                        <td class="text-l"><input v-model="item.stock" type="text" style="width: 70%;"
+                                                  oninput="value=value.replace(/[^\d]/g,'')"/></td>
                         <td>{{dateFormat(new Date(item.createTime))}}</td>
                         <td class="td-status"><span
                                 :class="[item.deleted?'label-defaunt':'label-success','label','radius']">{{item.deleted?"已停用":"已启用"}}</span>
@@ -128,10 +130,13 @@
                             <a @click="enableSku(item.id, item.goodsId, !item.deleted)" href="javascript:;" title="停用"
                                :class="[item.deleted?'':'btn-success','btn-xs','btn']"><i
                                     class="icon-ok bigger-120"></i></a>
-                            <a title="编辑" onclick="member_edit('编辑','sku-update.html?sid=1&amp;gid=1','4','','510')"
+                            <a title="编辑"
+                               @click="member_edit('编辑','sku-update.html?id='+item.id+'&goodsId='+item.goodsId,'1200','510')"
                                href="javascript:;" class="btn btn-xs btn-info"><i class="icon-edit bigger-120"></i></a>
                             <a title="删除" href="javascript:;" @click="deleteSku(item.id, item.goodsId)"
                                class="btn btn-xs btn-warning"><i class="icon-trash  bigger-120"></i></a>
+                            <a @click="updatePriceStock(item)" href="javascript:;" title="点击更新价格和sku"
+                               class="btn btn-warning Order_form" style="padding: 5px;margin-top: 5px;"><i class="icon-edit"></i>更新价格/库存</a>
                         </td>
                     </tr>
                     </tbody>
@@ -200,11 +205,6 @@
         $(".table_menu_list").width($(window).width() - 20);
         $(".table_menu_list").height($(window).height() - 215);
     })
-
-    /*产品-编辑*/
-    function member_edit(title, url, id, w, h) {
-        layer_show(title, url, w, h);
-    }
 
 
     //面包屑返回值

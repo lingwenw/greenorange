@@ -1,5 +1,6 @@
 package com.wpp.greenorange.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.domain.select.GoodsSkuSelect;
@@ -91,4 +92,26 @@ public interface GoodsSkuService {
      * @return
      */
     PageInfo<GoodsSku> getAllLimit(GoodsSkuSelect sku);
+
+    /**
+     * 从redis中获取价格和库存
+     * @param skuId
+     * @return
+     */
+    Map<String, Double> getPriceAndStock(Integer skuId);
+
+    /**
+     * 更新库存和价格
+     * @param sku
+     * @return
+     */
+    boolean updatePriceStock(GoodsSku sku) throws IOException;
+
+    /**
+     * 获得该sku的信息
+     * @param id
+     * @param goodsId
+     * @return
+     */
+    Map<String, Object> getSkuInfo(Integer id, Integer goodsId) throws JsonProcessingException;
 }

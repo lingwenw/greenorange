@@ -24,6 +24,15 @@
     <link href="Widget/icheck/icheck.css" rel="stylesheet" type="text/css"/>
 
     <title>修改商品</title>
+    <style>
+        #form-article-add .edition .Add_p_s{
+            float: none;
+            position: initial;
+        }
+        #form-article-add .edition .formControls{
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
 <div class="clearfix" id="add_picture">
@@ -63,7 +72,15 @@
                 </div>
 
             </div>
-
+            <div class="clearfix cl edition">
+                <label class="form-label col-2">添加可选择项：</label>
+                <div class="formControls col-2" v-for="(value, key) in parseJson(goods.editionChoice)"><input :value="key" type="text" class="input-text edition-input" maxlength="10"></div>
+                <div class="Add_p_s">
+                    <button onclick="moreEdition(this)" style="margin-left: 110px" id="more-edition" class="btn btn-primary" type="button">
+                        更多选择项
+                    </button>
+                </div>
+            </div>
             <div class="clearfix cl">
                 <label class="form-label col-2">卖点介绍：</label>
                 <div id="editor" class="formControls col-10">
@@ -100,144 +117,9 @@
 <script src="Widget/wangEditor/wangEditor.min.js"></script>
 <script src="../js/vuejs-2.5.16.js"></script>
 <script src="../js/axios-0.18.0.js"></script>
+<script src="../js/vue-methods.js"></script>
 <script src="../js/util.js"></script>
 <script>
-
-
-$(function () {
-    //获得品牌信息
-    $.get("../goods/getAllBrand",function (data) {
-        if (data.error){
-            layer.msg('获取品牌出错，服务器繁忙', {icon: 5,time:1000});
-        } else{
-            data.forEach(function (e) {
-                var option = $('<option value="'+e.name+'">'+e.name+'</option>');
-                option.data("brandId",e.id);
-                $(".select-box>select").append(option);
-            })
-        }
-    })
-})
-
-    $(function () {
-        //zTree
-        var zTree = $("#treeDemo");
-        $.post("/category/findCategorys", function (data) {
-            zNodes.push({id: 0, pId: -1, name: "商城分类列表", open: true});
-            zNodes = data;
-            zTree = $.fn.zTree.init(zTree, setting, {
-                name: "商城分类",
-                open: true,
-                children: data
-            });
-        })
-
-        //富文本编辑器
-        var E = window.wangEditor
-        var editor = new E('#editor')
-        // 配置服务器端地址
-        editor.customConfig.uploadImgServer = '../goods/uploadGoods';
-        editor.customConfig.uploadFileName = 'file';
-
-        //控件
-        editor.customConfig.menus = [
-            'head',
-            'bold',
-            'link',
-            'underline',
-            'foreColor'
-        ]
-
-        //上传图片的回调函数
-        editor.customConfig.uploadImgHooks = {
-
-            success: function (xhr, editor, result) {
-                // 图片上传并返回结果，图片插入成功之后触发
-                // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
-                response = xhr.response;
-            },
-            customInsert: function (insertImg, result, editor) {
-                console.log(result)
-                var url = result.data
-                insertImg("../img/goods_img/"+url)
-            }
-        }
-
-        editor.create();
-
-
-        // editor.txt.html("aa");
-        //获得goods
-        let goodsUpdateVue = new Vue({
-            el : "#form-article-add",
-            data : {
-                goods : {}
-            },
-            methods : {
-                getOne : function () {
-                    let _this = this;
-                    axios.get("../goods/getOne",{
-                        params : {
-                            id : $.getParameterJson().id
-                        }
-                    })
-                    .then( resp => {
-                        _this.goods = resp.data;
-                        let node = zTree.getNodeByParam("id",_this.goods.categoryId);
-                        zTree.selectNode(node);
-                    } )
-                },
-                updateGoods : function () {
-                    let _this = this;
-                    axios.put("../goods/updateGoods",_this.goods)
-                    .then( resp => {
-                        let data = resp.data;
-                        $.errorAjax(data,function () {
-                            if (data) {
-                                layer.msg("更新成功", {icon: 1,time:1000})
-                            }else{
-                                layer.msg("更新失败", {icon: 5,time:1000})
-                            }
-                            setTimeout(function () {
-                                let goodsVue = parent.goodsVue;
-                                goodsVue.getAllLimit(goodsVue.pageInfo.pageNum);
-                                layer_close();
-                            },1000)
-                        })
-                    } )
-                }
-            },
-            created: function () {
-                this.getOne();
-            }
-        })
-    })
-
-
-    $(function () {
-        $("#add_picture").fix({
-            float: 'left',
-            skin: 'green',
-            durationTime: false,
-            stylewidth: '220',
-            spacingw: 0,
-            spacingh: 260,
-        });
-    });
-    $(document).ready(function () {
-//初始化宽度、高度
-
-        $(".widget-box").height($(window).height());
-        $(".page_right_style").height($(window).height());
-        $(".page_right_style").width($(window).width() - 220);
-        //当文档窗口发生改变时 触发
-        $(window).resize(function () {
-
-            $(".widget-box").height($(window).height());
-            $(".page_right_style").height($(window).height());
-            $(".page_right_style").width($(window).width() - 220);
-        });
-    });
     /*******ztree设置*******/
     var setting = {
         view: {
@@ -265,8 +147,132 @@ $(function () {
     };
 
     var zNodes = [];
+    //更多选择项
+    function moreEdition(e){
+        let clone = $('<div class="formControls col-2"><input type="text" class="input-text edition-input" maxlength="10"></div>');
+        $(e).parent().before(clone);
+    }
+    $(function () {
+        //zTree
+        let zTree = $("#treeDemo");
+        $.post("/category/findCategorys", function (data) {
+            zNodes.push({id: 0, pId: -1, name: "商城分类列表", open: true});
+            zNodes = data;
+            zTree = $.fn.zTree.init(zTree, setting, {
+                name: "商城分类",
+                open: true,
+                children: data
+            });
+        })
+
+        var E = window.wangEditor
+        var editor = new E('#editor');
+
+        //控件
+        editor.customConfig.menus = [
+            'head',
+            'bold',
+            'link',
+            'underline',
+            'foreColor'
+        ]
 
 
+
+        //获得goods
+        let goodsUpdateVue = new Vue({
+            el : "#form-article-add",
+            data : {
+                goods : {}
+            },
+            methods : {
+                getOne : function () {
+                    let _this = this;
+                    axios.get("../goods/getOne",{
+                        params : {
+                            id : $.getParameterJson().id
+                        }
+                    })
+                    .then( resp => {
+                        _this.goods = resp.data;
+                        let node = zTree.getNodeByParam("id",_this.goods.categoryId);
+                        zTree.selectNode(node);
+                        editor.create();
+                        editor.txt.html(_this.goods.sellPoint);
+                    } )
+                },
+                updateGoods : function () {
+                    let _this = this;
+                    let editionChoice = {}
+                    $(".edition-input").each(function () {
+                        editionChoice[this.value] = "";
+                    })
+                    _this.goods.editionChoice = JSON.stringify(editionChoice);
+                    axios.put("../goods/updateGoods",_this.goods)
+                        .then( resp => {
+                            let data = resp.data;
+                            $.errorAjax(data,function () {
+                                if (data) {
+                                    layer.msg("更新成功", {icon: 1,time:1000})
+                                }else{
+                                    layer.msg("更新失败", {icon: 5,time:1000})
+                                }
+                                setTimeout(function () {
+                                    let goodsVue = parent.goodsVue;
+                                    goodsVue.getAllLimit(goodsVue.pageInfo.pageNum);
+                                    layer_close();
+                                    window.location.reload();
+                                },1000)
+                            })
+                        } )
+                }
+            },
+            created: function () {
+                this.getOne();
+            }
+        })
+
+        //获得品牌信息
+        $.get("../goods/getAllBrand",function (data) {
+            if (data.error){
+                layer.msg('获取品牌出错，服务器繁忙', {icon: 5,time:1000});
+            } else{
+                data.forEach(function (e) {
+                    var option = $('<option value="'+e.name+'">'+e.name+'</option>');
+                    option.data("brandId",e.id);
+                    $(".select-box>select").append(option);
+                })
+            }
+        })
+
+
+    })
+
+
+    $(function () {
+        $("#add_picture").fix({
+            float: 'left',
+            skin: 'green',
+            durationTime: false,
+            stylewidth: '220',
+            spacingw: 0,
+            spacingh: 260,
+        });
+    });
+    $(document).ready(function () {
+//初始化宽度、高度
+
+        $(".widget-box").height($(window).height());
+        $(".page_right_style").height($(window).height());
+        $(".page_right_style").width($(window).width() - 220);
+        //当文档窗口发生改变时 触发
+        $(window).resize(function () {
+
+            $(".widget-box").height($(window).height());
+            $(".page_right_style").height($(window).height());
+            $(".page_right_style").width($(window).width() - 220);
+        });
+    });
 
 </script>
 </body>
