@@ -53,15 +53,12 @@ public class OrderController {
 
     @RequestMapping(value = "/addOrder")
     public @ResponseBody Order addOrder(@RequestBody Map orderData, HttpSession session, HttpServletRequest req) throws UnsupportedEncodingException {
-//        User user = (User) session.getAttribute("loginUser");
-        User user = new User();
-        user.setId(1);
+        User user = (User) session.getAttribute("loginUser");
         Order order = orderService.insert(orderData, user);
         Order order1 = new Order();
         order1.setId(order.getId());
         order1.setPrice(order.getPrice());
         order1.setSubject(order.getSubject());
-
         return order1;
     }
 }
