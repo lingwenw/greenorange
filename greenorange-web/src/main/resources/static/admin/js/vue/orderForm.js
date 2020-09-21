@@ -28,7 +28,6 @@ var orderVue = new Vue({
         },
         //初始化数据
         initItemData : function (item) {
-            console.log(111)
             let orderGoods = item.orderGoods;
             if (orderGoods==null||orderGoods.length==0){
                 return [];
@@ -58,5 +57,8 @@ var orderVue = new Vue({
     },
     created : function () {
         this.getAllLimit(1);
+    },
+    updated : function() {
+        showNewOrder();
     }
 })

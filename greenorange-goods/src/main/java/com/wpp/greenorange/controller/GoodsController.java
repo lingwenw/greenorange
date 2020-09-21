@@ -3,18 +3,15 @@ package com.wpp.greenorange.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
-import com.wpp.greenorange.config.WebSocketServer;
+import com.wpp.greenorange.websocket.ServerSendType;
+import com.wpp.greenorange.websocket.WebSocketServer;
 import com.wpp.greenorange.domain.Goods;
-import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.domain.select.GoodsSelect;
 import com.wpp.greenorange.service.GoodsService;
-import com.wpp.webutil.exception.MyException;
 import com.wpp.webutil.util.MyUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 import javax.annotation.Resource;
 import java.io.*;
@@ -37,8 +34,12 @@ public class GoodsController {
 
 
     @RequestMapping("/testSend")
-    public void testSend(Integer userId) throws IOException {
-        WebSocketServer.sendInfo("我是服务端",userId);
+    public void testSend() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, Object> map = new HashMap<>(4);
+        map.put("type", ServerSendType.ORDER_COUNT);
+
+        WebSocketServer.massInfo(mapper.writeValueAsString(map));
     }
 
     /**
