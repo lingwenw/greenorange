@@ -4,6 +4,7 @@ import com.wpp.greenorange.domain.Order;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Order)表数据库访问层
@@ -55,4 +56,9 @@ public interface OrderDao {
      */
     Integer deleteById(Integer id);
 
+    /**
+     * 获得全部的状态
+     * @return
+     */
+    List<Map> getAllOrderStatus();
 }

@@ -1,8 +1,12 @@
 package com.wpp.greenorange.service;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Order;
+import com.wpp.greenorange.domain.select.OrderSelect;
+import com.wpp.greenorange.domain.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Order)表服务接口
@@ -31,10 +35,10 @@ public interface OrderService {
     /**
      * 新增数据
      *
-     * @param order 实例对象
+     * @param
      * @return 是否成功
      */
-    Boolean insert(Order order);
+    Order insert(Map orderData, User user);
 
     /**
      * 修改数据
@@ -52,4 +56,16 @@ public interface OrderService {
      */
     Boolean deleteById(Integer id);
 
+    /**
+     * 分页的方法
+     * @param orderSelect
+     * @return
+     */
+    PageInfo<Order> getAllLimit(OrderSelect orderSelect);
+
+    /**
+     *
+     * @return
+     */
+    List<Map> getAllOrderStatus();
 }

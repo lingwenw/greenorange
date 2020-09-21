@@ -15,6 +15,13 @@ import java.util.List;
 public interface CategoryDao {
 
     /**
+     * 根据cid查询到他的所有子cid
+     * @param cid
+     * @return
+     */
+    String findCidsByCid(Integer cid);
+
+    /**
      * 通过ID查询单条数据
      *
      * @param id 主键

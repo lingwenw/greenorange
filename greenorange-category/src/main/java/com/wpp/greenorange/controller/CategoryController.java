@@ -66,18 +66,21 @@ public class CategoryController{
     public List<Map> findCategorys() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String categorys = redisTemplate.opsForValue().get("categorys");
+        if (categorys==null){
+            categoryService.saveCategoryTreeToRedis();
+            categorys = redisTemplate.opsForValue().get("categorys");
+        }
         return mapper.readValue(categorys, List.class);
     }
 
     /**
-     *
      * @param category
      * @return Category 修改数据
      */
     @RequestMapping("/updateCategory")
     public boolean updateCategory(Category category) throws JsonProcessingException {
         boolean isUpdate = categoryService.update(category);
-        if (isUpdate){
+        if (isUpdate) {
             redisTemplate.delete("categorys");
             categoryService.saveCategoryTreeToRedis();
         }
@@ -85,17 +88,25 @@ public class CategoryController{
     }
 
     /**
-     *
      * @param category 删除数据
      * @return
      */
     @RequestMapping("/deleteCategory")
     public boolean deleteCategory(Category category) throws JsonProcessingException {
-        System.out.println(category);
-//        boolean aBoolean = categoryService.deleteById(category);
-//        redisTemplate.delete("categorys");
-//        categoryService.saveCategoryTreeToRedis();
-        return false;
+        boolean aBoolean = categoryService.deleteById(category);
+        redisTemplate.delete("categorys");
+        categoryService.saveCategoryTreeToRedis();
+        return aBoolean;
+    }
+
+    @RequestMapping("/addCategory")
+    public boolean addCategory(Category category) throws JsonProcessingException {
+        Boolean insert = categoryService.insert(category);
+        if (insert){
+            redisTemplate.delete("categorys");
+            categoryService.saveCategoryTreeToRedis();
+        }
+        return insert;
     }
 
 }

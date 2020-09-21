@@ -82,4 +82,10 @@ public interface CategoryService {
      */
     Map findMap(Integer id) throws JsonProcessingException;
 
+    /**
+     * 根据id获得全部子分类id
+     * @param categoryId
+     * @return
+     */
+    String findCidsByCid(Integer categoryId);
 }

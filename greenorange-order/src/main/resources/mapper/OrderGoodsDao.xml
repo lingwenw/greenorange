@@ -13,60 +13,74 @@
         <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <association property="sku" column="sku_id" select="com.wpp.greenorange.dao.GoodsSkuDao.findById">
+
+        </association>
     </resultMap>
+
+    <select id="findByOrderId" resultMap="orderGoodsMap">
+        SELECT
+        og.id, og.sku_id, og.original_price, og.paid_price, og.order_id, og.status_id, s.name statusName, og.count, og.deleted, og.create_time, og.update_time
+        FROM tb_order_goods og
+        LEFT JOIN tb_order_status s
+        ON og.status_id = s.id
+        WHERE og.deleted = 0
+        and og.order_id =  #{orderId}
+    </select>
 
     <!--查询单个-->
     <select id="findById" resultMap="orderGoodsMap">
-        select
-          id, sku_id, original_price, paid_price, order_id, status_id, count, deleted, create_time, update_time
-        from greenorange.tb_order_goods
-        where id = #{id}
+        SELECT
+        og.id, og.sku_id, og.original_price, og.paid_price, og.order_id, og.status_id, s.name statusName, og.count, og.deleted, og.create_time, og.update_time
+        FROM tb_order_goods og
+        LEFT JOIN tb_order_status s
+        ON og.status_id = s.id
+        WHERE og.deleted = 0
+        where og.id = #{id}
     </select>
 
 
     <!--通过实体作为筛选条件查询-->
     <select id="findAllByCondition" resultMap="orderGoodsMap">
-        select
-        id, sku_id, original_price, paid_price, order_id, status_id, count, deleted, create_time, update_time
-        from greenorange.tb_order_goods
+        SELECT
+        og.id, og.sku_id, og.original_price, og.paid_price, og.order_id, og.status_id, s.name statusName, og.count, og.deleted, og.create_time, og.update_time
+        FROM tb_order_goods og
+        LEFT JOIN tb_order_status s
+        ON og.status_id = s.id
+        WHERE og.deleted = 0
         <where>
             <if test="id != null">
-                and id = #{id}
+                and og.id = #{id}
             </if>
             <if test="skuId != null">
-                and sku_id = #{skuId}
+                and og.sku_id = #{skuId}
             </if>
             <if test="originalPrice != null">
-                and original_price = #{originalPrice}
+                and og.original_price = #{originalPrice}
             </if>
             <if test="paidPrice != null">
-                and paid_price = #{paidPrice}
+                and og.paid_price = #{paidPrice}
             </if>
             <if test="orderId != null">
-                and order_id = #{orderId}
+                and og.order_id = #{orderId}
             </if>
             <if test="statusId != null">
-                and status_id = #{statusId}
+                and og.status_id = #{statusId}
             </if>
             <if test="count != null">
-                and count = #{count}
+                and og.count = #{count}
             </if>
             <if test="deleted != null">
-                and deleted = #{deleted}
+                and og.deleted = #{deleted}
             </if>
-            <if test="createTime != null">
-                and create_time = #{createTime}
-            </if>
-            <if test="updateTime != null">
-                and update_time = #{updateTime}
-            </if>
+
         </where>
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_order_goods(sku_id, original_price, paid_price, order_id, status_id, count, deleted, create_time, update_time)
-        values (#{skuId}, #{originalPrice}, #{paidPrice}, #{orderId}, #{statusId}, #{count}, #{deleted}, #{createTime}, #{updateTime})
+        insert into greenorange.tb_order_goods(sku_id, original_price, paid_price, order_id, status_id, count)
+        values (#{skuId}, #{originalPrice}, #{paidPrice}, #{orderId}, #{statusId}, #{count})
     </insert>
 
     <!--通过主键修改数据-->
@@ -93,12 +107,6 @@
             </if>
             <if test="deleted != null">
                 deleted = #{deleted},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
             </if>
         </set>
         where id = #{id}

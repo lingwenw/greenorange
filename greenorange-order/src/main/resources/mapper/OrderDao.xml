@@ -15,67 +15,76 @@
         <result property="tradeNo" column="trade_no" jdbcType="VARCHAR"/>
         <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <association property="address" column="address_id" select="com.wpp.greenorange.dao.AddressDao.findById">
+
+        </association>
+        <collection property="orderGoods" column="id" select="com.wpp.greenorange.dao.OrderGoodsDao.findByOrderId"></collection>
     </resultMap>
+
+    <!--获得全部的订单状态-->
+    <select id="getAllOrderStatus" resultType="map">
+        select id,`name`
+        from tb_order_status
+    </select>
 
     <!--查询单个-->
     <select id="findById" resultMap="orderMap">
-        select
-          id, user_id, address_id, status_id, price, create_time, payment_time, receiving_time, subject, trade_no, deleted, update_time
-        from greenorange.tb_order
-        where id = #{id}
+        SELECT
+        o.id, o.user_id, o.address_id, o.status_id, s.name statusName, o.price, o.create_time, o.payment_time, o.receiving_time, o.`subject`, o.trade_no, o.deleted, o.update_time
+        FROM tb_order o
+        LEFT JOIN tb_order_status s
+        ON o.status_id = s.id
+        WHERE o.deleted =0
+        and o.id = #{id}
     </select>
 
 
     <!--通过实体作为筛选条件查询-->
     <select id="findAllByCondition" resultMap="orderMap">
-        select
-        id, user_id, address_id, status_id, price, create_time, payment_time, receiving_time, subject, trade_no,
-        deleted, update_time
-        from greenorange.tb_order
+        SELECT
+        o.id, o.user_id, o.address_id, o.status_id, s.name statusName, o.price, o.create_time, o.payment_time, o.receiving_time, o.`subject`, o.trade_no, o.deleted, o.update_time
+        FROM tb_order o
+        LEFT JOIN tb_order_status s
+        ON o.status_id = s.id
         <where>
             <if test="id != null">
-                and id = #{id}
+                and o.id = #{id}
             </if>
             <if test="userId != null">
-                and user_id = #{userId}
+                and o.user_id = #{userId}
             </if>
             <if test="addressId != null">
-                and address_id = #{addressId}
+                and o.address_id = #{addressId}
             </if>
             <if test="statusId != null">
-                and status_id = #{statusId}
+                and o.status_id = #{statusId}
             </if>
             <if test="price != null">
-                and price = #{price}
+                and o.price = #{price}
             </if>
-            <if test="createTime != null">
-                and create_time = #{createTime}
+            <if test="startTime != null">
+                and o.create_time &gt;= #{startTime}
             </if>
-            <if test="paymentTime != null">
-                and payment_time = #{paymentTime}
+            <if test="endTime != null">
+                and o.create_time &lt;= #{endTime}
             </if>
             <if test="receivingTime != null">
                 and receiving_time = #{receivingTime}
             </if>
             <if test="subject != null and subject != ''">
-                and subject = #{subject}
+                and o.subject = #{subject}
             </if>
             <if test="tradeNo != null and tradeNo != ''">
-                and trade_no = #{tradeNo}
-            </if>
-            <if test="deleted != null">
-                and deleted = #{deleted}
-            </if>
-            <if test="updateTime != null">
-                and update_time = #{updateTime}
+                and o.trade_no = #{tradeNo}
             </if>
         </where>
+        and o.deleted =0
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_order(user_id, address_id, status_id, price, create_time, payment_time, receiving_time, subject, trade_no, deleted, update_time)
-        values (#{userId}, #{addressId}, #{statusId}, #{price}, #{createTime}, #{paymentTime}, #{receivingTime}, #{subject}, #{tradeNo}, #{deleted}, #{updateTime})
+        insert into greenorange.tb_order(user_id, address_id, status_id, price, subject, trade_no)
+        values (#{userId}, #{addressId}, #{statusId}, #{price}, #{subject}, #{tradeNo})
     </insert>
 
     <!--通过主键修改数据-->
@@ -100,9 +109,7 @@
             <if test="paymentTime != null">
                 payment_time = #{paymentTime},
             </if>
-            <if test="receivingTime != null">
-                receiving_time = #{receivingTime},
-            </if>
+
             <if test="subject != null and subject != ''">
                 subject = #{subject},
             </if>
@@ -112,9 +119,7 @@
             <if test="deleted != null">
                 deleted = #{deleted},
             </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
-            </if>
+
         </set>
         where id = #{id}
     </update>

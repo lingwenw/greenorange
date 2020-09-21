@@ -66,11 +66,10 @@ public class AdminController {
      *
      */
     @RequestMapping("/getLoginName")
-    public String getLoginName(HttpSession session){
+    public Admin getLoginName(HttpSession session){
         Admin admin = (Admin) session.getAttribute("loginAdmin");
-        String name = admin.getName();
-        System.out.println(name);
-        return name;
+        System.out.println(admin);
+        return admin;
 
     }
 

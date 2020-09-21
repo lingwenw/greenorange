@@ -9,7 +9,6 @@
 
     <link rel="stylesheet" type="text/css" href="./css/all.css" />
     <link rel="stylesheet" type="text/css" href="./css/pages-list.css" />
-    <script href="./js/jquery-3.3.1.min.js"></script>
     <style>
         .price-confirm{
             width: 38px;
@@ -26,63 +25,7 @@
 </head>
 
 <body>
-	<!-- 头部栏位 -->
-	<!--页面顶部-->
-<div id="nav-bottom">
-	<!--顶部-->
-	<div class="nav-top">
-		<div class="top">
-			<div class="py-container">
-				<div class="shortcut">
-					<ul class="fl">
-						<li class="f-item">青橙欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
-					</ul>
-					<div class="fr typelist">
-						<ul class="types">
-							<li class="f-item"><span>我的订单</span></li>
-							
-							<li class="f-item"><span><a href="cart.html" target="_blank">我的购物车</a></span></li>
-							<li class="f-item"><span><a href="home.html" target="_blank">我的青橙</a></span></li>			
-							<li class="f-item"><span>青橙会员</span></li>						
-							<li class="f-item"><span>企业采购</span></li>						
-							<li class="f-item"><span>关注青橙</span></li>
-							<li class="f-item"><span><a href="cooperation.html" target="_blank">合作招商</a></span></li>
-							<li class="f-item"><span><a href="shoplogin.html" target="_blank">商家后台</a></span></li>				
-							<li class="f-item"><span>网站导航</li>
-						</ul>
-					</div>
-					
-				</div>
-			</div>
-		</div>
-
-		<!--头部-->
-		<div class="header">
-			<div class="py-container">
-				<div class="yui3-g Logo">
-					<div class="yui3-u Left logoArea">
-						<a class="logo-bd" title="青橙" href="index.html" target="_blank"></a>
-					</div>
-					<div class="yui3-u Rit searchArea">
-						<div class="search">
-							<form class="sui-form form-inline" onsubmit="return false">
-								<!--searchAutoComplete-->
-                                <div class="input-append">
-                                    <input type="text" id="autocomplete" th:value="${input}" class="input-error input-xxlarge" />
-                                    <button id="search-btn" onclick="goSearch()" type="button" class="sui-btn btn-xlarge btn-danger">搜索</button>
-                                </div>
-							</form>
-						</div>
-					</div>
-					
-				</div>
-
-			</div>
-		</div>
-	</div>
-</div>
-
+    <div id="head"></div>
 	<!-- 商品分类导航 -->
 	<div class="typeNav">
 			<div class="py-container">
@@ -483,9 +426,10 @@
 					</li>					
 				</ul>
 				<ul class="fl sui-tag">
-                    <li th:if="!${#strings.isEmpty(input)}" th:text="'您输入的关键字  :  '+${input}"></li>
-					<li data-th-data-url="${url.replace('category='+category,'')}" th:if="${category!=''&&category!=null}" th:utext="${category}+'<i>×</i>'" class="with-x"><i>×</i></li>
-                    <li data-th-data-url="${url.replace('brand='+brand,'')}" th:each="brand:${brands}" th:utext="${brand}+'<i>×</i>'" class="with-x"></li>
+                    <li th:if="!${#strings.isEmpty(input)}" th:text="'关键字 : &quot;'+${input}+'&quot;'"></li>
+					<li data-th-data-url="${url.replace('category='+category,'').replaceAll('&*pageNum=\d+','')}" th:if="${category!=''&&category!=null}" th:utext="${category}+'<i>×</i>'" class="with-x"><i>×</i></li>
+                    <li data-th-data-url="${url.replace('brand='+brand,'').replaceAll('&*pageNum=\d+','')}" th:each="brand:${brands}" th:utext="${brand}+'<i>×</i>'" class="with-x"></li>
+                    <li data-th-data-url="${url.replace('params='+inputParam,'').replaceAll('&*pageNum=\d+','')}" th:each="inputParam:${inputParams}" th:utext="${inputParam}+'<i>×</i>'" class="with-x"></li>
 				</ul>
 			</div>
 			<!--selector-->
@@ -494,7 +438,7 @@
 					<div class="fl key">商品分类</div>
 					<div class="fl value">
 						<span>
-							<a th:href="${url.replace('category='+category,'category='+cate)}" th:each="cate:${params.categoryNames}" th:text="${cate}" style="margin-right: 15px;"></a>
+							<a th:href="${url.replace('category='+category,'category='+cate).replaceAll('&*pageNum=\d+','')}" th:each="cate:${params.categoryNames}" th:text="${cate}" style="margin-right: 15px;"></a>
 						</span>
 					</div>
 					<div class="fl ext"></div>
@@ -504,8 +448,7 @@
 					<div class="value logos">
 						<ul class="logo-list">
 							<li th:each="brand:${params.get('brandNames')}" >
-                                <!--href没有处理-->
-                                <a th:href="${url.replaceAll('null','')+'&brand='+brand}" th:text="${brand}" style="display: block;width: 100%;height: 100%">
+                                <a th:href="${url.replaceAll('&*pageNum=\d+','').replaceAll('null','')+'&brand='+brand}" th:text="${brand}" style="display: block;width: 100%;height: 100%">
 
                                 </a>
                             </li>
@@ -516,76 +459,13 @@
 						<a href="javascript:void(0);">更多</a>
 					</div>
 				</div>
-				<div class="type-wrap">
-					<div class="fl key">网络制式</div>
-					<div class="fl value">
+<!--                <div th:text="${params.get('params')}"></div>-->
+				<div class="type-wrap" th:each="map:${params.get('params')}" th:if="${#lists.size(map.get('list'))>0}">
+					<div class="fl key" th:text="${map.get('paramName')}"></div>
+					<div class="fl value" >
 						<ul class="type-list">
-							<li>
-								<a>GSM（移动/联通2G）</a>
-							</li>
-							<li>
-								<a>电信2G</a>
-							</li>
-							<li>
-								<a>电信3G</a>
-							</li>
-							<li>
-								<a>移动3G</a>
-							</li>
-							<li>
-								<a>联通3G</a>
-							</li>
-							<li>
-								<a>联通4G</a>
-							</li>
-							<li>
-								<a>电信3G</a>
-							</li>
-							<li>
-								<a>移动3G</a>
-							</li>
-							<li>
-								<a>联通3G</a>
-							</li>
-							<li>
-								<a>联通4G</a>
-							</li>
-						</ul>
-					</div>
-					<div class="fl ext"></div>
-				</div>
-				<div class="type-wrap">
-					<div class="fl key">显示屏尺寸</div>
-					<div class="fl value">
-						<ul class="type-list">
-							<li>
-								<a>4.0-4.9英寸</a>
-							</li>
-							<li>
-								<a>4.0-4.9英寸</a>
-							</li>
-						</ul>
-					</div>
-					<div class="fl ext"></div>
-				</div>
-				<div class="type-wrap">
-					<div class="fl key">摄像头像素</div>
-					<div class="fl value">
-						<ul class="type-list">
-							<li>
-								<a>1200万以上</a>
-							</li>
-							<li>
-								<a>800-1199万</a>
-							</li>
-							<li>
-								<a>1200-1599万</a>
-							</li>
-							<li>
-								<a>1600万以上</a>
-							</li>
-							<li>
-								<a>无摄像头</a>
+							<li th:each="item:${map.get('list')}">
+								<a th:text="${item}" th:href="${url.replaceAll('&*pageNum=\d+','')+'&'+'params='+map.get('paramName')+'：'+item}"></a>
 							</li>
 						</ul>
 					</div>
@@ -597,7 +477,7 @@
 						<input th:value="${#arrays.length(price)>0?price[0]:''}" oninput="value=value.replace(/[^\d]/g,'')" class="price-range" type="text" style="width: 52px;border: 1px solid #CCC;;color: #333;"/>
                         -
                         <input th:value="${#arrays.length(price)>1?price[1]:''}" oninput="value=value.replace(/[^\d]/g,'')" class="price-range" type="text" style="width: 52px;border: 1px solid #CCC;;color: #333;"/>
-                        <a th:href="${url.replaceAll('&*price=[0-9]*-[0-9]*','')}">清空</a>
+                        <a th:href="${url.replaceAll('&*price=[0-9]*-[0-9]*','').replaceAll('&*pageNum=\d+','')}">清空</a>
                         <a class="price-confirm">确定</a>
 					</div>
 					<div class="fl ext">
@@ -610,19 +490,19 @@
 					<div class="navbar-inner filter">
 						<ul class="sui-nav">
 							<li th:class="${sort==''?'active':''}" class="active">
-								<a th:href="${url.replace('sort='+sort,'').replace('order='+order,'')}">综合</a>
+								<a th:href="${url.replace('sort='+sort,'').replace('order='+order,'').replaceAll('&*pageNum=\d+','')}">综合</a>
 							</li>
 							<li th:class="${sort=='saleCount'?'active':''}">
-								<a th:href="${url.replace('sort='+sort,'sort=saleCount').replace('order='+order,'order=DESC')}">销量</a>
+								<a th:href="${url.replace('sort='+sort,'sort=saleCount').replace('order='+order,'order=DESC').replaceAll('&*pageNum=\d+','')}">销量</a>
 							</li>
 							<li th:class="${sort=='createTime'?'active':''}">
-								<a th:href="${url.replace('sort='+sort,'sort=createTime').replace('order='+order,'order=DESC')}">新品</a>
+								<a th:href="${url.replace('sort='+sort,'sort=createTime').replace('order='+order,'order=DESC').replaceAll('&*pageNum=\d+','')}">新品</a>
 							</li>
 							<li th:class="${sort=='evaluateCount'?'active':''}">
-								<a th:href="${url.replace('sort='+sort,'sort=evaluateCount').replace('order='+order,'order=DESC')}" href="#">评价</a>
+								<a th:href="${url.replace('sort='+sort,'sort=evaluateCount').replace('order='+order,'order=DESC').replaceAll('&*pageNum=\d+','')}" href="#">评价</a>
 							</li>
 							<li th:class="${sort=='price'?'active':''}">
-								<a id="sort" th:class="${sort=='price'&&order=='ASC'?'desc':'asc'}" data-th-data-url="${url.replace('sort='+sort,'sort=price').replace('&order='+order,'')}">价格
+								<a id="sort" th:class="${sort=='price'&&order=='ASC'?'desc':'asc'}" data-th-data-url="${url.replace('sort='+sort,'sort=price').replace('&order='+order,'').replaceAll('&*pageNum=\d+','')}">价格
                                     <i th:text="${sort=='price'?(order=='ASC'?'↑':'↓'):'↑'}" style="margin-left: 5px;"></i>
                                 </a>
 							</li>
@@ -661,14 +541,14 @@
 						<ul>
 							<li th:class="'prev '+${page.pageNum==1?'disabled':''}" >
                                 <!--三元运算，当前页是第一页，超链接无效-->
-								<a th:href="${page.pageNum==1?'javascript:void(0)':url.replace('pageNum='+page.pageNum,'pageNum='+(page.pageNum-1))}">«上一页</a>
+								<a th:href="${page.pageNum==1?'javascript:void(0)':url.replaceAll('pageNum=\d+','pageNum='+(page.pageNum-1))}">«上一页</a>
 							</li>
 							<li th:each="nav:${page.navigatepageNums}" th:class="${nav==page.pageNum?'active':''}">
-								<a th:text="${nav}" th:href="${page.pageNum==nav?'javascript:void(0)':url.replace('pageNum='+page.pageNum,'pageNum='+nav)}"></a>
+								<a th:text="${nav}" th:href="${page.pageNum==nav?'javascript:void(0)':url.replaceAll('pageNum=\d+','pageNum='+nav)}"></a>
 							</li>
 							<li class="dotted"><span>...</span></li>
 							<li th:class="'prev '+${page.pageNum==page.pages?'disabled':''}">
-								<a th:href="${page.pageNum==page.pages?'javascript:void(0)':url.replace('pageNum='+page.pageNum,'pageNum='+(page.pageNum+1))}">下一页»</a>
+								<a th:href="${page.pageNum==page.pages?'javascript:void(0)':url.replaceAll('pageNum=\d+','pageNum='+(page.pageNum+1))}">下一页»</a>
 							</li>
 						</ul>
 						<div><span th:text="'共'+${page.pages}+'页'">nbsp;</span><span>
@@ -765,138 +645,7 @@
 		</div>
 	</div>
 	<!-- 底部栏位 -->
-	<!--页面底部-->
-<div class="clearfix footer">
-	<div class="py-container">
-		<div class="footlink">
-			<div class="Mod-service">
-				<ul class="Mod-Service-list">
-					<li class="grid-service-item intro  intro1">
-
-						<i class="serivce-item fl"></i>
-						<div class="service-text">
-							<h4>正品保障</h4>
-							<p>正品保障，提供发票</p>
-						</div>
-
-					</li>
-					<li class="grid-service-item  intro intro2">
-
-						<i class="serivce-item fl"></i>
-						<div class="service-text">
-							<h4>正品保障</h4>
-							<p>正品保障，提供发票</p>
-						</div>
-
-					</li>
-					<li class="grid-service-item intro  intro3">
-
-						<i class="serivce-item fl"></i>
-						<div class="service-text">
-							<h4>正品保障</h4>
-							<p>正品保障，提供发票</p>
-						</div>
-
-					</li>
-					<li class="grid-service-item  intro intro4">
-
-						<i class="serivce-item fl"></i>
-						<div class="service-text">
-							<h4>正品保障</h4>
-							<p>正品保障，提供发票</p>
-						</div>
-
-					</li>
-					<li class="grid-service-item intro intro5">
-
-						<i class="serivce-item fl"></i>
-						<div class="service-text">
-							<h4>正品保障</h4>
-							<p>正品保障，提供发票</p>
-						</div>
-
-					</li>
-				</ul>
-			</div>
-			<div class="clearfix Mod-list">
-				<div class="yui3-g">
-					<div class="yui3-u-1-6">
-						<h4>购物指南</h4>
-						<ul class="unstyled">
-							<li>购物流程</li>
-							<li>会员介绍</li>
-							<li>生活旅行/团购</li>
-							<li>常见问题</li>
-							<li>购物指南</li>
-						</ul>
-
-					</div>
-					<div class="yui3-u-1-6">
-						<h4>配送方式</h4>
-						<ul class="unstyled">
-							<li>上门自提</li>
-							<li>211限时达</li>
-							<li>配送服务查询</li>
-							<li>配送费收取标准</li>
-							<li>海外配送</li>
-						</ul>
-					</div>
-					<div class="yui3-u-1-6">
-						<h4>支付方式</h4>
-						<ul class="unstyled">
-							<li>货到付款</li>
-							<li>在线支付</li>
-							<li>分期付款</li>
-							<li>邮局汇款</li>
-							<li>公司转账</li>
-						</ul>
-					</div>
-					<div class="yui3-u-1-6">
-						<h4>售后服务</h4>
-						<ul class="unstyled">
-							<li>售后政策</li>
-							<li>价格保护</li>
-							<li>退款说明</li>
-							<li>返修/退换货</li>
-							<li>取消订单</li>
-						</ul>
-					</div>
-					<div class="yui3-u-1-6">
-						<h4>特色服务</h4>
-						<ul class="unstyled">
-							<li>夺宝岛</li>
-							<li>DIY装机</li>
-							<li>延保服务</li>
-							<li>品优购E卡</li>
-							<li>品优购通信</li>
-						</ul>
-					</div>
-					<div class="yui3-u-1-6">
-						<h4>帮助中心</h4>
-						<img src="./img/wx_cz.jpg">
-					</div>
-				</div>
-			</div>
-			<div class="Mod-copyright">
-				<ul class="helpLink">
-					<li>关于我们<span class="space"></span></li>
-					<li>联系我们<span class="space"></span></li>
-					<li>关于我们<span class="space"></span></li>
-					<li>商家入驻<span class="space"></span></li>
-					<li>营销中心<span class="space"></span></li>
-					<li>友情链接<span class="space"></span></li>
-					<li>关于我们<span class="space"></span></li>
-					<li>营销中心<span class="space"></span></li>
-					<li>友情链接<span class="space"></span></li>
-					<li>关于我们</li>
-				</ul>
-				<p>地址：北京市昌平区建材城西路金燕龙办公楼一层 邮编：100096 电话：400-618-4000 传真：010-82935100</p>
-				<p>京ICP备08001421号京公网安备110108007702</p>
-			</div>
-		</div>
-	</div>
-</div>
-<!--页面底部END-->
+    <div id="foot"></div>
 	
 	<!-- 基础js库 -->
 
@@ -1018,32 +767,40 @@
 	</div>
 </div>
 
-
-<script type="text/javascript" src="./js/all.js"></script>
 </body>
+<script type="text/javascript" src="js/all.js"></script>
+<script type="text/javascript" src="admin/assets/layer/layer.js"></script>
+<script>
+    $("#head").load("include/head.html");
+    $("#foot").load("include/foot.html");
+</script>
 <script th:inline="javascript">
 
-    //点击搜索按钮的方法
-    function goSearch(){
-        var url = [[${url}]];
-        if (url.indexOf("input=")==-1) {
-            url = url+"&input="+$("#autocomplete").val();
-        }else{
-            url = url.replace("input="+([[${input}]]),"input="+$("#autocomplete").val());
-        }
-        location.href = url;
-    }
+
 
     //页码输入跳转
     function confirmJump(){
-        location.href = location.href.replace("pageNum="+([[${page.pageNum}]]),"pageNum="+$(".page-num").val());
+        let url = location.href;
+        let pageNum = $(".page-num").val();
+        if (pageNum>[[${page.pages}]]) {
+            pageNum = [[${page.pages}]];
+        }
+        if (pageNum<1){
+            pageNum = 1;
+        }
+        if (url.indexOf("pageNum=")==-1){
+            url = url+"&pageNum="+pageNum;
+        }else{
+            url = url.replace("pageNum="+([[${page.pageNum}]]),"pageNum="+pageNum);
+        }
+        location.href = url;
     }
     $(function () {
 
         //点击确认价格
         $(".price-confirm").click(function () {
-            var url = [[${url}]];
-            var price = $(".price-range:eq(0)").val()+"-"+$(".price-range:eq(1)").val();
+            let url = [[${url.replaceAll('&*pageNum=\d+','')}]];
+            let price = $(".price-range:eq(0)").val()+"-"+$(".price-range:eq(1)").val();
             //没有价格
             if (url.indexOf("price=")==-1) {
                 url = url+"&price="+price;
@@ -1053,16 +810,10 @@
             location.href = url;
         })
 
-        //按回车键进行搜索
-        $("#autocomplete").keydown(function (e) {
-            if(e.keyCode==13){
-                $("#search-btn").trigger("click");
-            }
-        })
 
         //价格排序
         $("#sort").click(function () {
-            var order = "ASC";
+            let order = "ASC";
             //判断父级是否被选中
             if ( $(this).parent().hasClass("active") ) {
                 //判断当前是升序还是降序

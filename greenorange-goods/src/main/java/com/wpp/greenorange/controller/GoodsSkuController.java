@@ -1,8 +1,10 @@
 package com.wpp.greenorange.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.wpp.greenorange.domain.GoodsSku;
+import com.wpp.greenorange.domain.select.GoodsSkuSelect;
 import com.wpp.greenorange.service.GoodsSkuService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -26,7 +28,53 @@ public class GoodsSkuController {
     @Resource
     private GoodsSkuService goodsSkuService;
 
+    @PutMapping("/sku/updateSku")
+    public boolean updateSku(@RequestBody GoodsSku sku) throws IOException {
+        return goodsSkuService.update(sku);
+    }
 
+    @GetMapping("/sku/getSkuInfo")
+    public Map<String, Object> getSkuInfo(Integer id, Integer goodsId) throws IOException {
+        return goodsSkuService.getSkuInfo(id, goodsId);
+    }
+
+    @PutMapping("/sku/updatePriceStock")
+    public boolean updatePriceStock(@RequestBody GoodsSku sku) throws IOException {
+        return goodsSkuService.updatePriceStock(sku);
+    }
+
+    @RequestMapping("/sku/getPriceAndStock")
+    public Map<String, Double> getPriceAndStock(Integer skuId){
+        return goodsSkuService.getPriceAndStock(skuId);
+    }
+
+    @DeleteMapping("/sku/deleteSku")
+    public boolean deleteSku(Integer id, Integer goodsId) throws IOException {
+        return goodsSkuService.deleteById(id, goodsId);
+    }
+
+    @PutMapping("/sku/addSku")
+    public boolean addSku(@RequestBody GoodsSku sku) throws IOException {
+        return goodsSkuService.insert(sku);
+    }
+
+    @PutMapping("/sku/enableSku")
+    public boolean enableSku(@RequestBody GoodsSku sku) throws IOException {
+        goodsSkuService.enableSku(sku);
+        return true;
+    }
+
+    /**
+     * 获得分页信息
+     * @return
+     */
+    @GetMapping("/sku/getAllLimit")
+    public PageInfo<GoodsSku> getAllLimit(GoodsSkuSelect goodsSkuSelect){
+        if (goodsSkuSelect.getPageNum()==null||goodsSkuSelect.getPageNum()<1){
+            goodsSkuSelect.setPageNum(1);
+        }
+        return goodsSkuService.getAllLimit(goodsSkuSelect);
+    }
 
     /**
      *
@@ -38,7 +86,7 @@ public class GoodsSkuController {
      */
     @RequestMapping("/search")
     public ModelAndView search(String input, String[] brand, String category, Integer pageNum,
-                               String sort, String order,String[] params, String price, HttpServletRequest req) throws IOException {
+                               String sort, String order, String[] params, String price, HttpServletRequest req) throws IOException {
         if (pageNum==null||pageNum<1){
             pageNum = 1;
         }
@@ -94,6 +142,7 @@ public class GoodsSkuController {
         modelAndView.addObject("sort",sort);
         modelAndView.addObject("order",order);
         modelAndView.addObject("price",price.split("-"));
+        modelAndView.addObject("inputParams",params);
         return modelAndView;
     }
 

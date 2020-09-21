@@ -94,12 +94,6 @@
             <if test="deleted != null">
                 and deleted = #{deleted}
             </if>
-            <if test="createTime != null">
-                and create_time = #{createTime}
-            </if>
-            <if test="updateTime != null">
-                and update_time = #{updateTime}
-            </if>
             <if test="showImg != null and showImg != ''">
                 and show_img = #{showImg}
             </if>
@@ -117,25 +111,25 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_goods_sku(goods_id, sku_edition, price, stock, deleted, create_time, update_time, params, introduce_data)
-        values (#{goodsId}, #{skuEdition}, #{price}, #{stock}, #{deleted}, #{createTime}, #{updateTime},#{params}, #{introduceData})
+        insert into greenorange.tb_goods_sku(goods_id, title, show_img, params,sku_edition, price, stock, deleted,  introduce_data)
+        values (#{goodsId}, #{title}, #{showImg}, #{params}, #{skuEdition}, #{price}, #{stock}, #{deleted}, #{introduceData})
     </insert>
 
     <!--通过主键修改数据-->
     <update id="update">
         update greenorange.tb_goods_sku
         <set>
-            <if test="goodsId != null">
-                goods_id = #{goodsId},
+            <if test="title != null and title != ''">
+                title = #{title},
             </if>
             <if test="skuEdition != null and skuEdition != ''">
                 sku_edition = #{skuEdition},
             </if>
             <if test="params != null and params != ''">
-                and params = #{params}
+                params = #{params},
             </if>
             <if test="introduceData != null and introduceData != ''">
-                and introduce_data = #{introduceData}
+                introduce_data = #{introduceData},
             </if>
             <if test="price != null">
                 price = #{price},
@@ -146,11 +140,14 @@
             <if test="deleted != null">
                 deleted = #{deleted},
             </if>
-            <if test="createTime != null">
-                create_time = #{createTime},
+            <if test="goodEvaluate != null">
+                good_evaluate = #{goodEvaluate},
             </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
+            <if test="badEvaluate != null">
+                bad_evaluate = #{badEvaluate},
+            </if>
+            <if test="saleCount != null">
+                sale_count = #{saleCount},
             </if>
         </set>
         where id = #{id}
