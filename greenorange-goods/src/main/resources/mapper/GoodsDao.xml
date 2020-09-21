@@ -13,17 +13,24 @@
         <result property="brandName" column="brand_name" jdbcType="VARCHAR" />
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="editionChoice" column="edition_choice" jdbcType="TIMESTAMP"/>
         <collection property="skuList" column="id"
                     select="com.wpp.greenorange.dao.GoodsSkuDao.findAllByGoodsId">
 
         </collection>
     </resultMap>
 
+    <!--获得全部的品牌信息-->
+    <select id="getAllBrand" resultType="java.util.Map">
+        select id,name
+        from tb_brand
+    </select>
+
     <!--查询单个-->
     <select id="findById" resultMap="goodsMap">
         SELECT
             g.id, g.category_id, g.name, g.brand_id, g.sell_point, g.deleted, g.create_time,
-            g.update_time, b.name brand_name, c.name category_name
+            g.update_time, b.name brand_name, c.name category_name, g.edition_choice
         FROM greenorange.tb_goods g
         LEFT JOIN tb_brand b
         ON g.brand_id = b.id
@@ -37,44 +44,35 @@
     <select id="findAllByCondition" resultMap="goodsMap">
         SELECT
         g.id, g.category_id, g.name, g.brand_id, g.sell_point, g.deleted, g.create_time,
-        g.update_time, b.name brand_name, c.name category_name
+        g.update_time, b.name brand_name, c.name category_name, g.edition_choice
         FROM greenorange.tb_goods g
         LEFT JOIN tb_brand b
         ON g.brand_id = b.id
         LEFT JOIN tb_category c
         ON g.category_id = c.id
         <where>
-            <if test="id != null">
-                and g.id = #{id}
+            <if test="goods.id != null">
+                and g.id = #{goods.id}
             </if>
-            <if test="categoryId != null">
-                and g.category_id = #{categoryId}
+            <if test="goods.name != null and goods.name != ''">
+                and g.name like concat('%',#{goods.name},'%')
             </if>
-            <if test="name != null and name != ''">
-                and g.name = #{name}
+            <if test="goods.categoryName != null and goods.categoryName != ''">
+                and b.name like concat('%',#{goods.categoryName},'%')
             </if>
-            <if test="brandId != null">
-                and g.brand_id = #{brandId}
+            <if test="goods.deleted != null">
+                and g.deleted = #{goods.deleted}
             </if>
-            <if test="sellPoint != null and sellPoint != ''">
-                and g.sell_point = #{sellPoint}
-            </if>
-            <if test="deleted != null">
-                and g.deleted = #{deleted}
-            </if>
-            <if test="createTime != null">
-                and g.create_time = #{createTime}
-            </if>
-            <if test="updateTime != null">
-                and g.update_time = #{updateTime}
+            <if test="ids != null">
+                and g.category_id in (${ids})
             </if>
         </where>
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into greenorange.tb_goods(category_id, name, brand_id, sell_point,  deleted, create_time, update_time)
-        values (#{categoryId}, #{name}, #{brandId}, #{sellPoint}, #{deleted}, #{createTime}, #{updateTime})
+        insert into greenorange.tb_goods(category_id, name, brand_id, sell_point, deleted, edition_choice)
+        values (#{categoryId}, #{name}, #{brandId}, #{sellPoint}, #{deleted}, #{editionChoice})
     </insert>
 
     <!--通过主键修改数据-->
@@ -95,6 +93,9 @@
             </if>
             <if test="deleted != null">
                 deleted = #{deleted},
+            </if>
+            <if test="editionChoice != null and editionChoice != ''">
+                edition_choice = #{editionChoice},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime},

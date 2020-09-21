@@ -2,8 +2,10 @@ package com.wpp.greenorange.dao;
 
 import com.wpp.greenorange.domain.Goods;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Goods)表数据库访问层
@@ -23,13 +25,16 @@ public interface GoodsDao {
     Goods findById(Integer id);
 
 
+
+
     /**
      * 通过实体作为筛选条件查询
      *
      * @param goods 实例对象
+     * @param ids 根据category id数组进行in查询
      * @return 对象列表
      */
-    List<Goods> findAllByCondition(Goods goods);
+    List<Goods> findAllByCondition(@Param("goods") Goods goods, @Param("ids") String ids);
 
     /**
      * 新增数据
@@ -55,4 +60,9 @@ public interface GoodsDao {
      */
     Integer deleteById(Integer id);
 
+    /**
+     * 获得全部的品牌
+     * @return
+     */
+    List<Map> getAllBrand();
 }

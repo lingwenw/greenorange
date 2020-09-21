@@ -221,19 +221,6 @@
 
     var zNodes = [];
 
-    function getChildrens(category) {
-        var childrens = category.categories;
-
-        if (childrens == undefined) {
-            zNodes.push(category);
-            return;
-        } else {
-            zNodes.push(category);
-            childrens.forEach(function (e) {
-                getChildrens(e);
-            })
-        }
-    }
 
     function errorAlert(str) {
         layer.alert(str, {

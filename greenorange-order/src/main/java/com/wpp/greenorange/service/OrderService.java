@@ -1,6 +1,8 @@
 package com.wpp.greenorange.service;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Order;
+import com.wpp.greenorange.domain.select.OrderSelect;
 import com.wpp.greenorange.domain.User;
 
 import java.util.List;
@@ -54,4 +56,16 @@ public interface OrderService {
      */
     Boolean deleteById(Integer id);
 
+    /**
+     * 分页的方法
+     * @param orderSelect
+     * @return
+     */
+    PageInfo<Order> getAllLimit(OrderSelect orderSelect);
+
+    /**
+     *
+     * @return
+     */
+    List<Map> getAllOrderStatus();
 }
