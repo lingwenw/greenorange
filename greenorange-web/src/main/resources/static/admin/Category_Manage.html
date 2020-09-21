@@ -44,7 +44,7 @@
     </div>
 </div>
 </body>
-<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="./js/jquery-3.3.1.min.js"></script>
 <script src="./assets/js/ace-elements.min.js"></script>
 <script src="./assets/js/ace.min.js"></script>
 <script src="./assets/js/bootstrap.min.js"></script>
@@ -92,9 +92,31 @@
         },
         callback: {
             beforeClick: function (treeId, treeNode) {
-                console.log(treeNode)
                 //改变子框架的输入框
-                demoIframe.contents().find("#category_name").attr("placeholder", treeNode.name);
+                demoIframe.contents().find("#category_name").val(treeNode.name);
+                demoIframe.contents().find(".paramTypeBox").empty();
+                var paramType = JSON.parse(treeNode.paramType)
+                for (var key in paramType) {
+                    var select;
+                    if (paramType[key] == true || paramType[key] == "true") {
+                        select = "<select>\n" +
+                            "                    <option value=\"\"></option>\n" +
+                            "                    <option value=\"true\" selected='selected'>true</option>\n" +
+                            "                </select>"
+                    } else {
+                        select = "<select>\n" +
+                            "                    <option value=\"\" selected='selected'></option>\n" +
+                            "                    <option value=\"true\">true</option>\n" +
+                            "                </select>"
+                    }
+                    var $paramType = $("<div class=\"formControls col-10 param-box\">\n" +
+                        "                <input type=\"text\" class=\"input_text\" value=\"" + key + "\"/>\n" +
+                        "                <i>:</i>\n" +
+                        select +
+                        "            </div>");
+                    demoIframe.contents().find(".paramTypeBox").append($paramType)
+                }
+
 
                 //存入数据
                 demoIframe.contents().find("#category-btn").data("category", {
@@ -107,6 +129,7 @@
 
                     var category = $(this).data("category");
                     category.name = demoIframe.contents().find("#category_name").val();
+                    category.paramType = getParamType();
                     $.post("/category/updateCategory", category, function (data) {
                         if (data) {
                             location.reload(true);
@@ -140,8 +163,9 @@
                     var parentCategory = demoIframe.contents().find("#category-btn").data("category");
                     console.log(parentCategory)
                     var category = {
-                        "parentId":parentCategory.id,
-                        "name":demoIframe.contents().find("#category_name").val()
+                        "parentId": parentCategory.id,
+                        "name": demoIframe.contents().find("#category_name").val(),
+                        "paramType":getParamType()
                     }
                     $.post("/category/addCategory", category, function (data) {
                         if (data) {
@@ -150,6 +174,19 @@
                             errorAlert("服务器繁忙，请稍后再试！");
                         }
                     })
+                })
+
+                //addParamType
+                demoIframe.contents().find("#addParamType").off("click").click(function () {
+                    var $paramType = $("<div class=\"formControls col-10 param-box\">\n" +
+                        "                <input type=\"text\" class=\"input_text\" value=\"\" placeholder='参数名称'/>\n" +
+                        "                <i>:</i>\n" +
+                        "<select>\n" +
+                        "                    <option value=\"\"></option>\n" +
+                        "                    <option value=\"true\" selected='selected'>true</option>\n" +
+                        "                </select>" +
+                        "            </div>")
+                    demoIframe.contents().find(".paramTypeBox").append($paramType)
                 })
             }
         }
@@ -191,5 +228,23 @@
             icon: 0,
         });
     }
+
+    function getParamType() {
+        var paramType = {};
+        demoIframe.contents().find(".paramTypeBox").children().each(function () {
+            var value = $(this).children("select").val();
+            if (value!=""){
+                value = eval(value);
+            }
+            var key = $(this).children(".input_text").val()
+            if (key!="") {
+                paramType[key] = value;
+            }
+        })
+        return JSON.stringify(paramType)
+    }
+
+
+
 </script>
 </html>

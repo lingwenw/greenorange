@@ -76,6 +76,17 @@ public class OrderGoods implements Serializable {
     public void setSku(GoodsSku sku) {
         this.sku = sku;
     }
+    public OrderGoods(Integer skuId, Double originalPrice, Double paidPrice, Integer orderId, Integer statusId, Integer count) {
+        this.skuId = skuId;
+        this.originalPrice = originalPrice;
+        this.paidPrice = paidPrice;
+        this.orderId = orderId;
+        this.statusId = statusId;
+        this.count = count;
+    }
+
+    public OrderGoods() {
+    }
 
     public Integer getId() {
         return id;

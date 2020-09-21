@@ -94,6 +94,16 @@ public class Order implements Serializable {
     public void setOrderGoods(List<OrderGoods> orderGoods) {
         this.orderGoods = orderGoods;
     }
+    public Order(Integer userId, Integer addressId, Integer statusId, Double price, String subject) {
+        this.userId = userId;
+        this.addressId = addressId;
+        this.statusId = statusId;
+        this.price = price;
+        this.subject = subject;
+    }
+
+    public Order() {
+    }
 
     public Integer getId() {
         return id;

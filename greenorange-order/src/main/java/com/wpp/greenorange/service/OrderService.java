@@ -3,6 +3,7 @@ package com.wpp.greenorange.service;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Order;
 import com.wpp.greenorange.domain.select.OrderSelect;
+import com.wpp.greenorange.domain.User;
 
 import java.util.List;
 import java.util.Map;
@@ -34,10 +35,10 @@ public interface OrderService {
     /**
      * 新增数据
      *
-     * @param order 实例对象
+     * @param
      * @return 是否成功
      */
-    Boolean insert(Order order);
+    Order insert(Map orderData, User user);
 
     /**
      * 修改数据
