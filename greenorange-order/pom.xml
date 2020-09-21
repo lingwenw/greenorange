@@ -11,5 +11,23 @@
 
     <artifactId>greenorange-order</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.wpp.greenorange</groupId>
+            <artifactId>greenorange-address</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
+        <dependency>
+            <groupId>com.wpp.greenorange</groupId>
+            <artifactId>greenorange-login</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.wpp.greenorange</groupId>
+            <artifactId>greenorange-goods</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

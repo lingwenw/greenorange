@@ -1,12 +1,16 @@
 package com.wpp.greenorange.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.dao.OrderDao;
 import com.wpp.greenorange.domain.Order;
+import com.wpp.greenorange.domain.select.OrderSelect;
 import com.wpp.greenorange.service.OrderService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Order)表服务实现类
@@ -72,5 +76,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Boolean deleteById(Integer id) {
         return this.orderDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public PageInfo<Order> getAllLimit(OrderSelect orderSelect) {
+        PageHelper.startPage(orderSelect.getPageNum(), orderSelect.getPageSize(),"create_time desc");
+        List<Order> list = orderDao.findAllByCondition(orderSelect);
+        return PageInfo.of(list, 5);
+    }
+
+    @Override
+    public List<Map> getAllOrderStatus() {
+        return orderDao.getAllOrderStatus();
     }
 }

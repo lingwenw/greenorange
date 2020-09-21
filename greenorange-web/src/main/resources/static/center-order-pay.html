@@ -77,88 +77,126 @@
 
                         <div class="order-detail">
                             <div class="orders">
-                                <div class="choose-order">
-                                    <label data-toggle="checkbox" class="checkbox-pretty checked">
-                                        <input type="checkbox" checked="checked"><span>全选</span>
-                                    </label>
-                                    <a href="" class="sui-btn btn-info btn-bordered hepay-btn">合并付款</a>
-                                    <div class="sui-pagination pagination-large top-pages">
-                                        <ul>
-                                            <li class="prev disabled"><a href="#">上一页</a></li>
-
-                                            <li class="next"><a href="#">下一页</a></li>
-                                        </ul>
+                                <template v-for="item in pageInfo.list">
+                                    <!--order1-->
+                                    <div class="choose-title">
+                                        <label data-toggle="checkbox" class="checkbox-pretty ">
+                                            <input type="checkbox" checked="checked"><span>{{dateFormat(new Date(item.createTime))}}　订单编号：{{item.id}}</span>
+                                        </label>
+                                        <a class="sui-btn btn-info share-btn">分享</a>
                                     </div>
-                                </div>
-
-                                <div class="choose-title">
-                                    <label data-toggle="checkbox" class="checkbox-pretty ">
-                                           <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
-                                     </label>
-                                    <a class="sui-btn btn-info share-btn">分享</a>
-                                </div>
-                                <table class="sui-table table-bordered order-datatable">
-
-                                    <tbody>
-                                        <tr>
+                                    <table class="sui-table table-bordered order-datatable">
+                                        <tbody>
+                                        <tr v-for="(orderGoods, index) in item.orderGoods">
                                             <td width="35%">
-                                                <div class="typographic"><img src="./img/goods.png" />
-                                                    <a href="#" class="block-text">包邮 正品玛姬儿压缩面膜无纺布纸膜100粒 送泡瓶面膜刷喷瓶 新款</a>
-                                                    <span class="guige">规格：温泉喷雾150ml</span>
+                                                {{initItemData(orderGoods)}}
+                                                <div class="typographic"><img width="82" :src="'img/goods_img/'+parseArr(orderGoods.sku.showImg)[0]" />
+                                                    <a href="javascript:void(0)" class="block-text">{{orderGoods.sku.title}}</a>
+                                                    <span class="guige">规格：{{orderGoods.edition}}</span>
                                                 </div>
                                             </td>
                                             <td width="5%" class="center">
                                                 <ul class="unstyled">
-                                                    <li class="o-price">¥599.00</li>
-                                                    <li>¥299.00</li>
+                                                    <li class="o-price">¥{{getOriginalPrice(orderGoods)}}</li>
+                                                    <li>¥{{getOriginalPrice(orderGoods)}}</li>
                                                 </ul>
                                             </td>
-                                            <td width="5%" class="center">1</td>
-                                            <td width="8%" class="center"></td>
-                                            <td width="10%" class="center">
+                                            <td width="5%" class="center">{{orderGoods.count}}</td>
+                                            <td width="8%" class="center">
                                                 <ul class="unstyled">
-                                                    <li>¥299.00</li>
-                                                    <li>（含运费：￥0.00）</li>
+                                                    <li>{{orderGoods.statusName}}</li>
+                                                    <li><a>付款</a></li>
                                                 </ul>
                                             </td>
-                                            <td width="10%" class="center">
-                                                <ul class="unstyled">
-                                                    <li>等待买家付款</li>
-                                                    <li><a href="orderDetail.html" class="btn">订单详情 </a></li>
-                                                </ul>
-
-
-                                            </td>
-                                            <td width="10%" class="center">
-                                                <ul class="unstyled">
-                                                    <li><a href="#" class="sui-btn btn-info">立即付款</a></li>
-                                                    <li><a href="#">取消订单</a></li>
-                                                </ul>
-                                            </td>
+                                            <template v-if="index==0">
+                                                <td width="10%" class="center" rowspan="2">
+                                                    <ul class="unstyled">
+                                                        <li>{{item.price}}</li>
+                                                        <li>（含运费：￥0.00）</li>
+                                                    </ul>
+                                                </td>
+                                                <td width="10%" class="center" rowspan="2">
+                                                    <ul class="unstyled">
+                                                        <li>{{item.statusName}}</li>
+                                                        <li><a href="javascript:void(0)" class="btn">订单详情 </a></li>
+                                                    </ul>
+                                                </td>
+                                                <td width="10%" class="center" rowspan="2">
+                                                    <ul class="unstyled">
+                                                        <li>还剩4天23时</li>
+                                                        <li><a href="javascript:void(0)" class="sui-btn btn-info">付款</a></li>
+                                                    </ul>
+                                                </td>
+                                            </template>
                                         </tr>
-                                        </tr>
-                                    </tbody>
-                                </table>
 
+                                        </tbody>
+                                    </table>
+                                </template>
+
+                                <!--order2-->
+                                <!--                                <div class="choose-title">-->
+                                <!--                                    <label data-toggle="checkbox" class="checkbox-pretty ">-->
+                                <!--                                           <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>-->
+                                <!--                                     </label>-->
+                                <!--                                    <a class="sui-btn btn-info share-btn">分享</a>-->
+                                <!--                                </div>-->
+                                <!--                                <table class="sui-table table-bordered order-datatable">-->
+                                <!--                                    <tbody>-->
+                                <!--                                        <tr>-->
+                                <!--                                            <td width="35%">-->
+                                <!--                                                <div class="typographic"><img src="./img/goods.png" />-->
+                                <!--                                                    <a href="javascript:void(0)" class="block-text">包邮 正品玛姬儿压缩面膜无纺布纸膜100粒 送泡瓶面膜刷喷瓶 新款</a>-->
+                                <!--                                                    <span class="guige">规格：温泉喷雾150ml</span>-->
+                                <!--                                                </div>-->
+                                <!--                                            </td>-->
+                                <!--                                            <td width="5%" class="center">-->
+                                <!--                                                <ul class="unstyled">-->
+                                <!--                                                    <li class="o-price">¥599.00</li>-->
+                                <!--                                                    <li>¥299.00</li>-->
+                                <!--                                                </ul>-->
+                                <!--                                            </td>-->
+                                <!--                                            <td width="5%" class="center">1</td>-->
+                                <!--                                            <td width="8%" class="center">-->
+                                <!--                                                <ul class="unstyled">-->
+
+                                <!--                                                    <li><a>退货/退款</a></li>-->
+                                <!--                                                </ul>-->
+                                <!--                                            </td>-->
+                                <!--                                            <td width="10%" class="center">-->
+                                <!--                                                <ul class="unstyled">-->
+                                <!--                                                    <li>¥299.00</li>-->
+                                <!--                                                    <li>（含运费：￥0.00）</li>-->
+                                <!--                                                </ul>-->
+                                <!--                                            </td>-->
+                                <!--                                            <td width="10%" class="center">-->
+                                <!--                                                <ul class="unstyled">-->
+                                <!--                                                    <li>买家已付款</li>-->
+                                <!--                                                    <li><a href="orderDetail.html" class="btn">订单详情 </a></li>-->
+                                <!--                                                </ul>-->
+                                <!--                                            </td>-->
+                                <!--                                            <td width="10%" class="center">-->
+                                <!--                                                <ul class="unstyled">-->
+                                <!--                                                    <li><a href="javascript:void(0)" class="sui-btn btn-info">提醒发货</a></li>-->
+                                <!--                                                </ul>-->
+                                <!--                                            </td>-->
+                                <!--                                        </tr>-->
+                                <!--                                    </tbody>-->
+                                <!--                                </table>-->
                             </div>
-
                             <div class="choose-order">
-                                <label data-toggle="checkbox" class="checkbox-pretty checked">
-                                        <input type="checkbox" checked="checked"><span>全选</span>
-                                    </label>
-                                <a href="" class="sui-btn btn-info btn-bordered hepay-btn">合并付款</a>
+
                                 <div class="sui-pagination pagination-large top-pages">
                                     <ul>
-                                        <li class="prev disabled"><a href="#">«上一页</a></li>
-                                        <li class="active"><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
+                                        <li @click="pageInfo.hasPreviousPage && getAllLimit(pageInfo.pageNum-1)" :class="[pageInfo.hasPreviousPage?'':'disabled','prev']"><a href="javascript:void(0)">«上一页</a></li>
+                                        <li @click="getAllLimit(nav)" v-for="nav in pageInfo.navigatepageNums" :class="[nav==pageInfo.pageNum?'active':'']"><a href="javascript:void(0)">{{nav}}</a></li>
                                         <li class="dotted"><span>...</span></li>
-                                        <li class="next"><a href="#">下一页»</a></li>
+                                        <li @click="pageInfo.hasNextPage && getAllLimit(pageInfo.pageNum+1)" :class="[pageInfo.hasNextPage?'':'disabled','next']"><a href="javascript:void(0)">下一页»</a></li>
                                     </ul>
-                                    <div><span>共10页&nbsp;</span><span>
+                                    <div><span>共{{pageInfo.pages}}页&nbsp;</span><span>
                                             到
-                                            <input type="text" class="page-num"><button class="page-confirm" onclick="alert(1)">确定</button>
+                                            <input type="text" oninput="value=value.replace(/[^\d]/g,'')" class="page-num">
+                                        <button class="page-confirm" >确定</button>
                                             页</span></div>
                                 </div>
                             </div>
@@ -267,8 +305,28 @@
 </body>
 <script type="text/javascript" src="js/all.js"></script>
 <script type="text/javascript" src="admin/assets/layer/layer.js"></script>
+<script src="js/vuejs-2.5.16.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/util.js"></script>
+<script src="js/vue-methods.js"></script>
 <script>
+    $(function () {
+        //点击跳转
+        $(".page-confirm").click(()=>{
+            let pageNum = $(".page-num").val();
+            if (pageNum < 1){
+                pageNum = 1;
+            }
+            if (pageNum > orderVue.pageInfo.pages) {
+                pageNum = orderVue.pageInfo.pages;
+            }
+            orderVue.getAllLimit(pageNum);
+        })
+    })
+
+    var statusId = 3;
     $("#head").load("include/head.html");
     $("#foot").load("include/foot.html");
 </script>
+<script src="js/pages/order-vue.js"></script>
 </html>
