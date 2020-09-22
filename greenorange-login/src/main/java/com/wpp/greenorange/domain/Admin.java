@@ -97,4 +97,16 @@ public class Admin implements Serializable {
         this.updateTime = updateTime;
     }
 
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "id=" + id +
+                ", accountnumber='" + accountnumber + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", deleted=" + deleted +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

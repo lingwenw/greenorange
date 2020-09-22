@@ -10,6 +10,8 @@
 
     <link rel="stylesheet" type="text/css" href="./css/all.css" />
     <link rel="stylesheet" type="text/css" href="./css/pages-login.css" />
+	<script src="js/jquery.js"></script>
+	<script src="assets/layer/layer.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -40,13 +42,14 @@
 							<img src="./img/wx_cz.jpg" />
 						</div>
 						<div id="profile" class="tab-pane active">
-							<form class="sui-form" >
+							<form class="sui-form" id="myform">
 								<div class="input-prepend"><span class="add-on loginname"></span>
-									<input id="inputName" type="text" placeholder="邮箱/用户名/手机号" class="span2 input-xfat">
+									<input id="inputName" name="email" type="text" placeholder="邮箱/用户名/手机号" class="span2 input-xfat">
 								</div>
 								<div class="input-prepend"><span class="add-on loginpwd"></span>
-									<input id="inputPassword" type="password" placeholder="请输入密码" class="span2 input-xfat">
+									<input id="inputPassword" name="password" type="password" placeholder="请输入密码" class="span2 input-xfat">
 								</div>
+<!--								<div id="Tips" style="color: red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;密码错误</div>-->
 								<div class="setting">
 									<label class="checkbox inline">
 										<input name="m1" type="checkbox" value="2" checked="">
@@ -55,7 +58,24 @@
 									<span class="forget">忘记密码？</span>
 								</div>
 								<div class="logined">
-									<a class="sui-btn btn-block btn-xlarge btn-danger" href="home.html" target="_blank">登&nbsp;&nbsp;录</a>
+									<a class="sui-btn btn-block btn-xlarge btn-danger">登&nbsp;&nbsp;录</a>
+									<script>
+										$(function () {
+											console.log($("#myform").serialize())
+											$(".sui-btn").click(function () {
+												$.post("/user/findByIDemailOrUserNameOrphone",$("#myform").serialize(),function (data) {
+													if (data==false){
+														layer.alert('密码错误！',{
+															title: '提示框',
+															icon:1,
+														});
+													}else if (data==true) {
+														location.href="home.html"
+													}
+												})
+											})
+										})
+									</script>
 								</div>
 							</form>
 							<div class="otherlogin">

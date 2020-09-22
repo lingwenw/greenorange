@@ -600,14 +600,12 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         if (skuPriceStock==null || skuPriceStock.isEmpty()){
             //从数据库查询
             List<GoodsSku> skus = goodsSkuDao.findAllByCondition(null);
-            System.out.println(skus.size());
             HashMap<String, Double> map = new HashMap<>(16);
             //添加到缓存
             for (GoodsSku sku : skus) {
                 map.put("price"+sku.getId(),sku.getPrice());
                 map.put("stock"+sku.getId(),sku.getStock().doubleValue());
             }
-            System.out.println(map.size());
             redisTemplate.opsForHash().putAll("skuPriceStock",map);
         }
     }

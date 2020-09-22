@@ -20,7 +20,7 @@
                             <li class="f-item"><span>企业采购</span></li>
                             <li class="f-item"><span>关注青橙</span></li>
                             <li class="f-item"><span><a href="cooperation.html" target="_blank">合作招商</a></span></li>
-                            <li class="f-item"><span><a href="shoplogin.html" target="_blank">商家后台</a></span></li>
+                            <li class="f-item"><span><a href="admin/login.html" target="_blank">商家后台</a></span></li>
                             <li class="f-item"><span>网站导航</li>
                         </ul>
                     </div>
@@ -55,6 +55,21 @@
     </div>
 </div>
 <script type="text/javascript" src="js/util.js"></script>
+<script>
+    $(function () {
+        $.post("/user/getUserLoginName",function (data) {
+            var fl= $(".fl")
+            if (data==null||data==""){
+                fl.empty()
+                $("<li class='f-item'>青橙欢迎您!</li>").appendTo(fl)
+                $("<li class='f-item'>请<a href='login.html' target='_blank'>登录</a>　<span><a href='register.html' target='_blank'>免费注册</a></span></li>").appendTo(fl)
+            }else {
+                fl.empty()
+                $("<li class='f-item'>"+data.name+",青橙欢迎您!</li>").appendTo(fl)
+            }
+        })
+    })
+</script>
 <script>
     $(function () {
         let url = decodeURI(location.href);

@@ -52,4 +52,52 @@ public interface UserService {
      */
     Boolean deleteById(Integer id);
 
+
+
+
+
+
+
+
+    /*
+     * @param email 邮箱
+     * 通过邮箱查询
+     * @return User
+     */
+    User findByemail(String Email,String password);
+
+    /*
+     * @param phone 手机号
+     * 通过手机号查询
+     * @return User
+     */
+    User findByphone(String Phone,String password);
+
+    /*
+     * @param name 用户名
+     * 通过用户名查询
+     * @return User
+     */
+    User findByname(String Name,String password);
+
+    /*
+     * @user 注册时的user
+     * 注册
+     * return 是否添加成功
+     */
+    Boolean insertUser(User user);
+
+    /*
+     * @param eamil 邮箱
+     * @return
+     */
+    boolean registerFindByemail(String email);
+
+    /*
+     * @param phone 手机
+     * @return
+     */
+    boolean registerFindByphone(String phone);
+
+
 }

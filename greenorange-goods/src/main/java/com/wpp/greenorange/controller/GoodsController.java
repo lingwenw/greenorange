@@ -3,8 +3,6 @@ package com.wpp.greenorange.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
-import com.wpp.greenorange.websocket.ServerSendType;
-import com.wpp.greenorange.websocket.WebSocketServer;
 import com.wpp.greenorange.domain.Goods;
 import com.wpp.greenorange.domain.select.GoodsSelect;
 import com.wpp.greenorange.service.GoodsService;
@@ -33,14 +31,14 @@ public class GoodsController {
     private GoodsService goodsService;
 
 
-    @RequestMapping("/testSend")
+    /*@RequestMapping("/testSend")
     public void testSend() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         HashMap<String, Object> map = new HashMap<>(4);
         map.put("type", ServerSendType.ORDER_COUNT);
 
         WebSocketServer.massInfo(mapper.writeValueAsString(map));
-    }
+    }*/
 
     /**
      * 文件上传的方法
