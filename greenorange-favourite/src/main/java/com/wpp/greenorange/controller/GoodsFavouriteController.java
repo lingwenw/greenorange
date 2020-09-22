@@ -69,6 +69,7 @@ public class GoodsFavouriteController {
      */
     @RequestMapping("/findAllByConditions")
     public List<GoodsFavourite> findAllByConditions(String ids,String nums){
+        //
         List<GoodsFavourite> allByConditions=new ArrayList();
         String[] split1 = ids.split(":");
         String[] split = nums.split(":");

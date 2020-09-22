@@ -184,6 +184,11 @@ $(function () {
     //根据用户id从数据库中获取商品订单
     function exhibit(data) {
         var tbody=$(".send-detail");
+        //用户名
+        $.ajax({ url:"/user/getOne",type: "post",data:{"id":data[0].userId}, success: function(date){
+                $("#userId").empty();
+                $("#userId").append("<li class='f-item'>"+date.name+"&nbsp;青橙欢迎您!</li>")
+            }});
         for (var i = 0; i <data.length ; i++) {
             goodsSkuId.push(data[i].goodsSku.id);
             var showimg=data[i].goodsSku.showImg.split(",");
