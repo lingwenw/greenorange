@@ -1,6 +1,7 @@
 package com.wpp.greenorange.dao;
 
 import com.wpp.greenorange.domain.Admin;
+import com.wpp.greenorange.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -55,4 +56,29 @@ public interface AdminDao {
      */
     Integer deleteById(Integer id);
 
+    /*
+     * admin登录验证
+     *
+     */
+    Admin AdminLogin(String accountNumber,String password);
+
+    /*
+     * 分页
+     */
+    List<User> findUserByInfo();
+
+    /*
+     * 封号
+     */
+    int startUser(int id);
+
+    /*
+     * 封号
+     */
+    int StopUser(int id);
+
+    /*
+     * 永封
+     */
+    int foreverStop(int id);
 }

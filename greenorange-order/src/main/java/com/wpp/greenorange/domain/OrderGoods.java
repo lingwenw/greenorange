@@ -2,6 +2,7 @@ package com.wpp.greenorange.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * (OrderGoods)实体类
@@ -51,7 +52,30 @@ public class OrderGoods implements Serializable {
      * 最近一次修改时间
      */
     private Date updateTime;
+    /**
+     * sku
+     */
+    private GoodsSku sku;
+    /**
+     * 状态
+     */
+    private String statusName;
 
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public GoodsSku getSku() {
+        return sku;
+    }
+
+    public void setSku(GoodsSku sku) {
+        this.sku = sku;
+    }
     public OrderGoods(Integer skuId, Double originalPrice, Double paidPrice, Integer orderId, Integer statusId, Integer count) {
         this.skuId = skuId;
         this.originalPrice = originalPrice;

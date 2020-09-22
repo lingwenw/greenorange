@@ -1,8 +1,12 @@
 package com.wpp.greenorange.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.dao.GoodsDao;
 import com.wpp.greenorange.dao.GoodsSkuDao;
 import com.wpp.greenorange.dao.OrderDao;
+import com.wpp.greenorange.domain.Order;
+import com.wpp.greenorange.domain.select.OrderSelect;
 import com.wpp.greenorange.dao.OrderGoodsDao;
 import com.wpp.greenorange.domain.*;
 import com.wpp.greenorange.service.GoodsService;
@@ -80,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
         }
         subject = subject.substring(0, subject.length() - 1);
         Integer addressId = (Integer) orderData.get("addressId");
-        Order order = new Order(user.getId(), addressId, 1, price,subject);
+        Order order = new Order(user.getId(), addressId, 3, price,subject);
         orderDao.insert(order);
 
         //订单商品表
@@ -116,5 +120,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Boolean deleteById(Integer id) {
         return this.orderDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public PageInfo<Order> getAllLimit(OrderSelect orderSelect) {
+        PageHelper.startPage(orderSelect.getPageNum(), orderSelect.getPageSize(),"create_time desc");
+        List<Order> list = orderDao.findAllByCondition(orderSelect);
+        return PageInfo.of(list, 5);
+    }
+
+    @Override
+    public List<Map> getAllOrderStatus() {
+        return orderDao.getAllOrderStatus();
     }
 }

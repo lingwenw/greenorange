@@ -103,7 +103,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Map> findCategorys() {
         List<Category> categories = categoryDao.findAllByCondition(null);
-        List<Map> test = test(categories, 0);
+        List<Map> test = recursionAll(categories, 0);
         return test;
     }
 
@@ -124,12 +124,17 @@ public class CategoryServiceImpl implements CategoryService {
         String categorysStr = redisTemplate.opsForValue().get("categorys");
         ObjectMapper mapper = new ObjectMapper();
         List<Map> list = mapper.readValue(categorysStr, List.class);
-        Map map = test2(list, id);
+        Map map = recursionOne(list, id);
         return map;
     }
 
+    @Override
+    public String findCidsByCid(Integer categoryId) {
+        return categoryDao.findCidsByCid(categoryId);
+    }
 
-    private List<Map> test(List<Category> categories, int pid) {
+
+    private List<Map> recursionAll(List<Category> categories, int pid) {
         List<Map> list = new ArrayList<>();
         for (Category category : categories) {
             if (category.getParentId() == pid) {
@@ -138,7 +143,7 @@ public class CategoryServiceImpl implements CategoryService {
                 map.put("pId",category.getParentId());
                 map.put("name", category.getName());
                 map.put("paramType",category.getParamType());
-                map.put("children", test(categories, category.getId()));
+                map.put("children", recursionAll(categories, category.getId()));
                 list.add(map);
             }
         }
@@ -157,7 +162,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
-    private Map test2(List<Map> list, int id) {
+    private Map recursionOne(List<Map> list, int id) {
         Map categoryMap = new HashMap<>();
         for (Map map : list) {
             Integer this_id = (Integer) map.get("id");
@@ -165,7 +170,7 @@ public class CategoryServiceImpl implements CategoryService {
                 return map;
             } else {
                 List<Map> children = (List<Map>) map.get("children");
-                categoryMap = test2(children, id);
+                categoryMap = recursionOne(children, id);
                 if (categoryMap != null) {
                     return categoryMap;
                 }

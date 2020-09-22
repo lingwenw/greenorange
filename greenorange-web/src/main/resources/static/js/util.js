@@ -7,13 +7,13 @@ $.fn.extend({
 $.extend({
 
     /**
-     * 判断一个ajax请求是否出错，用layer进行提升
+     * 判断一个ajax请求是否出错，用layer进行提示
      * @param resp 服务器响应的数据
      * @param fun 服务器正常返回的回调
      */
     errorAjax : function(resp,fun){
         if (resp.error){
-            layer.alert(resp.message, {icon: 5,time:1000});
+            layer.alert(resp.message, {icon: 5});
         }else{
             fun();
         }

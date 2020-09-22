@@ -72,6 +72,7 @@ public class GoodsSku implements Serializable {
      */
     private String introduceData;
 
+
     public String getIntroduceData() {
         return introduceData;
     }

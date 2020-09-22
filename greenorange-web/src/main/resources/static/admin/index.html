@@ -213,7 +213,19 @@ $('.change_Password').on('click', function(){
                <ul class="nav ace-nav">	
                 <li class="light-blue">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<span  class="time"><em id="time"></em></span><span class="user-info"><small>欢迎光临,</small>ADMIN	</span>
+								<span  class="time"><em id="time"></em></span><span class="user-info"></span>
+								<script>
+									$(function () {
+										$.post("/admin/getLoginName",function (data) {
+											if (data!=null){
+												$(".user-info").html("欢迎光临,"+"</br>"+data.name)
+											} else {
+												$(".user-info").html("欢迎光临，ADMIN")
+											}
+
+										})
+									})
+								</script>
 								<i class="icon-caret-down"></i>
 							</a>
 							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
@@ -224,7 +236,7 @@ $('.change_Password').on('click', function(){
 							</ul>
 						</li>
 	                   <li class="purple">
-						<a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-bell-alt"></i><span class="badge badge-important">8</span></a>
+						<a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-bell-alt"></i><span class="badge badge-important" id="tips-count">1</span></a>
 							<ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
                             <li class="dropdown-header"><i class="icon-warning-sign"></i>8条通知</li>
                             <li>
@@ -234,7 +246,7 @@ $('.change_Password').on('click', function(){
 												<i class="btn btn-xs no-hover btn-pink icon-comment"></i>
 												新闻评论
 											</span>
-											<span class="pull-right badge badge-info">+12</span>
+											<span id="news-count" class="pull-right badge badge-info"></span>
 										</div>
 									</a>
 								</li>
@@ -253,7 +265,7 @@ $('.change_Password').on('click', function(){
 												<i class="btn btn-xs no-hover btn-success icon-shopping-cart"></i>
 												新订单
 											</span>
-											<span class="pull-right badge badge-success">+8</span>
+											<span id="goods-count" class="pull-right badge badge-success"></span>
 										</div>
 									</a>
 								</li>
@@ -265,7 +277,7 @@ $('.change_Password').on('click', function(){
 												<i class="btn btn-xs no-hover btn-info icon-twitter"></i>
 												粉丝
 											</span>
-											<span class="pull-right badge badge-info">+11</span>
+											<span id="user-count" class="pull-right badge badge-info"></span>
 										</div>
 									</a>
 								</li>
@@ -321,6 +333,7 @@ $('.change_Password').on('click', function(){
                      <li><a href="#" class="dropdown-toggle"><i class="icon-desktop"></i><span class="menu-text"> 产品管理 </span><b class="arrow icon-angle-down"></b></a>
 					   <ul class="submenu">
                          <li class="home"><a  href="javascript:void(0)" name="Products_List.html"  title="产品类表" class="iframeurl"><i class="icon-double-angle-right"></i>产品类表</a></li>
+						   <li class="home"><a href="javascript:void(0)" name="sku-list.html" title="sku管理"  class="iframeurl"><i class="icon-double-angle-right"></i>sku管理</a></li>
 						 <li class="home"><a  href="javascript:void(0)" name="Brand_Manage.html" title="品牌管理"  class="iframeurl"><i class="icon-double-angle-right"></i>品牌管理</a></li>
 						 <li class="home"><a href="javascript:void(0)" name="Category_Manage.html" title="分类管理"  class="iframeurl"><i class="icon-double-angle-right"></i>分类管理</a></li>
 
@@ -470,5 +483,57 @@ $('.change_Password').on('click', function(){
 		<!-- basic scripts -->
 		
 </body>
+<script>
+	var socket;
+	function openSocket() {
+		if(typeof(WebSocket) == "undefined") {
+			console.log("您的浏览器不支持WebSocket");
+		}else{
+			console.log("您的浏览器支持WebSocket");
+			//实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+			//等同于socket = new WebSocket("ws://localhost:8888/xxxx/im/25");
+			//var socketUrl="${request.contextPath}/im/"+$("#userId").val();
+			var socketUrl="http://localhost:8080/websocket/"+adminId;
+			socketUrl=socketUrl.replace("https","ws").replace("http","ws");
+			console.log(socketUrl);
+			if(socket!=null){
+				socket.close();
+				socket=null;
+			}
+			socket = new WebSocket(socketUrl);
+			//打开事件
+			socket.onopen = function() {
+				console.log("websocket已打开");
+				//socket.send("这是来自客户端的消息" + location.href + new Date());
+			};
+			//获得消息事件
+			socket.onmessage = function(msg) {
+				console.log(msg.data);
+				//发现消息进入    开始处理前端触发逻辑
+			};
+			//关闭事件
+			socket.onclose = function() {
+				console.log("websocket已关闭");
+			};
+			//发生了错误事件
+			socket.onerror = function() {
+				console.log("websocket发生了错误");
+			}
+		}
+	}
+
+	/**
+	 * 发送消息
+	 */
+	function sendMessage() {
+		if(typeof(WebSocket) == "undefined") {
+			console.log("您的浏览器不支持WebSocket");
+		}else {
+			console.log("您的浏览器支持WebSocket");
+			console.log('{"toUserId":"'+111+'"}');
+			socket.send('{"toUserId":"'+111+'"}');
+		}
+	}
+</script>
 </html>
 

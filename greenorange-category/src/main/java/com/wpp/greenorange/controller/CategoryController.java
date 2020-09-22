@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/category")
-public class CategoryController {
+public class CategoryController{
     /**
      * 服务对象
      */
@@ -66,6 +66,10 @@ public class CategoryController {
     public List<Map> findCategorys() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String categorys = redisTemplate.opsForValue().get("categorys");
+        if (categorys==null){
+            categoryService.saveCategoryTreeToRedis();
+            categorys = redisTemplate.opsForValue().get("categorys");
+        }
         return mapper.readValue(categorys, List.class);
     }
 
@@ -97,7 +101,6 @@ public class CategoryController {
 
     @RequestMapping("/addCategory")
     public boolean addCategory(Category category) throws JsonProcessingException {
-        System.out.println(category);
         Boolean insert = categoryService.insert(category);
         if (insert){
             redisTemplate.delete("categorys");
