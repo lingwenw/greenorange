@@ -130,19 +130,20 @@ public class PayController {
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
 
+                if (orderService.findById(Integer.parseInt(out_trade_no)).getStatusId() != 4) {
+                    Order order = new Order();
+                    order.setId(Integer.parseInt(out_trade_no));
+                    order.setStatusId(4);
+                    order.setTradeNo(trade_no);
+                    order.setPaymentTime(new Date());
 
-                Order order = new Order();
-                order.setId(Integer.parseInt(out_trade_no));
-                order.setStatusId(4);
-                order.setTradeNo(trade_no);
-                order.setPaymentTime(new Date());
+                    OrderGoods orderGoods = new OrderGoods();
+                    orderGoods.setStatusId(4);
+                    orderGoods.setOrderId(Integer.parseInt(out_trade_no));
 
-                OrderGoods orderGoods = new OrderGoods();
-                orderGoods.setStatusId(4);
-                orderGoods.setOrderId(Integer.parseInt(out_trade_no));
-
-                orderService.update(order);
-                orderGoodsService.update(orderGoods);
+                    orderService.update(order);
+                    orderGoodsService.update(orderGoods);
+                }
                 //注意：
                 //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
             } else if (trade_status.equals("TRADE_SUCCESS")) {
@@ -150,18 +151,20 @@ public class PayController {
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
                 //支付成功，改变数据库
-                Order order = new Order();
-                order.setId(Integer.parseInt(out_trade_no));
-                order.setStatusId(4);
-                order.setTradeNo(trade_no);
-                order.setPaymentTime(new Date());
+                if (orderService.findById(Integer.parseInt(out_trade_no)).getStatusId() != 4) {
+                    Order order = new Order();
+                    order.setId(Integer.parseInt(out_trade_no));
+                    order.setStatusId(4);
+                    order.setTradeNo(trade_no);
+                    order.setPaymentTime(new Date());
 
-                OrderGoods orderGoods = new OrderGoods();
-                orderGoods.setStatusId(4);
-                orderGoods.setOrderId(Integer.parseInt(out_trade_no));
+                    OrderGoods orderGoods = new OrderGoods();
+                    orderGoods.setStatusId(4);
+                    orderGoods.setOrderId(Integer.parseInt(out_trade_no));
 
-                orderService.update(order);
-                orderGoodsService.update(orderGoods);
+                    orderService.update(order);
+                    orderGoodsService.update(orderGoods);
+                }
                 //注意：
                 //付款完成后，支付宝系统发送该交易状态通知
             }
@@ -218,24 +221,25 @@ public class PayController {
         //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
         //如果有做过处理，不执行商户的业务程序
 
+        if (orderService.findById(Integer.parseInt(out_trade_no)).getStatusId() != 4) {
+            Order order = new Order();
+            order.setId(Integer.parseInt(out_trade_no));
+            order.setStatusId(4);
+            order.setTradeNo(trade_no);
+            order.setPaymentTime(new Date());
 
-        Order order = new Order();
-        order.setId(Integer.parseInt(out_trade_no));
-        order.setStatusId(4);
-        order.setTradeNo(trade_no);
-        order.setPaymentTime(new Date());
+            OrderGoods orderGoods = new OrderGoods();
+            orderGoods.setStatusId(4);
+            orderGoods.setOrderId(Integer.parseInt(out_trade_no));
 
-        OrderGoods orderGoods = new OrderGoods();
-        orderGoods.setStatusId(4);
-        orderGoods.setOrderId(Integer.parseInt(out_trade_no));
-
-        orderService.update(order);
-        orderGoodsService.update(orderGoods);
+            orderService.update(order);
+            orderGoodsService.update(orderGoods);
+        }
         //注意：
         //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
         //——请在这里编写您的程序（以上代码仅作参考）——
         ModelAndView view = new ModelAndView();
-        view.addObject("total_amount",total_amount);
+        view.addObject("total_amount", total_amount);
         view.setViewName("paysuccess");
         return view;
     }

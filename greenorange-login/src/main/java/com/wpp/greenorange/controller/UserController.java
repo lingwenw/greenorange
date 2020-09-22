@@ -84,6 +84,7 @@ public class UserController {
     @RequestMapping("/getUserLoginName")
     public User getUserLoginName(HttpSession session){
         User user = (User) session.getAttribute("loginUser");
+        user.setPassword("****");
         return user;
     }
 

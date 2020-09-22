@@ -275,6 +275,7 @@
 <!--页面底部END-->
 <script type="text/javascript" src="js/all.js"></script>
 <script type="text/javascript" src="admin/assets/layer/layer.js"></script>
+	<script src="js/util.js"></script>
 <script>
 	$("#head").load("include/head.html");
 	$("#foot").load("include/foot.html");
@@ -285,6 +286,7 @@
 			$("input[name='chk_list']").prop("checked", $(this).prop("checked"));
 		});
 		//用户id值的传入!
+
 		var userId=1;
 		// 页面加载时，根据登录号用户id从数据库拿取这个用户所有商品数据
 		loads(userId);
@@ -327,8 +329,10 @@
 	function exhibit(data) {
 		var tbody=$(".cart-body");
 		for (var i = 0; i <data.length ; i++) {
-			var showimg=data[i].goodsSku.showImg.split(",");
-			var showimg_1=showimg[0].split("[");
+			var showimg = [];
+			if (!$.emptyString(data[i].goodsSku.showImg)){
+				showimg = JSON.parse(data[i].goodsSku.showImg);
+			}
 			var param=data[i].goodsSku.params.split(";");
 			// alert(showimg+":"+param);
 			var param_1=param[0].split(",");
@@ -336,7 +340,7 @@
 					"<input type='checkbox' name='chk_list' name='' id='' value="+data[i].id+" /></li>"+
 					"<li class='yui3-u-6-24'>"+
 					"<div class='good-item'>"+
-					"<div class='item-img'><img src="+showimg_1[0].toString()+"/></div>"+
+					"<div class='item-img'><img src=../img/goods_img/"+showimg[0].toString()+"></div>"+
 					"<div class='item-msg'>"+data[i].goodsSku.title+"</div>"+
 					"</div></li>"+
 					"<li class='yui3-u-5-24'>"+

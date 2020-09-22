@@ -184,16 +184,23 @@ $(function () {
     //根据用户id从数据库中获取商品订单
     function exhibit(data) {
         var tbody=$(".send-detail");
+        //用户名
+        $.ajax({ url:"/user/getOne",type: "post",data:{"id":data[0].userId}, success: function(date){
+                $("#userId").empty();
+                $("#userId").append("<li class='f-item'>"+date.name+"&nbsp;青橙欢迎您!</li>")
+            }});
         for (var i = 0; i <data.length ; i++) {
             goodsSkuId.push(data[i].goodsSku.id);
             var showimg=data[i].goodsSku.showImg.split(",");
             var showimg_1=showimg[0].split("[");
+            //
+            //
             var param=data[i].goodsSku.params.split(";");
             var param_1=param[0].split(",");
             tbody.append("<li><div class='sendGoods'>"+
                 "<ul class='yui3-g'>"+
                 "<li class='yui3-u-1-6'>"+
-                "<span><img src='"+showimg_1[0].toString()+"'/></span>"+
+                "<span><img src=../img/goods_img/"+showimg_1[1].toString()+"></span>"+
                 "</li>"+
                 "<li class='yui3-u-7-12'>"+
                 "<div class='desc'>"+data[i].goodsSku.title+"</div>"+
@@ -225,7 +232,7 @@ $(function () {
         //传值cartNums数量集合，goodsSkuId集合
         orderData.skus = [];
         for (var i = 0; i <goodsSkuId.length ; i++) {
-            let temp = {
+            var temp = {
                 id:parseInt(goodsSkuId[i]),
                 count:parseInt(cartNums[i])
             }
