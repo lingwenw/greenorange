@@ -121,4 +121,9 @@
         from greenorange.tb_goods_sku
         where id = #{id}
     </select>
+
+    <!--通过user删除数据-->
+    <delete id="deleteByUserId">
+        delete from greenorange.tb_goods_favourite where sku_id = #{skuId} and user_id = #{userId}
+    </delete>
 </mapper>

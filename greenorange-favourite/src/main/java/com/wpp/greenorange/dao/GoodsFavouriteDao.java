@@ -68,4 +68,13 @@ public interface GoodsFavouriteDao {
      */
     Integer deleteById(Integer id);
 
+
+    /**
+     * 通过user删除数据
+     * @param skuId
+     * @param userId
+     * @return
+     */
+    Integer deleteByUserId(Integer skuId,Integer userId);
+
 }

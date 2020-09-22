@@ -2,12 +2,9 @@ package com.wpp.greenorange.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wpp.greenorange.dao.GoodsDao;
-import com.wpp.greenorange.dao.GoodsSkuDao;
-import com.wpp.greenorange.dao.OrderDao;
+import com.wpp.greenorange.dao.*;
 import com.wpp.greenorange.domain.Order;
 import com.wpp.greenorange.domain.select.OrderSelect;
-import com.wpp.greenorange.dao.OrderGoodsDao;
 import com.wpp.greenorange.domain.*;
 import com.wpp.greenorange.service.GoodsService;
 import com.wpp.greenorange.service.GoodsSkuService;
@@ -39,6 +36,9 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private GoodsDao goodsDao;
 
+    @Resource
+    private GoodsFavouriteDao goodsFavouriteDao;
+
     /**
      * 通过实体作为筛选条件查询
      *
@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     @Transactional(rollbackFor = {RuntimeException.class, Error.class})
-    public Order insert(Map orderData,User user) {
+    public Order insert(Map orderData, User user) {
         //订单表
         List<Map> skus = (List<Map>) orderData.get("skus");
         Double price = Double.valueOf(0);
@@ -78,13 +78,15 @@ public class OrderServiceImpl implements OrderService {
             Integer skuId = (Integer) map.get("id");
             Integer count = (Integer) map.get("count");
             GoodsSku sku = goodsSkuDao.findById(skuId);
-            price += (sku.getPrice()*count);
+            price += (sku.getPrice() * count);
             Goods goods = goodsDao.findById(sku.getGoodsId());
             subject += goods.getName() + ",";
+            //删除购物车
+            goodsFavouriteDao.deleteByUserId(skuId, user.getId());
         }
         subject = subject.substring(0, subject.length() - 1);
         Integer addressId = (Integer) orderData.get("addressId");
-        Order order = new Order(user.getId(), addressId, 3, price,subject);
+        Order order = new Order(user.getId(), addressId, 3, price, subject);
         orderDao.insert(order);
 
         //订单商品表
@@ -92,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
             Integer skuId = (Integer) map.get("id");
             Integer count = (Integer) map.get("count");
             GoodsSku sku = goodsSkuDao.findById(skuId);
-            OrderGoods orderGoods = new OrderGoods(skuId,sku.getPrice(),sku.getPrice(),order.getId(),order.getStatusId(),count);
+            OrderGoods orderGoods = new OrderGoods(skuId, sku.getPrice(), sku.getPrice(), order.getId(), order.getStatusId(), count);
             orderGoodsDao.insert(orderGoods);
         }
 
@@ -124,7 +126,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public PageInfo<Order> getAllLimit(OrderSelect orderSelect) {
-        PageHelper.startPage(orderSelect.getPageNum(), orderSelect.getPageSize(),"create_time desc");
+        PageHelper.startPage(orderSelect.getPageNum(), orderSelect.getPageSize(), "create_time desc");
         List<Order> list = orderDao.findAllByCondition(orderSelect);
         return PageInfo.of(list, 5);
     }
