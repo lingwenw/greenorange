@@ -14,6 +14,7 @@ import java.util.List;
 @Mapper
 public interface AdvertDao {
 
+
     /**
      * 通过ID查询单条数据
      *
@@ -30,6 +31,7 @@ public interface AdvertDao {
      * @return 对象列表
      */
     List<Advert> findAllByCondition(Advert advert);
+
 
     /**
      * 新增数据

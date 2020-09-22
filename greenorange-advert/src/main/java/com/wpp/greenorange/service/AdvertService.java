@@ -1,5 +1,6 @@
 package com.wpp.greenorange.service;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Advert;
 
 import java.util.List;
@@ -52,4 +53,5 @@ public interface AdvertService {
      */
     Boolean deleteById(Integer id);
 
+    PageInfo<Advert> findAllLimit(Integer pageNum,Integer pageSize);
 }
