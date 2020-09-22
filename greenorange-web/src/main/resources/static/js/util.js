@@ -25,7 +25,7 @@ $.extend({
     emptyString : function (value) {
         //正则表达式用于判斷字符串是否全部由空格或换行符组成
         //返回值为true表示是空字符串
-        return (value == null || value == undefined || !/\S/.test(value) )
+        return (value == null || value == undefined || !/\S/.test(value) || value.length==undefined )
     },
     /**
      * 以json格式获取url上的参数

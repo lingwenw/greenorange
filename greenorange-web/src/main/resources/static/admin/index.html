@@ -229,61 +229,61 @@ $('.change_Password').on('click', function(){
 								<i class="icon-caret-down"></i>
 							</a>
 							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-								<li><a href="#"><i class="icon-cog"></i>设置</a></li>
-								<li><a href="#"><i class="icon-user"></i>个人资料</a></li>
+								<li><a href="javascript:void(0)"><i class="icon-cog"></i>设置</a></li>
+								<li><a href="javascript:void(0)"><i class="icon-user"></i>个人资料</a></li>
 								<li class="divider"></li>
 								<li><a href="javascript:ovid(0)" id="Exit_system"><i class="icon-off"></i>退出</a></li>
 							</ul>
 						</li>
 	                   <li class="purple">
-						<a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-bell-alt"></i><span class="badge badge-important" id="tips-count">1</span></a>
+						<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0)"><i class="icon-bell-alt"></i><span class="badge badge-important" id="tips_count"></span></a>
 							<ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
-                            <li class="dropdown-header"><i class="icon-warning-sign"></i>8条通知</li>
+                            <li class="dropdown-header"><i class="icon-warning-sign"></i><span></span>条通知</li>
                             <li>
-                              <a href="#">
+                              <a href="javascript:void(0)">
 										<div class="clearfix">
 											<span class="pull-left">
 												<i class="btn btn-xs no-hover btn-pink icon-comment"></i>
 												新闻评论
 											</span>
-											<span id="news-count" class="pull-right badge badge-info"></span>
+											<span id="news_count" class="pull-right badge badge-info"></span>
 										</div>
 									</a>
 								</li>
 
 								<li>
-									<a href="#">
+									<a href="javascript:void(0)">
 										<i class="btn btn-xs btn-primary icon-user"></i>
 										切换为编辑登录..
 									</a>
 								</li>
 
 								<li>
-									<a href="#">
+									<a href="javascript:void(0)">
 										<div class="clearfix">
 											<span class="pull-left">
 												<i class="btn btn-xs no-hover btn-success icon-shopping-cart"></i>
 												新订单
 											</span>
-											<span id="goods-count" class="pull-right badge badge-success"></span>
+											<span id="order_count" class="pull-right badge badge-success"></span>
 										</div>
 									</a>
 								</li>
 
 								<li>
-									<a href="#">
+									<a href="javascript:void(0)">
 										<div class="clearfix">
 											<span class="pull-left">
 												<i class="btn btn-xs no-hover btn-info icon-twitter"></i>
 												粉丝
 											</span>
-											<span id="user-count" class="pull-right badge badge-info"></span>
+											<span id="user_count" class="pull-right badge badge-info"></span>
 										</div>
 									</a>
 								</li>
 
 								<li>
-									<a href="#">
+									<a href="javascript:void(0)">
 										查看所有通知
 										<i class="icon-arrow-right"></i>
 									</a>
@@ -310,7 +310,7 @@ $('.change_Password').on('click', function(){
 				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
 			</script>
 			<div class="main-container-inner">
-				<a class="menu-toggler" id="menu-toggler" href="#">
+				<a class="menu-toggler" id="menu-toggler" href="javascript:void(0)">
 					<span class="menu-text"></span>
 				</a>
 				<div class="sidebar" id="sidebar">
@@ -330,7 +330,7 @@ $('.change_Password').on('click', function(){
 					</div><!-- #sidebar-shortcuts -->
 					<ul class="nav nav-list" id="nav_list">
 				     <li class="home"><a href="javascript:void(0)" name="home.html" class="iframeurl" title=""><i class="icon-dashboard"></i><span class="menu-text"> 系统首页 </span></a></li>
-                     <li><a href="#" class="dropdown-toggle"><i class="icon-desktop"></i><span class="menu-text"> 产品管理 </span><b class="arrow icon-angle-down"></b></a>
+                     <li><a href="javascript:void(0)" class="dropdown-toggle"><i class="icon-desktop"></i><span class="menu-text"> 产品管理 </span><b class="arrow icon-angle-down"></b></a>
 					   <ul class="submenu">
                          <li class="home"><a  href="javascript:void(0)" name="Products_List.html"  title="产品类表" class="iframeurl"><i class="icon-double-angle-right"></i>产品类表</a></li>
 						   <li class="home"><a href="javascript:void(0)" name="sku-list.html" title="sku管理"  class="iframeurl"><i class="icon-double-angle-right"></i>sku管理</a></li>
@@ -340,14 +340,14 @@ $('.change_Password').on('click', function(){
 						</ul>
 					</li>
 					<li>
-						<a href="#" class="dropdown-toggle"><i class="icon-picture "></i><span class="menu-text"> 图片管理 </span><b class="arrow icon-angle-down"></b></a>
+					<a href="javascript:void(0)" class="dropdown-toggle"><i class="icon-picture "></i><span class="menu-text"> 图片管理 </span><b class="arrow icon-angle-down"></b></a>
 						<ul class="submenu">
 							<li class="home"><a href="javascript:void(0)" name="advertising.html" title="广告管理" class="iframeurl"><i class="icon-double-angle-right"></i>广告管理</a></li>
 <!--							<li class="home"><a href="javascript:void(0)" name="Sort_ads.html" title="分类管理"  class="iframeurl"><i class="icon-double-angle-right"></i>分类管理</a></li>-->
 						</ul>
 						</li>
 					<li>
-					<a href="#" class="dropdown-toggle"><i class="icon-list"></i><span class="menu-text"> 交易管理 </span><b class="arrow icon-angle-down"></b></a>
+					<a href="javascript:void(0)" class="dropdown-toggle"><i class="icon-list"></i><span class="menu-text"> 交易管理 </span><b class="arrow icon-angle-down"></b></a>
                     <ul class="submenu">
                     <li class="home"><a href="javascript:void(0)" name="transaction.html" title="交易信息"  class="iframeurl"><i class="icon-double-angle-right"></i>交易信息</a></li>
                     <li class="home"><a href="javascript:void(0)" name="Orderform.html" title="订单管理"  class="iframeurl"><i class="icon-double-angle-right"></i>订单管理</a></li>
@@ -357,7 +357,7 @@ $('.change_Password').on('click', function(){
                    </ul>
 				  </li>
                   <li>
-					<a href="#" class="dropdown-toggle"><i class="icon-user"></i><span class="menu-text"> 会员管理 </span><b class="arrow icon-angle-down"></b></a>
+					<a href="javascript:void(0)" class="dropdown-toggle"><i class="icon-user"></i><span class="menu-text"> 会员管理 </span><b class="arrow icon-angle-down"></b></a>
                     <ul class="submenu">
                     <li class="home"><a href="javascript:void(0)" name="user_list.html" title="会员列表"  class="iframeurl"><i class="icon-double-angle-right"></i>会员列表</a></li>
                     <li class="home"><a href="javascript:void(0)" name="member-Grading.html" title="等级管理"  class="iframeurl"><i class="icon-double-angle-right"></i>等级管理</a></li>
@@ -365,19 +365,19 @@ $('.change_Password').on('click', function(){
 
                    </ul>
 				  </li>
-						<li><a href="#" class="dropdown-toggle"><i class="icon-edit"></i><span class="menu-text"> 消息管理 </span><b class="arrow icon-angle-down"></b></a>
+						<li><a href="javascript:void(0)" class="dropdown-toggle"><i class="icon-edit"></i><span class="menu-text"> 消息管理 </span><b class="arrow icon-angle-down"></b></a>
 							<ul class="submenu">
 								<li class="home"><a href="javascript:void(0)" name="Guestbook.html" title="留言列表" class="iframeurl"><i class="icon-double-angle-right"></i>留言列表</a></li>
                                 <li class="home"><a href="javascript:void(0)" name="Feedback.html" title="意见反馈" class="iframeurl"><i class="icon-double-angle-right"></i>意见反馈</a></li>
 							</ul>
 						</li>
-						<li><a href="#" class="dropdown-toggle"><i class="icon-edit"></i><span class="menu-text"> 文章管理 </span><b class="arrow icon-angle-down"></b></a>
+						<li><a href="javascript:void(0)" class="dropdown-toggle"><i class="icon-edit"></i><span class="menu-text"> 文章管理 </span><b class="arrow icon-angle-down"></b></a>
 							<ul class="submenu">
 								<li class="home"><a href="javascript:void(0)" name="Guestbook.html" title="文章列表" class="iframeurl"><i class="icon-double-angle-right"></i>文章列表</a></li>
                                 <li class="home"><a href="javascript:void(0)" name="Feedback.html" title="分类分类" class="iframeurl"><i class="icon-double-angle-right"></i>分类分类</a></li>
 							</ul>
 						</li>
-                        	<li><a href="#" class="dropdown-toggle"><i class="icon-cogs"></i><span class="menu-text"> 系统管理 </span><b class="arrow icon-angle-down"></b></a>
+                        	<li><a href="javascript:void(0)" class="dropdown-toggle"><i class="icon-cogs"></i><span class="menu-text"> 系统管理 </span><b class="arrow icon-angle-down"></b></a>
 							<ul class="submenu">
 								<li class="home"><a href="javascript:void(0)" name="Systems.html" title="系统设置" class="iframeurl"><i class="icon-double-angle-right"></i>系统设置</a></li>
 								<li class="home"><a href="javascript:void(0)" name="菜单管理.html" title="栏目管理" class="iframeurl"><i class="icon-double-angle-right"></i>栏目管理</a></li>
@@ -385,7 +385,7 @@ $('.change_Password').on('click', function(){
                                 <li class="home"><a href="javascript:void(0)" name="用户管理.html" title="系统日志" class="iframeurl"><i class="icon-double-angle-right"></i>系统日志</a></li>
 							</ul>
 						</li>
-                        <li><a href="#" class="dropdown-toggle"><i class="icon-group"></i><span class="menu-text"> 管理员管理 </span><b class="arrow icon-angle-down"></b></a>
+                        <li><a href="javascript:void(0)" class="dropdown-toggle"><i class="icon-group"></i><span class="menu-text"> 管理员管理 </span><b class="arrow icon-angle-down"></b></a>
 							<ul class="submenu">
 							
 								<li class="home"><a href="javascript:void(0)" name="admin_Competence.html" title="权限管理"  class="iframeurl"><i class="icon-double-angle-right"></i>权限管理</a></li>
@@ -483,19 +483,29 @@ $('.change_Password').on('click', function(){
 		<!-- basic scripts -->
 		
 </body>
+<script src="../js/util.js"></script>
 <script>
+
+	$(function () {
+		$("#order_count").parents("a").click(function () {
+			$(".iframeurl[title='订单管理']").trigger("click");
+		})
+	})
+
 	var socket;
+	//从session中拿应该
+	var adminId = 1;
+	openSocket();
 	function openSocket() {
 		if(typeof(WebSocket) == "undefined") {
-			console.log("您的浏览器不支持WebSocket");
+			layer.alert("您的浏览器不支持WebSocket,可能无法与服务端实时通信!",{icon:5})
 		}else{
-			console.log("您的浏览器支持WebSocket");
+			// console.log("您的浏览器支持WebSocket");
 			//实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
 			//等同于socket = new WebSocket("ws://localhost:8888/xxxx/im/25");
 			//var socketUrl="${request.contextPath}/im/"+$("#userId").val();
 			var socketUrl="http://localhost:8080/websocket/"+adminId;
 			socketUrl=socketUrl.replace("https","ws").replace("http","ws");
-			console.log(socketUrl);
 			if(socket!=null){
 				socket.close();
 				socket=null;
@@ -504,12 +514,16 @@ $('.change_Password').on('click', function(){
 			//打开事件
 			socket.onopen = function() {
 				console.log("websocket已打开");
-				//socket.send("这是来自客户端的消息" + location.href + new Date());
 			};
 			//获得消息事件
 			socket.onmessage = function(msg) {
-				console.log(msg.data);
+				let data = msg.data;
 				//发现消息进入    开始处理前端触发逻辑
+				if (!data.error){
+					data = JSON.parse(data);
+					addTips(data);
+				}
+
 			};
 			//关闭事件
 			socket.onclose = function() {
@@ -522,17 +536,50 @@ $('.change_Password').on('click', function(){
 		}
 	}
 
+
+
 	/**
 	 * 发送消息
 	 */
 	function sendMessage() {
 		if(typeof(WebSocket) == "undefined") {
-			console.log("您的浏览器不支持WebSocket");
+			//不支持
 		}else {
-			console.log("您的浏览器支持WebSocket");
-			console.log('{"toUserId":"'+111+'"}');
-			socket.send('{"toUserId":"'+111+'"}');
+			//支持
+			// socket.send('');
 		}
+	}
+
+	/**
+	 * 给对应选择器的的提示+1
+	 * @param selector jq选择器
+	 */
+	function addTips(map) {
+
+		let selector = "#"+map.type.toLocaleLowerCase();
+
+		let el = $(selector);
+		//子提示
+		el.data( "count",el.text() )
+		if ($.emptyString( el.data("count") ) ){
+			el.data( "count",0 )
+		}else{
+			el.data( "count", $.parseFloat(el.text()) )
+		}
+		el.data( "count", el.data("count")+1 )
+		el.text( "+"+el.data("count") );
+
+		//总提示
+		let total = $("#tips_count");
+		total.data( "count",$("#tips_count").text() );
+		if ($.emptyString(total.data( "count"))){
+			total.data( "count",0 );
+		}else{
+			total.data( "count",$.parseFloat($("#tips_count").text()) );
+		}
+		total.data( "count", total.data( "count")+1 );
+		$("#tips_count").text(total.data( "count"));
+		$(".dropdown-header>span").text(total.data( "count"));
 	}
 </script>
 </html>

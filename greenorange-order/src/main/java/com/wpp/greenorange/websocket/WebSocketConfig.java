@@ -1,4 +1,4 @@
-package com.wpp.greenorange.config;
+package com.wpp.greenorange.websocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

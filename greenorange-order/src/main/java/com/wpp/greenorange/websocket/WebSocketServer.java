@@ -1,4 +1,4 @@
-package com.wpp.greenorange.config;
+package com.wpp.greenorange.websocket;
 
 import org.springframework.stereotype.Component;
 
@@ -8,6 +8,9 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -39,6 +42,7 @@ public class WebSocketServer {
     public void OnOpen(Session session, @PathParam(value = "userId") Integer userId){
         this.session = session;
         this.userId = userId;
+
         // name是用来表示唯一客户端，如果需要指定发送，需要指定发送通过name来区分
         webSocketMap.put(userId,this);
     }
@@ -66,6 +70,14 @@ public class WebSocketServer {
             webSocketMap.get(userId).sendMessage(message);
         }else{
             System.out.println(userId+"用户不在线");
+        }
+    }
+
+
+    public static void massInfo(String message) throws IOException {
+        ConcurrentHashMap.KeySetView<Integer, WebSocketServer> keySet = webSocketMap.keySet();
+        for (Integer userId : keySet) {
+            sendInfo(message, userId);
         }
     }
 }
