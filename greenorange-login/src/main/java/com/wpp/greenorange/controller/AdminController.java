@@ -43,15 +43,14 @@ public class AdminController {
      */
     @RequestMapping("/AdminLogin")
     public boolean AdminLogin(Admin admin, HttpSession session){
-//        System.out.println(admin);
-//        Admin SQLadmin = adminService.AdminLogin(admin.getAccountnumber(), admin.getPassword());
-//        if (SQLadmin!=null){
-//            session.setAttribute("loginAdmin",SQLadmin);
-//            return true;
-//        }else {
-//            return false;
-//        }
-        return true;
+        System.out.println(admin);
+        Admin SQLadmin = adminService.AdminLogin(admin.getAccountnumber(), admin.getPassword());
+        if (SQLadmin!=null){
+            session.setAttribute("loginAdmin",SQLadmin);
+            return true;
+        }else {
+            return false;
+        }
     }
     /*
      * 分页
