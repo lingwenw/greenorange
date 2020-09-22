@@ -225,7 +225,7 @@ $(function () {
         //传值cartNums数量集合，goodsSkuId集合
         orderData.skus = [];
         for (var i = 0; i <goodsSkuId.length ; i++) {
-            let temp = {
+            var temp = {
                 id:parseInt(goodsSkuId[i]),
                 count:parseInt(cartNums[i])
             }
