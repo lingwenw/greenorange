@@ -98,7 +98,7 @@ public interface GoodsSkuService {
      * @param skuId
      * @return
      */
-    Map<String, Double> getPriceAndStock(Integer skuId);
+    Map<String, Object> getPriceAndStock(Integer skuId);
 
     /**
      * 更新库存和价格

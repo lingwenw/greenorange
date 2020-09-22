@@ -121,7 +121,7 @@
                 return;
             }
             if (url.indexOf("search?")==-1){
-                location.href = "http://localhost:8080/search?&input="+keyWord;
+                location.href = "/search?&input="+keyWord;
             } else{
                 location.href = url+"&input="+keyWord;
             }

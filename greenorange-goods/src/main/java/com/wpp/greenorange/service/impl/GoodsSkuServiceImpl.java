@@ -115,7 +115,9 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         //从数据库查用户输入的分类
         if ( splits!=null && !splits.isEmpty()){
             categoryMap = goodsSkuDao.getCategoryNameIn(splits);
-            category = (String) categoryMap.get("name");
+            if (categoryMap!=null){
+                category = (String) categoryMap.get("name");
+            }
         }
         //从数据库查用户输入的品牌
         if (MyUtil.isEmptyStrArr(brand) && splits!=null && !splits.isEmpty()){
@@ -219,10 +221,10 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
     }
 
     @Override
-    public Map<String, Double> getPriceAndStock(Integer skuId) {
+    public Map<String, Object> getPriceAndStock(Integer skuId) {
         Double price = (Double) redisTemplate.opsForHash().get("skuPriceStock", "price" + skuId);
         Double stock = (Double) redisTemplate.opsForHash().get("skuPriceStock", "stock" + skuId);
-        Map<String, Double> map = new HashMap<>(2);
+        Map<String, Object> map = new HashMap<>(2);
         map.put("price",price);
         map.put("stock",stock);
         return map;

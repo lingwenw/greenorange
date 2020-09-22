@@ -40,7 +40,7 @@
 			<div class="top">
 				<div class="py-container">
 					<div class="shortcut">
-						<ul class="fl">
+						<ul class="fl" id="username-box">
 							<li class="f-item">青橙欢迎您！</li>
 							<li class="f-item">请
 								<a href="../login.html" target="_blank">登录</a>
@@ -1834,16 +1834,16 @@
 		<div id="item">
 			<div class="crumb-wrap">
 				<ul class="sui-breadcrumb">
-					<li>
-						<a href="#">手机、数码、通讯</a>
-					</li>
-					<li>
-						<a href="#">手机</a>
-					</li>
-					<li>
-						<a href="#">Apple苹果</a>
-					</li>
-					<li class="active">iphone 6S系类</li>
+<!--					<li>-->
+<!--						<a href="#">手机、数码、通讯</a>-->
+<!--					</li>-->
+<!--					<li>-->
+<!--						<a href="#">手机</a>-->
+<!--					</li>-->
+<!--					<li>-->
+<!--						<a href="#">Apple苹果</a>-->
+<!--					</li>-->
+<!--					<li class="active">iphone 6S系类</li>-->
 				</ul>
 			</div>
 			<!--product-info-->
@@ -1953,7 +1953,7 @@
 							<div class="fl">
 								<ul class="btn-choose unstyled">
 									<li>
-										<a href="../cart.html" target="_blank" :class="[stock>0?'btn-danger':'btn-grey','sui-btn','addshopcar']" >{{stock>0?'加入购物车':'暂时无货'}}</a>
+										<a @click="stock>0 && insertCart()" :class="[stock>0?'btn-danger':'btn-grey','sui-btn','addshopcar']" >{{stock>0?'加入购物车':'暂时无货'}}</a>
 									</li>
 								</ul>
 							</div>
@@ -2784,12 +2784,35 @@
 	<script type="text/javascript" src="../js/plugins/sui/sui.min.js"></script>
 	<script type="text/javascript" src="../js/plugins/jquery.jqzoom/jquery.jqzoom.js"></script>
 	<script type="text/javascript" src="../js/plugins/jquery.jqzoom/zoom.js"></script>
+	<script src="../js/util.js"></script>
 	<script type="text/javascript" src="../js/vuejs-2.5.16.js"></script>
 	<script type="text/javascript" src="../js/axios-0.18.0.js"></script>
+	<script src="../admin/assets/layer/layer.js"></script>
 </body>
 <script th:inline="javascript">
+	function exit(){
+		$.get("/user/exit",function (data) {
+			if (!data.error){
+				location.reload();
+			} else {
+				layer.alert(data.message,{icon:5})
+			}
+		})
+	}
 	//获取价格和库存
 	$(function () {
+		$.post("../user/getUserLoginName",function (data) {
+			var fl= $("#username-box")
+			if (data==null||data==""){
+				fl.empty()
+				$("<li class='f-item'>青橙欢迎您!</li>").appendTo(fl)
+				$("<li class='f-item'>请<a href='login.html' target='_blank'>登录</a>　<span><a href='register.html' target='_blank'>免费注册</a></span></li>").appendTo(fl)
+			}else {
+				fl.empty()
+				$("<li class='f-item'>"+data.name+",青橙欢迎您!<a id='exit' onclick='exit()' href='javascript:void(0)'>退出登录</a></li>").appendTo(fl)
+			}
+		})
+
 		let skuVue = new Vue({
 			el : ".itemInfo-wrap",
 			data : {
@@ -2797,6 +2820,24 @@
 				stock : ""
 			},
 			methods : {
+				insertCart : function(){
+					let _this = this;
+					let postData= new URLSearchParams()
+					postData.append("skuId",[[${sku.id}]])
+					axios.post("../goodsFavourite/insert",postData)
+					.then( (resp) => {
+						let data = resp.data;
+						$.errorAjax(data,function () {
+							layer.msg("添加购物车成功",{icon : 1,time : 1500})
+							setTimeout(()=>{
+								location.href = "../cart.html";
+							},1500)
+						})
+					} )
+				},
+				/**
+				 * 获得需要的信息
+				 */
 				getPriceAndStock : function () {
 					let _this = this;
 					axios.get("../sku/getPriceAndStock",{
@@ -2809,6 +2850,7 @@
 						if (!data.error){
 							_this.price = fmoney(data.price,2);
 							_this.stock = data.stock;
+							_this.skuId = data.skuId;
 						}
 					} )
 				}

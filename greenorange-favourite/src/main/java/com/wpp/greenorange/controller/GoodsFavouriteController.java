@@ -5,7 +5,9 @@ import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.service.GoodsFavouriteService;
 import com.wpp.greenorange.service.impl.GoodsSkuServiceImpl;
 import com.wpp.greenorange.domain.User;
+import com.wpp.webutil.exception.MyException;
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -59,7 +61,7 @@ public class GoodsFavouriteController {
             GoodsSku goodsSku = findsBySkuId(allByCondition.get(i).getSkuId());
             allByCondition.get(i).setGoodsSku(goodsSku);
         }
-        System.out.println(allByCondition);
+//        System.out.println(allByCondition);
         return allByCondition;
     }
     /**
@@ -126,11 +128,19 @@ public class GoodsFavouriteController {
     @RequestMapping("/insert")
     public Boolean insert(Integer skuId,HttpSession session){
         User user = (User) session.getAttribute("loginUser");
+        if (user==null){
+            throw new MyException("您还没有登录");
+        }
         GoodsFavourite favourite = new GoodsFavourite();
         favourite.setSkuId(skuId);
         favourite.setUserId(user.getId());
 //        favourite.setUserId(1);
         favourite.setStatusId(1);
-        return goodsFavouriteService.insert(favourite);
+        try {
+            goodsFavouriteService.insert(favourite);
+        } catch (DuplicateKeyException e) {
+            throw new MyException("您已经添加过这件商品了!");
+        }
+        return true;
     }
 }
