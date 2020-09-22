@@ -1,5 +1,6 @@
 package com.wpp.greenorange.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Advert;
 import com.wpp.greenorange.service.AdvertService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,9 +115,8 @@ public class AdvertController {
      * @return查询全部数据返回页面
      */
     @RequestMapping("/getAllAdvert")
-    public List getAllAdvert() {
-        List<Advert> adverts = advertService.findAllByCondition(null);
-        return adverts;
+    public PageInfo<Advert> getAllAdvert(Integer pageNum,Integer pageSize) {
+        return advertService.findAllLimit(pageNum,pageSize);
     }
     @RequestMapping("/removeAdvert")
     public boolean removeAdvert(Integer ids) {

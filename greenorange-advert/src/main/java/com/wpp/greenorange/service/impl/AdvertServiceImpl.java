@@ -1,5 +1,7 @@
 package com.wpp.greenorange.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.dao.AdvertDao;
 import com.wpp.greenorange.domain.Advert;
 import com.wpp.greenorange.service.AdvertService;
@@ -72,5 +74,12 @@ public class AdvertServiceImpl implements AdvertService {
     @Override
     public Boolean deleteById(Integer id) {
         return this.advertDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public PageInfo<Advert> findAllLimit(Integer pageNum,Integer pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<Advert> list = advertDao.findAllByCondition(null);
+        return PageInfo.of(list,pageSize);
     }
 }

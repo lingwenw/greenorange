@@ -38,12 +38,12 @@
                         <h4 class="lighter smaller">广告图分类</h4>
                      </div>
                     <div class="widget-body" >
-                        <ul class="b_P_Sort_list position">
+                        <ul class="b_P_Sort_list" id="pos">
                             <li class="li-dian">
                                 <i class="orange  fa fa-user-secret"></i>
-                                <a href="#">全部 {{positionList.length}}</a>
+                                <a href="#">全部 {{poslist.length}}</a>
                             </li>
-                            <li class="li-dian" v-for="po in positionList">
+                            <li class="li-dian" v-for="po in poslist">
                                 <i class="fa fa-image pink ">
                                     <a href="#"> {{po.position}}</a>
                                 </i>
@@ -58,9 +58,26 @@
        <span class="l_f">
         <a href="javascript:void(0)" onclick="addClick()" id="ads_add" class="btn btn-warning"><i class="fa fa-plus"></i> 添加广告</a>
        </span>
-       <span class="r_f">共：<b>{{advertList.length}}</b>条广告</span>
+       <span class="r_f">共：<b>{{pageInfo.total}}</b>条广告</span>
      </div>
+
      <div class="Ads_lists">
+         <div class="row" style="margin: 10px;">
+             <div class="col-sm-6">
+                 <div class="dataTables_length" id="sample-table_length">
+                     <label>每页显示条数:
+                         <select name="sample-table_length" aria-controls="sample-table" class="">
+                             <option value="3">3</option>
+                             <option value="5">5</option>
+                             <option value="10">10</option>
+                             <option value="25">25</option>
+                             <option value="50">50</option>
+                             <option value="100">100</option>
+                        </select>
+                     </label>
+                 </div>
+             </div>
+         </div>
        <table class="table table-striped table-bordered table-hover" id="sample-table">
 		<thead>
 		 <tr>
@@ -74,38 +91,56 @@
 			</tr>
 		</thead>
 	<tbody>
-      <tr v-for="adList in advertList">
-       <td class="Radvert">{{adList.id}}</td>
-       <td>{{adList.describe}}</td>
+      <tr v-for="list in pageInfo.list">
+       <td class="Radvert">{{list.id}}</td>
+       <td>{{list.describe}}</td>
        <td><span class="ad_img">
-           <img :src="'..'+adList.imgUrl"  width="100%" height="100%"/>
+           <img :src="'..'+list.imgUrl"  width="100%" height="100%"/>
        </span>
        </td>
-<!--       <td>1890x1080</td>-->
-       <td><a href="#" target="_blank">{{adList.href}}</a></td>
-       <td class="txt">{{adList.createTime}}</td>
-       <td class="txt">{{adList.updateTime}}</td>
+       <td><a href="#" target="_blank">{{list.href}}</a></td>
+       <td class="txt">{{list.createTime}}</td>
+       <td class="txt">{{list.updateTime}}</td>
        <td class="td-manage">
-        <a title="编辑" @click="clickBtn(adList.id)" href="javascript:(void 0);"  class="btn btn-xs btn-info" ><i class="fa fa-edit bigger-120"></i></a>
+        <a title="编辑" @click="clickBtn(list.id)" href="javascript:(void 0);"  class="btn btn-xs btn-info" ><i class="fa fa-edit bigger-120"></i></a>
         <a title="删除" href="javascript:(void 0);"  onclick="member_del(this,'1')" class="btn btn-xs btn-warning" ><i class="fa fa-trash  bigger-120"></i></a>
 
        </td>
       </tr>
     </tbody>
     </table>
+         <div class="row">
+             <div class="col-sm-6">
+                 <div class="dataTables_info" id="sample-table_info" role="status" aria-live="polite">第 {{pageInfo.startRow}} 到{{pageInfo.endRow}}  条记录，共 {{pageInfo.total}} 条</div>
+             </div>
+             <div class="col-sm-6">
+                 <div class="dataTables_paginate paging_bootstrap" id="sample-table_paginate">
+                     <ul class="pagination">
+                         <li :class="[pageInfo.hasPreviousPage  ? 'active':'','prev','disabled']" >
+                            <a href="javascript:(void 0);" @click="getAdvert(pageInfo.prePage)">上一页</a>
+                         </li>
+                         <li v-for="pag in pageInfo.navigatepageNums" @click="getAdvert(pag)" :class="[pageInfo.pageNum==pag?'active':'']">
+                             <a href="javascript:(void 0);">{{pag}}</a>
+                         </li>
+                         <li  :class="[pageInfo.hasNextPage ? 'active':'','next','disabled']"  @click="getAdvert(pageInfo.nextPage)">
+                             <a href="javascript:(void 0);">下一页</a>
+                         </li>
+                     </ul>
+                 </div>
+             </div>
+         </div>
      </div>
  </div>
 </div>
-
-<div id="position">
 <!--改变广告-->
+<div id="list">
 <div class="fix" style="display: none; width: 500px;height: 200px;margin: 0 auto;background: #f9f9f9;color: black;position: fixed;top: 50px;left: 30%;">
     <a id="shows" href="javascript:(void 0);" style="float: right;margin: 5px;border: 1px solid #6fb3e0;">关闭</a>
     <div style="height: 20px;width: 100%;"></div>
     <form id="setad" action="/advert/setAdvert" method="post" enctype="multipart/form-data">
     <div style="margin: 0 auto;width: 300px;">
         <select name="positions" class="form-control">
-            <option v-for="po in positions">{{po.position}}</option>
+            <option v-for="po in poslists">{{po.position}}</option>
         </select>
         <span style="display: block;">
             图片:<input name="upload" style="margin: 0;" class="form-control" type="file"/>
@@ -121,19 +156,19 @@
         $(function () {
             $("#shows").click(function () {
                 $(".fix").css("display","none")
-
             })
             $("#but").click(function () {
-                var sid=$(".fix").data("sid");
-                var id=$("#uid").val(sid)
-                var position=$("#positions").val();
-                var img_Url=$("#img_Url").val();
-                var herf=$("#herf").val();
-                if (id!="" && position!="" && img_Url!="" && herf!=""){
-                        $("#setad").submit()
+                var sid = $(".fix").data("sid");
+                var id = $("#uid").val(sid)
+                var position = $("#positions").val();
+                var img_Url = $("#img_Url").val();
+                var herf = $("#herf").val();
+                if (id != "" && position != "" && img_Url != "" && herf != "") {
+                    $("#setad").submit()
                 }
             })
         })
+
     </script>
 </div>
 <!--添加广告样式-->
@@ -145,7 +180,7 @@
       <label class="label_name">所属分类</label>
       <span class="cont_style">
         <select class="form-control" id="form-field-select-1"  name="option">
-            <option v-for="pos in positions">{{pos.position}}</option>
+            <option v-for="pos in poslists">{{pos.position}}</option>
         </select>
       </span>
   </li>
@@ -185,7 +220,6 @@
 
 </div>
 </div>
-
 </body>
 </html>
 <script>
@@ -370,50 +404,50 @@ $(document).ready(function() {
 });
 </script>
 <script>
-jQuery(function($) {
-				var oTable1 = $('#sample-table').dataTable( {
-				"aaSorting": [[ 1, "desc" ]],//默认第几个排序
-		"bStateSave": true,//状态保存
-		"aoColumnDefs": [
-		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-		  {"orderable":false,"aTargets":[0,2,3,4,5,7,8,]}// 制定列不参与排序
-		] } );
-
-
-				$('table th input:checkbox').on('click' , function(){
-					var that = this;
-					$(this).closest('table').find('tr > td:first-child input:checkbox')
-					.each(function(){
-						this.checked = that.checked;
-						$(this).closest('tr').toggleClass('selected');
-					});
-
-				});
-
-
-				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-				function tooltip_placement(context, source) {
-					var $source = $(source);
-					var $parent = $source.closest('table')
-					var off1 = $parent.offset();
-					var w1 = $parent.width();
-
-					var off2 = $source.offset();
-					var w2 = $source.width();
-
-					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-					return 'left';
-				}
-			})
+// jQuery(function($) {
+		// 		var oTable1 = $('#sample-table').dataTable( {
+		// 		"aaSorting": [[ 1, "desc" ]],//默认第几个排序
+		// "bStateSave": true,//状态保存
+		// "aoColumnDefs": [
+		//   //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+		//   {"orderable":false,"aTargets":[0,2,3,4,5,7,8,]}// 制定列不参与排序
+		// ] } );
+        //
+        //
+		// 		$('table th input:checkbox').on('click' , function(){
+		// 			var that = this;
+		// 			$(this).closest('table').find('tr > td:first-child input:checkbox')
+		// 			.each(function(){
+		// 				this.checked = that.checked;
+		// 				$(this).closest('tr').toggleClass('selected');
+		// 			});
+        //
+		// 		});
+        //
+        //
+		// 		$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+		// 		function tooltip_placement(context, source) {
+		// 			var $source = $(source);
+		// 			var $parent = $source.closest('table')
+		// 			var off1 = $parent.offset();
+		// 			var w1 = $parent.width();
+        //
+		// 			var off2 = $source.offset();
+		// 			var w2 = $source.width();
+        //
+		// 			if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+		// 			return 'left';
+		// 		}
+		// 	})
 </script>
 <script type="text/javascript" src="../js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="../js/axios-0.18.0.js"></script>
 <script>
     new Vue({
-        el : ".position",
+        el : "#list",
         //声明数据
         data : {
-            positionList : []
+            poslists: []
         },
         methods : {
             getposition : function () {
@@ -423,12 +457,13 @@ jQuery(function($) {
                     //成功
                     .then(function (resp) {
                         console.log(resp.data)
-                        _this.positionList = resp.data;
+                        _this.poslists = resp.data;
                     })
                     .catch(function (resp) {
                         console.log("服务器繁忙")
                     })
             }
+
         },
         //vue创建时
         created : function () {
@@ -436,10 +471,10 @@ jQuery(function($) {
         }
     })
     new Vue({
-        el : "#position",
+        el : "#pos",
         //声明数据
         data : {
-            positions: []
+            poslist: []
         },
         methods : {
             getposition : function () {
@@ -449,7 +484,7 @@ jQuery(function($) {
                     //成功
                     .then(function (resp) {
                         console.log(resp.data)
-                        _this.positions = resp.data;
+                        _this.poslist = resp.data;
                     })
                     .catch(function (resp) {
                         console.log("服务器繁忙")
@@ -467,32 +502,36 @@ jQuery(function($) {
         el : "#Ads_list",
         //声明数据
         data : {
-            advertList : []
+            pageInfo : {}
         },
         methods : {
-            getAdvert : function () {
+            getAdvert : function (pageNum) {
                 var _this = this;
                 //异步请求
-                axios.get("/advert/getAllAdvert")
+                axios.get("/advert/getAllAdvert",{
+                    params :{
+                        pageNum : pageNum,
+                        pageSize : $("#sample-table_length select>option:selected").val()
+                    }
+                })
                     //成功
                     .then(function (resp) {
                         console.log(resp.data)
-                        _this.advertList = resp.data;
+                        _this.pageInfo = resp.data;
                     })
                     .catch(function (resp) {
                         console.log("服务器繁忙")
                     })
             },
             clickBtn : function  (sid){
-                $(".fix").css("display","block")
-                // var sid=$(this).parents(".td-manage").siblings(".Radvert").text()
                 console.log(sid)
                 $(".fix").data("sid",sid);
+                $(".fix").css("display","block")
             }
         },
         //vue创建时
         created : function () {
-            this.getAdvert();
+            this.getAdvert(1);
         }
     })
 </script>

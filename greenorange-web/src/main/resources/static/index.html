@@ -163,22 +163,11 @@
                     <li data-target="#myCarousel" data-slide-to="1"></li>
                     <li data-target="#myCarousel" data-slide-to="2"></li>
                 </ol>
-                <div class="carousel-inner">
-                    <div class="active item">
-                        <a href="http://baidu2.wypxj.com/">
-                            <img src="./img/banner1.jpg"/>
+                <div class="carousel-inner" id="ad-carousel">
+                    <div v-for="(ad, index) in advertList" :class="[index==0?'active':'', 'item']" >
+                        <a :href="ad.href">
+                            <img :src="ad.imgUrl"/>
                         </a>
-                    </div>
-                    <div class="item">
-                        <a href="http://baidu2.wypxj.com/">
-                            <img src="./img/banner2.jpg"/>
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a href="http://baidu2.wypxj.com/">
-                            <img src="./img/banner3.jpg"/>
-                        </a>
-
                     </div>
                 </div>
                 <a href="#myCarousel" data-slide="prev" class="carousel-control left">‹</a>
@@ -289,26 +278,17 @@
 <!--推荐-->
 <div class="show">
     <div class="py-container">
-        <ul class="yui3-g Recommend">
+        <ul class="yui3-g Recommend" id="b-Recommend">
             <li class="yui3-u-1-6  clock">
                 <div class="time">
                     <img src="./img/clock.png"/>
                     <h3>今日推荐</h3>
                 </div>
             </li>
-            <li class="yui3-u-5-24">
-                <a href="list.html" target="_blank">
-                    <img src="./img/today01.png"/>
+            <li v-for="adv in advertLists" class="yui3-u-5-24">
+                <a :href="adv.href" target="_blank">
+                    <img :src="'.'+adv.imgUrl"/>
                 </a>
-            </li>
-            <li class="yui3-u-5-24">
-                <img src="./img/today02.png"/>
-            </li>
-            <li class="yui3-u-5-24">
-                <img src="./img/today03.png"/>
-            </li>
-            <li class="yui3-u-5-24">
-                <img src="./img/today04.png"/>
             </li>
         </ul>
     </div>
@@ -1372,6 +1352,7 @@
 
 <script type="text/javascript" src="./js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="./js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="./js/lunbo-tuijian.js"></script>
 <script type="text/javascript" src="./js/all.js"></script>
 <script type="text/javascript" src="./js/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="./js/pages/index.js"></script>
