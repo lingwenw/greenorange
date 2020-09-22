@@ -11,7 +11,24 @@
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
-
+<!--    -->
+    <resultMap type="com.wpp.greenorange.domain.GoodsSku" id="goodsSkuMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="goodsId" column="goods_id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="skuEdition" column="sku_edition" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="stock" column="stock" jdbcType="INTEGER"/>
+        <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="showImg" column="show_img" jdbcType="VARCHAR"/>
+        <result property="saleCount" column="sale_count" jdbcType="INTEGER"/>
+        <result property="goodEvaluate" column="good_evaluate" jdbcType="INTEGER"/>
+        <result property="badEvaluate" column="bad_evaluate" jdbcType="INTEGER"/>
+        <result property="introduceData" column="introduce_data" jdbcType="VARCHAR"/>
+        <result property="params" column="params" jdbcType="VARCHAR"/>
+    </resultMap>
     <!--查询单个-->
     <select id="findById" resultMap="goodsFavouriteMap">
         select
@@ -19,6 +36,15 @@
         from greenorange.tb_goods_favourite
         where id = #{id}
     </select>
+
+    <!--查询单个-->
+    <select id="findBySkuId" resultMap="goodsFavouriteMap">
+        select
+          id, sku_id, user_id, status_id, deleted, create_time, update_time
+        from greenorange.tb_goods_favourite
+        where sku_id = #{skuId}
+    </select>
+
 
 
     <!--通过实体作为筛选条件查询-->
@@ -88,4 +114,11 @@
         delete from greenorange.tb_goods_favourite where id = #{id}
     </delete>
 
+    <!--查询单个-->
+    <select id="findsBySkuId" resultMap="goodsSkuMap">
+        select
+          id, goods_id, title, sku_edition, price, stock, deleted, create_time, update_time, show_img, sale_count, good_evaluate, bad_evaluate, params, introduce_data
+        from greenorange.tb_goods_sku
+        where id = #{id}
+    </select>
 </mapper>

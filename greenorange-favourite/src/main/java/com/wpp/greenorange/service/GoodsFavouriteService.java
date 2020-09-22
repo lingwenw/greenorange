@@ -1,6 +1,7 @@
 package com.wpp.greenorange.service;
 
 import com.wpp.greenorange.domain.GoodsFavourite;
+import com.wpp.greenorange.domain.GoodsSku;
 
 import java.util.List;
 
@@ -28,6 +29,19 @@ public interface GoodsFavouriteService {
      */
     GoodsFavourite findById(Integer id);
 
+    /**
+     * 通过skuId查询单条数据
+     * @param skuId
+     * @return
+     */
+    GoodsFavourite findBySkuId(Integer skuId);
+
+    /**
+     * 通过skuId查询单条数据
+     * @param id
+     * @return
+     */
+    GoodsSku findsBySkuId(Integer id);
     /**
      * 新增数据
      *

@@ -346,6 +346,30 @@
 				})
 			});
 		}
+		//点击修改时，进行判断修改
+		$(".XiuGai_1").click(function () {
+			//
+			$(".modal-title").text("修改地址");
+			$(".sui-form").attr("action","/address/update");
+			var id=$($(this).parent().parent().find("div").get(1)).attr("data-title");
+			var contact=$($(this).parent().parent().find("div").get(0)).text();
+			var address=$($(this).parent().parent().find("div").get(1)).text();
+			var address_s=address.split(" ");
+			var address_1=address_s[0].toString()+"/"+address_s[1].toString()+"/"+address_s[2].toString();
+			var address_2=address_s[3].toString();
+			var mobile=$($(this).parent().parent().find("div").get(2)).text();
+			$(".input_name").val(contact);
+			$(".placeholder").val(address_1);
+			$(".input-large").val(address_2);
+			$(".input-telephone").val(mobile);
+			$(".input-remarks").attr("name","id");
+			$(".input-remarks").val(id);
+			$(".control-development").hide();
+			//
+			$.ajax({ url:"/address/getConditions", success: function(data){
+					inits(data);
+				}});
+		});
 	})
 
 </script>

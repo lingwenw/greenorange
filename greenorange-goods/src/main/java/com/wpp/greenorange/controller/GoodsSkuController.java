@@ -3,6 +3,7 @@ package com.wpp.greenorange.controller;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.domain.select.GoodsSkuSelect;
+import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.service.GoodsSkuService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,30 +29,6 @@ public class GoodsSkuController {
     @Resource
     private GoodsSkuService goodsSkuService;
 
-    @PutMapping("/sku/updateSku")
-    public boolean updateSku(@RequestBody GoodsSku sku) throws IOException {
-        return goodsSkuService.update(sku);
-    }
-
-    @GetMapping("/sku/getSkuInfo")
-    public Map<String, Object> getSkuInfo(Integer id, Integer goodsId) throws IOException {
-        return goodsSkuService.getSkuInfo(id, goodsId);
-    }
-
-    @PutMapping("/sku/updatePriceStock")
-    public boolean updatePriceStock(@RequestBody GoodsSku sku) throws IOException {
-        return goodsSkuService.updatePriceStock(sku);
-    }
-
-    @RequestMapping("/sku/getPriceAndStock")
-    public Map<String, Double> getPriceAndStock(Integer skuId){
-        return goodsSkuService.getPriceAndStock(skuId);
-    }
-
-    @DeleteMapping("/sku/deleteSku")
-    public boolean deleteSku(Integer id, Integer goodsId) throws IOException {
-        return goodsSkuService.deleteById(id, goodsId);
-    }
 
     @PutMapping("/sku/addSku")
     public boolean addSku(@RequestBody GoodsSku sku) throws IOException {
@@ -86,7 +63,7 @@ public class GoodsSkuController {
      */
     @RequestMapping("/search")
     public ModelAndView search(String input, String[] brand, String category, Integer pageNum,
-                               String sort, String order, String[] params, String price, HttpServletRequest req) throws IOException {
+                               String sort, String order,String[] params, String price, HttpServletRequest req) throws IOException {
         if (pageNum==null||pageNum<1){
             pageNum = 1;
         }
@@ -157,6 +134,13 @@ public class GoodsSkuController {
         return null;
     }
 
-
-
+    /**
+     * 根据id查询对应数据
+     * @param id
+     * @return
+     */
+    @RequestMapping("/GoodsSkuFindById")
+    public GoodsSku findById(Integer id){
+        return goodsSkuService.findById(id);
+    }
 }

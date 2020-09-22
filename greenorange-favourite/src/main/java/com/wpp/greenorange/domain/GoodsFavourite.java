@@ -2,6 +2,7 @@ package com.wpp.greenorange.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * (GoodsFavourite)实体类
@@ -39,7 +40,18 @@ public class GoodsFavourite implements Serializable {
      * 最近一次修改时间
      */
     private Date updateTime;
+    /**
+     * 对象
+     */
+    private GoodsSku goodsSku;
 
+    public GoodsSku getGoodsSku() {
+        return goodsSku;
+    }
+
+    public void setGoodsSku(GoodsSku goodsSku) {
+        this.goodsSku = goodsSku;
+    }
 
     public Integer getId() {
         return id;
@@ -97,4 +109,18 @@ public class GoodsFavourite implements Serializable {
         this.updateTime = updateTime;
     }
 
+
+    @Override
+    public String toString() {
+        return "GoodsFavourite{" +
+                "id=" + id +
+                ", skuId=" + skuId +
+                ", userId=" + userId +
+                ", statusId=" + statusId +
+                ", deleted=" + deleted +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", goodsSku=" + goodsSku +
+                '}';
+    }
 }
