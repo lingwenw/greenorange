@@ -1,5 +1,7 @@
 package com.wpp.greenorange.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Goods;
 import com.wpp.greenorange.domain.GoodsSku;
@@ -10,6 +12,8 @@ import com.wpp.greenorange.domain.User;
 import com.wpp.greenorange.service.GoodsService;
 import com.wpp.greenorange.service.GoodsSkuService;
 import com.wpp.greenorange.service.OrderService;
+import com.wpp.greenorange.websocket.ServerSendType;
+import com.wpp.greenorange.websocket.WebSocketServer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
@@ -78,11 +82,19 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/addOrder")
-    public @ResponseBody Order addOrder(@RequestBody Map orderData, HttpSession session, HttpServletRequest req) throws UnsupportedEncodingException {
+    public @ResponseBody Order addOrder(@RequestBody Map orderData, HttpSession session, HttpServletRequest req) throws IOException {
         User user = (User) session.getAttribute("loginUser");
 //        User user = new User();
 //        user.setId(1);
         Order order = orderService.insert(orderData, user);
+        //向客户端发消息
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, Object> map = new HashMap<>(4);
+        map.put("type", ServerSendType.ORDER_COUNT);
+
+        WebSocketServer.massInfo(mapper.writeValueAsString(map));
+
+
         Order order1 = new Order();
         order1.setId(order.getId());
         order1.setPrice(order.getPrice());

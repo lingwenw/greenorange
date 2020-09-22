@@ -96,9 +96,6 @@
             <if test="paidPrice != null">
                 paid_price = #{paidPrice},
             </if>
-            <if test="orderId != null">
-                order_id = #{orderId},
-            </if>
             <if test="statusId != null">
                 status_id = #{statusId},
             </if>
@@ -109,7 +106,7 @@
                 deleted = #{deleted},
             </if>
         </set>
-        where id = #{id}
+        where order_id = #{orderId}
     </update>
 
     <!--通过主键删除-->
