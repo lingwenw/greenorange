@@ -15,6 +15,13 @@ import java.util.List;
 public interface OrderGoodsDao {
 
     /**
+     * 根据订单号查出订单商品
+     * @param orderId
+     * @return
+     */
+    List<OrderGoods> findByOrderId(Integer orderId);
+
+    /**
      * 通过ID查询单条数据
      *
      * @param id 主键

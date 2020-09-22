@@ -73,4 +73,43 @@ public class UserServiceImpl implements UserService {
     public Boolean deleteById(Integer id) {
         return this.userDao.deleteById(id) > 0;
     }
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public User findByemail(String Email,String password) {
+        return userDao.findByemail(Email,password);
+    }
+
+    @Override
+    public User findByphone(String Phone,String password) {
+        return userDao.findByphone(Phone,password);
+    }
+
+    @Override
+    public User findByname(String Name,String password) {
+        return userDao.findByname(Name,password);
+    }
+
+    @Override
+    public Boolean insertUser(User user) {
+        return userDao.insertUser(user)>0;
+    }
+
+    @Override
+    public boolean registerFindByemail(String email) {
+        return userDao.registerFindByemail(email)==1;
+    }
+
+    @Override
+    public boolean registerFindByphone(String phone) {
+        return userDao.registerFindByphone(phone)==1;
+    }
 }

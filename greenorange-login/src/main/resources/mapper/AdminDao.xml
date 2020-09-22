@@ -12,6 +12,17 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <resultMap type="com.wpp.greenorange.domain.User" id="userMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="birthday" column="birthday" jdbcType="TIMESTAMP"/>
+        <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
     <!--查询单个-->
     <select id="findById" resultMap="adminMap">
         select
@@ -88,4 +99,28 @@
         delete from greenorange.tb_admin where id = #{id}
     </delete>
 
+    <!--admin登录验证-->
+    <select id="AdminLogin" resultMap="adminMap">
+        select * from tb_admin where accountNumber=#{accountNumber} and `password`=#{password}
+    </select>
+
+    <!--分页-->
+    <select id="findUserByInfo" resultMap="userMap">
+        select * from tb_user 
+    </select>
+
+    <!--解封-->
+    <update id="startUser" parameterType="int">
+        update tb_user set deleted=0 where id=#{id}
+    </update>
+
+    <!--封号-->
+    <update id="StopUser" parameterType="int">
+        update tb_user set deleted=2 where id=#{id}
+    </update>
+
+    <!--永封-->
+    <delete id="foreverStop" parameterType="int">
+        delete from tb_user where id=#{id}
+    </delete>
 </mapper>

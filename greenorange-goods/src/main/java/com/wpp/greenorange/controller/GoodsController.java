@@ -1,7 +1,10 @@
 package com.wpp.greenorange.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Goods;
+import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.domain.select.GoodsSelect;
 import com.wpp.greenorange.service.GoodsService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.io.*;
+import java.util.*;
 
 /**
  * (Goods)表控制层
@@ -27,8 +32,7 @@ public class GoodsController {
     private GoodsService goodsService;
 
     @RequestMapping("/getAllLimit")
-    public PageInfo<Goods> getAllLimit(@RequestBody GoodsSelect goodsSelect){
-        System.out.println(goodsSelect);
+    public PageInfo<Goods> getAllLimit(GoodsSelect goodsSelect){
         return goodsService.findAllLimit(goodsSelect);
     }
 
@@ -42,6 +46,8 @@ public class GoodsController {
     public Goods getOne(Integer id) {
         return this.goodsService.findById(id);
     }
+
+
 
     /**
      * 将点击的新数据添加到数据库
@@ -76,15 +82,4 @@ public class GoodsController {
         return update;
     }
 
-    /**
-     * 根据购物车每个商品的id删除数据
-     *
-     * @param id 商品对象的主键id
-     * @return
-     */
-    @RequestMapping("/deleteByIdGoods")
-    public boolean deleteByIdGoods(Integer id){
-        Boolean aBoolean = this.goodsService.deleteById(id);
-        return aBoolean;
-    };
 }

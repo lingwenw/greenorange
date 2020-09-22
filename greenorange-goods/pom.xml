@@ -12,6 +12,7 @@
     <artifactId>greenorange-goods</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.wpp.greenorange</groupId>
             <artifactId>greenorange-category</artifactId>

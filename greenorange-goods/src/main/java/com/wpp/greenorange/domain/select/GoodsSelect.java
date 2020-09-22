@@ -1,7 +1,10 @@
 package com.wpp.greenorange.domain.select;
 
 import com.wpp.greenorange.domain.Goods;
-
+/**
+ * goods的辅助查询类
+ * @author 吴鹏鹏ppp
+ */
 public class GoodsSelect extends Goods {
     private Integer pageSize;
     private Integer pageNum;
