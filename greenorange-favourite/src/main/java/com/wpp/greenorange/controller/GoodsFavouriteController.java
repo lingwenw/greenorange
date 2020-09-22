@@ -4,6 +4,7 @@ import com.wpp.greenorange.domain.GoodsFavourite;
 import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.service.GoodsFavouriteService;
 import com.wpp.greenorange.service.impl.GoodsSkuServiceImpl;
+import com.wpp.greenorange.domain.User;
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import javax.annotation.Resource;
 import javax.security.auth.message.callback.SecretKeyCallback;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -49,7 +51,9 @@ public class GoodsFavouriteController {
      * @return
      */
     @RequestMapping("/findAllByCondition")
-    public List<GoodsFavourite> findAllByCondition(GoodsFavourite goodsFavourite){
+    public List<GoodsFavourite> findAllByCondition(GoodsFavourite goodsFavourite,HttpSession session){
+        User user = (User) session.getAttribute("loginUser");
+        goodsFavourite.setUserId(user.getId());
         List<GoodsFavourite> allByCondition = this.goodsFavouriteService.findAllByCondition(goodsFavourite);
         for (int i = 0; i <allByCondition.size() ; i++) {
             GoodsSku goodsSku = findsBySkuId(allByCondition.get(i).getSkuId());
@@ -116,5 +120,16 @@ public class GoodsFavouriteController {
     public GoodsSku findsBySkuId(Integer id){
         GoodsSku goodsSku = this.goodsFavouriteService.findsBySkuId(id);
         return goodsSku;
+    }
+
+    @RequestMapping("/insert")
+    public Boolean insert(Integer skuId,HttpSession session){
+        User user = (User) session.getAttribute("loginUser");
+        GoodsFavourite favourite = new GoodsFavourite();
+        favourite.setSkuId(skuId);
+        favourite.setUserId(user.getId());
+//        favourite.setUserId(1);
+        favourite.setStatusId(1);
+        return goodsFavouriteService.insert(favourite);
     }
 }
