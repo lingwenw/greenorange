@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="./css/all.css" />
     <link rel="stylesheet" type="text/css" href="./css/pages-login.css" />
 	<script src="js/jquery.js"></script>
-	<script src="assets/layer/layer.js" type="text/javascript"></script>
+	<script src="admin/assets/layer/layer.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -65,12 +65,12 @@
 											$(".sui-btn").click(function () {
 												$.post("/user/findByIDemailOrUserNameOrphone",$("#myform").serialize(),function (data) {
 													if (data==false){
-														layer.alert('密码错误！',{
+														layer.alert('密码错误或账号被封！',{
 															title: '提示框',
-															icon:1,
+															icon:5
 														});
 													}else if (data==true) {
-														location.href="home.html"
+														location.href="index.html";
 													}
 												})
 											})

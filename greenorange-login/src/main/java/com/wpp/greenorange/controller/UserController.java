@@ -41,6 +41,13 @@ public class UserController {
         return this.userService.findById(id);
     }
 
+    @RequestMapping("/exit")
+    public boolean exit(HttpSession session){
+        session.removeAttribute("loginUser");
+        return true;
+    }
+
+
     @RequestMapping("/findByemail")
     public boolean findByemail(String email){
         boolean b = userService.registerFindByemail(email);

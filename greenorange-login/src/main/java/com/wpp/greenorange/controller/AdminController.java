@@ -68,7 +68,7 @@ public class AdminController {
     @RequestMapping("/getLoginName")
     public Admin getLoginName(HttpSession session){
         Admin admin = (Admin) session.getAttribute("loginAdmin");
-        System.out.println(admin);
+        admin.setPassword("*********");
         return admin;
 
     }

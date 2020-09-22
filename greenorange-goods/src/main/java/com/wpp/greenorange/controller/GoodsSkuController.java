@@ -29,6 +29,10 @@ public class GoodsSkuController {
     @Resource
     private GoodsSkuService goodsSkuService;
 
+    @RequestMapping("/sku/getPriceAndStock")
+    public Map getPriceAndStock(Integer skuId){
+        return goodsSkuService.getPriceAndStock(skuId);
+    }
 
     @PutMapping("/sku/addSku")
     public boolean addSku(@RequestBody GoodsSku sku) throws IOException {

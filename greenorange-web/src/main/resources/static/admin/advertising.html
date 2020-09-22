@@ -319,130 +319,15 @@ function addClick(){
 }
 
 </script>
-<script type="text/javascript">
-function updateProgress(file) {
-	$('.progress-box .progress-bar > div').css('width', parseInt(file.percentUploaded) + '%');
-	$('.progress-box .progress-num > b').html(SWFUpload.speed.formatPercent(file.percentUploaded));
-	if(parseInt(file.percentUploaded) == 100) {
-		// 如果上传完成了
-		$('.progress-box').hide();
-	}
-}
-
-function initProgress() {
-	$('.progress-box').show();
-	$('.progress-box .progress-bar > div').css('width', '0%');
-	$('.progress-box .progress-num > b').html('0%');
-}
-
-function successAction(fileInfo) {
-	var up_path = fileInfo.path;
-	var up_width = fileInfo.width;
-	var up_height = fileInfo.height;
-	var _up_width,_up_height;
-	if(up_width > 120) {
-		_up_width = 120;
-		_up_height = _up_width*up_height/up_width;
-	}
-	$(".logobox .resizebox").css({width: _up_width, height: _up_height});
-	$(".logobox .resizebox > img").attr('src', up_path);
-	$(".logobox .resizebox > img").attr('width', _up_width);
-	$(".logobox .resizebox > img").attr('height', _up_height);
-}
-
-var swfImageUpload;
-$(document).ready(function() {
-	var settings = {
-		flash_url : "Widget/swfupload/swfupload.swf",
-		flash9_url : "Widget/swfupload/swfupload_fp9.swf",
-		upload_url: "upload.php",// 接受上传的地址
-		file_size_limit : "5MB",// 文件大小限制
-		file_types : "*.jpg;*.gif;*.png;*.jpeg;",// 限制文件类型
-		file_types_description : "图片",// 说明，自己定义
-		file_upload_limit : 100,
-		file_queue_limit : 0,
-		custom_settings : {},
-		debug: false,
-		// Button settings
-		button_image_url: "Widget/swfupload/upload-btn.png",
-		button_width: "95",
-		button_height: "30 ",
-		button_placeholder_id: 'uploadBtnHolder',
-		button_window_mode : SWFUpload.WINDOW_MODE.TRANSPARENT,
-		button_cursor : SWFUpload.CURSOR.HAND,
-		button_action: SWFUpload.BUTTON_ACTION.SELECT_FILE,
-		
-		moving_average_history_size: 40,
-		
-		// The event handler functions are defined in handlers.js
-		swfupload_preload_handler : preLoad,
-		swfupload_load_failed_handler : loadFailed,
-		file_queued_handler : fileQueued,
-		file_dialog_complete_handler: fileDialogComplete,
-		upload_start_handler : function (file) {
-			initProgress();
-			updateProgress(file);
-		},
-		upload_progress_handler : function(file, bytesComplete, bytesTotal) {
-			updateProgress(file);
-		},
-		upload_success_handler : function(file, data, response) {
-			// 上传成功后处理函数
-			var fileInfo = eval("(" + data + ")");
-			successAction(fileInfo);
-		},
-		upload_error_handler : function(file, errorCode, message) {
-			alert('上传发生了错误！');
-		},
-		file_queue_error_handler : function(file, errorCode, message) {
-			if(errorCode == -110) {
-				alert('您选择的文件太大了。');	
-			}
-		}
-	};
-	swfImageUpload = new SWFUpload(settings);
-});
-</script>
-<script>
-// jQuery(function($) {
-		// 		var oTable1 = $('#sample-table').dataTable( {
-		// 		"aaSorting": [[ 1, "desc" ]],//默认第几个排序
-		// "bStateSave": true,//状态保存
-		// "aoColumnDefs": [
-		//   //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-		//   {"orderable":false,"aTargets":[0,2,3,4,5,7,8,]}// 制定列不参与排序
-		// ] } );
-        //
-        //
-		// 		$('table th input:checkbox').on('click' , function(){
-		// 			var that = this;
-		// 			$(this).closest('table').find('tr > td:first-child input:checkbox')
-		// 			.each(function(){
-		// 				this.checked = that.checked;
-		// 				$(this).closest('tr').toggleClass('selected');
-		// 			});
-        //
-		// 		});
-        //
-        //
-		// 		$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-		// 		function tooltip_placement(context, source) {
-		// 			var $source = $(source);
-		// 			var $parent = $source.closest('table')
-		// 			var off1 = $parent.offset();
-		// 			var w1 = $parent.width();
-        //
-		// 			var off2 = $source.offset();
-		// 			var w2 = $source.width();
-        //
-		// 			if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-		// 			return 'left';
-		// 		}
-		// 	})
-</script>
 <script type="text/javascript" src="../js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="../js/axios-0.18.0.js"></script>
 <script>
+    $(function () {
+        $("#sample-table_length select>option").click(function () {
+            advertVue.getAdvert(1);
+        })
+    })
+
     new Vue({
         el : "#list",
         //声明数据
@@ -497,8 +382,9 @@ $(document).ready(function() {
             this.getposition();
         }
     })
+
     // 查询所有
-    new Vue({
+    var advertVue = new Vue({
         el : "#Ads_list",
         //声明数据
         data : {

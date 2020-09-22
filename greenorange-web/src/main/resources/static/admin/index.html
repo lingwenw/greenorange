@@ -493,9 +493,18 @@ $('.change_Password').on('click', function(){
 	})
 
 	var socket;
+	var adminId = null;
 	//从session中拿应该
-	var adminId = 1;
-	openSocket();
+
+	$.get("/admin/getLoginName",function (data) {
+		$.errorAjax(data,function () {
+			// console.log(data)
+			adminId = data.id;
+			openSocket();
+		})
+	})
+
+
 	function openSocket() {
 		if(typeof(WebSocket) == "undefined") {
 			layer.alert("您的浏览器不支持WebSocket,可能无法与服务端实时通信!",{icon:5})
@@ -514,6 +523,7 @@ $('.change_Password').on('click', function(){
 			//打开事件
 			socket.onopen = function() {
 				console.log("websocket已打开");
+				//socket.send("这是来自客户端的消息" + location.href + new Date());
 			};
 			//获得消息事件
 			socket.onmessage = function(msg) {

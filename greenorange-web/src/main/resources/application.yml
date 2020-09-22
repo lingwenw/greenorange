@@ -2,8 +2,13 @@ spring:
   ##elasticsearch配置
   elasticsearch:
     rest:
-      uris: http://localhost:9200
-      username: elasticsearch
+#      uris: http://localhost:9200
+#      username: elasticsearch
+#      uris: http://121.89.197.100:9200
+#      username: wpp-application
+      uris: http://es-cn-st21u8rrg0002244h.public.elasticsearch.aliyuncs.com:9200
+      username: elastic
+      password: 1478963025Wu
   #数据库配置
   datasource:
     username: root

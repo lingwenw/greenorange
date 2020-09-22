@@ -119,6 +119,7 @@
     <!--通过邮箱查询-->
     <select id="findByemail" resultMap="userMap">
         select * from tb_user where email=#{Email} and password=#{password}
+        and deleted = 0
     </select>
     <!--通过手机查询-->
     <select id="findByphone" resultMap="userMap">

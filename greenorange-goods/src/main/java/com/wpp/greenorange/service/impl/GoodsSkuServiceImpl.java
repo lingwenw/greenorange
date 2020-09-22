@@ -107,6 +107,7 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         if ( flag && !MyUtil.isEmptyString(input) ){
             splits = splitInput(input);
         }
+        System.out.println(splits);
         //如果用户选择了分类，就将分类添加到分词集合中
         if (!MyUtil.isEmptyString(category)){
             splits.add(category);

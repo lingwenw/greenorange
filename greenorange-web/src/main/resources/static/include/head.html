@@ -6,7 +6,7 @@
         <div class="top">
             <div class="py-container">
                 <div class="shortcut">
-                    <ul class="fl">
+                    <ul class="fl" id="username-box">
                         <li class="f-item">青橙欢迎您！</li>
                         <li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
                     </ul>
@@ -58,20 +58,30 @@
 <script>
     $(function () {
         $.post("/user/getUserLoginName",function (data) {
-            var fl= $(".fl")
+            var fl= $("#username-box")
             if (data==null||data==""){
                 fl.empty()
                 $("<li class='f-item'>青橙欢迎您!</li>").appendTo(fl)
                 $("<li class='f-item'>请<a href='login.html' target='_blank'>登录</a>　<span><a href='register.html' target='_blank'>免费注册</a></span></li>").appendTo(fl)
             }else {
                 fl.empty()
-                $("<li class='f-item'>"+data.name+",青橙欢迎您!</li>").appendTo(fl)
+                $("<li class='f-item'>"+data.name+",青橙欢迎您!<a id='exit' onclick='exit()' href='javascript:void(0)'>退出登录</a></li>").appendTo(fl)
             }
         })
     })
 </script>
 <script>
+    function exit(){
+        $.get("/user/exit",function (data) {
+            if (!data.error){
+                location.reload();
+            } else {
+                layer.alert(data.message,{icon:5})
+            }
+        })
+    }
     $(function () {
+
         let url = decodeURI(location.href);
         //匹配正则的
         let temp = null;
@@ -110,7 +120,11 @@
                 layer.alert("您的文本框没有内容!",{icon:5})
                 return;
             }
-            location.href = url+"&input="+keyWord;
+            if (url.indexOf("search?")==-1){
+                location.href = "http://localhost:8080/search?&input="+keyWord;
+            } else{
+                location.href = url+"&input="+keyWord;
+            }
         })
 
         //按回车键进行搜索
