@@ -188,12 +188,14 @@ $(function () {
             goodsSkuId.push(data[i].goodsSku.id);
             var showimg=data[i].goodsSku.showImg.split(",");
             var showimg_1=showimg[0].split("[");
+            //
+            //
             var param=data[i].goodsSku.params.split(";");
             var param_1=param[0].split(",");
             tbody.append("<li><div class='sendGoods'>"+
                 "<ul class='yui3-g'>"+
                 "<li class='yui3-u-1-6'>"+
-                "<span><img src='"+showimg_1[0].toString()+"'/></span>"+
+                "<span><img src=../img/goods_img/"+showimg_1[1].toString()+"></span>"+
                 "</li>"+
                 "<li class='yui3-u-7-12'>"+
                 "<div class='desc'>"+data[i].goodsSku.title+"</div>"+
