@@ -2,11 +2,13 @@ package com.wpp.greenorange.service.impl;
 
 import com.wpp.greenorange.dao.GoodsFavouriteDao;
 import com.wpp.greenorange.domain.GoodsFavourite;
+import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.service.GoodsFavouriteService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (GoodsFavourite)表服务实现类
@@ -27,7 +29,8 @@ public class GoodsFavouriteServiceImpl implements GoodsFavouriteService {
      */
     @Override
     public List<GoodsFavourite> findAllByCondition(GoodsFavourite goodsFavourite) {
-        return this.goodsFavouriteDao.findAllByCondition(goodsFavourite);
+        List<GoodsFavourite> allByCondition = this.goodsFavouriteDao.findAllByCondition(goodsFavourite);
+        return allByCondition;
     }
 
     /**
@@ -39,6 +42,28 @@ public class GoodsFavouriteServiceImpl implements GoodsFavouriteService {
     @Override
     public GoodsFavourite findById(Integer id) {
         return this.goodsFavouriteDao.findById(id);
+    }
+
+    /**
+     * 通过skuId查询单条数据
+     *
+     * @param skuId
+     * @return
+     */
+    @Override
+    public GoodsFavourite findBySkuId(Integer skuId) {
+        return goodsFavouriteDao.findBySkuId(skuId);
+    }
+
+    /**
+     * 通过skuId查询单条数据
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public GoodsSku findsBySkuId(Integer id) {
+        return this.goodsFavouriteDao.findsBySkuId(id);
     }
 
     /**

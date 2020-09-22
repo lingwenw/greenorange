@@ -109,4 +109,13 @@ public class GoodsSkuController {
         return null;
     }
 
+    /**
+     * 根据id查询对应数据
+     * @param id
+     * @return
+     */
+    @RequestMapping("/GoodsSkuFindById")
+    public GoodsSku findById(Integer id){
+        return goodsSkuService.findById(id);
+    }
 }

@@ -1,6 +1,7 @@
 package com.wpp.greenorange.dao;
 
 import com.wpp.greenorange.domain.GoodsFavourite;
+import com.wpp.greenorange.domain.GoodsSku;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -22,7 +23,19 @@ public interface GoodsFavouriteDao {
      */
     GoodsFavourite findById(Integer id);
 
+    /**
+     * 通过skuId查询单条数据
+     * @param skuId
+     * @return
+     */
+    GoodsFavourite findBySkuId(Integer skuId);
 
+    /**
+     * 通过skuId查询单条数据
+     * @param id
+     * @return
+     */
+    GoodsSku findsBySkuId(Integer id);
     /**
      * 通过实体作为筛选条件查询
      *
