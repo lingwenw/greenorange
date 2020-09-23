@@ -82,10 +82,8 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/addOrder")
-    public @ResponseBody Order addOrder(@RequestBody Map orderData, HttpSession session, HttpServletRequest req) throws IOException {
+    public @ResponseBody Order addOrder(@RequestBody Map orderData, HttpSession session) throws IOException {
         User user = (User) session.getAttribute("loginUser");
-//        User user = new User();
-//        user.setId(1);
         Order order = orderService.insert(orderData, user);
         //向客户端发消息
         ObjectMapper mapper = new ObjectMapper();
@@ -93,7 +91,6 @@ public class OrderController {
         map.put("type", ServerSendType.ORDER_COUNT);
 
         WebSocketServer.massInfo(mapper.writeValueAsString(map));
-
 
         Order order1 = new Order();
         order1.setId(order.getId());
