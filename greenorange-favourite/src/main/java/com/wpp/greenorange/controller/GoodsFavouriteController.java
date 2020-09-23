@@ -61,7 +61,6 @@ public class GoodsFavouriteController {
             GoodsSku goodsSku = findsBySkuId(allByCondition.get(i).getSkuId());
             allByCondition.get(i).setGoodsSku(goodsSku);
         }
-//        System.out.println(allByCondition);
         return allByCondition;
     }
     /**
