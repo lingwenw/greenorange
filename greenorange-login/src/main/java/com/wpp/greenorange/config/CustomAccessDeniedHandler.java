@@ -21,7 +21,6 @@ public class CustomAccessDeniedHandler extends AccessDeniedHandlerImpl {
 
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-        System.out.println("403");
         String ajaxHeader = httpServletRequest.getHeader("X-Requested-With");
         String XMLHttpRequest = "XMLHttpRequest";
         if (XMLHttpRequest.equals(ajaxHeader)){

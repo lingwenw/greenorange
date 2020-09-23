@@ -12,6 +12,7 @@
         <module>greenorange-order</module>
         <module>greenorange-address</module>
         <module>greenorange-web</module>
+        <module>greenorange-power</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

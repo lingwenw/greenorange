@@ -35,7 +35,7 @@
     </select>
 
     <!--根据账号查询用户-->
-    <select id="findUserByAccont" resultMap="adminMap">
+    <select id="findUserByAccount" resultMap="adminMap">
         select
           id, accountNumber, password, name, deleted, create_time, update_time
         from greenorange.tb_admin

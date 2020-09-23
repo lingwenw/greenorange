@@ -9,13 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>greenorange-login</artifactId>
+    <artifactId>greenorange-power</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.wpp.greenorange</groupId>
-            <artifactId>greenorange-power</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 </project>

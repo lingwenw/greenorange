@@ -92,8 +92,8 @@ public interface AdminDao {
 
     /**
      * 根据账号查询用户
-     * @param accout
-     * @return
+     * @param account
+     * @account
      */
-    Admin findUserByAccont(String accout);
+    Admin findUserByAccount(String account);
 }

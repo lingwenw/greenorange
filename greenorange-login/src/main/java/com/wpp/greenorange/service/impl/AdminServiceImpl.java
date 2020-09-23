@@ -34,7 +34,8 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 从数据库中查出用户
-        Admin admin = adminDao.findUserByAccont(username);
+        System.out.println(username);
+        Admin admin = adminDao.findUserByAccount(username);
         admin.setUsername(username);
         //从数据库中查出权限列表
         List<GrantedAuthority> authorities = new ArrayList<>();
