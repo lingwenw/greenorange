@@ -13,7 +13,6 @@ $(function () {
     });
     $(".payType li").click(function () {
         $(this).toggleClass("selected").siblings().removeClass("selected");
-
     });
     //地址获取
     function GetQueryString(name) {
