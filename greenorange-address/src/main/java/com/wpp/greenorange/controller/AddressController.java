@@ -33,10 +33,13 @@ public class AddressController {
      * @return 信息
      */
     @RequestMapping("/getConditions")
-    public List<Address> getConditions(){
-        List<Address> allByCondition = this.addressService.findAllByCondition(null);
+    public List<Address> getConditions(String userId){
+        System.out.println(userId);
+        Address address=new Address();
+        address.setUserId(Integer.parseInt(userId));
+        List<Address> allByCondition = this.addressService.findAllByCondition(address);
 //        System.out.println(allByCondition);
-        //用户id
+
         return allByCondition;
     };
 
@@ -51,9 +54,10 @@ public class AddressController {
      */
     @ResponseBody
     @RequestMapping("/SetAddress")
-    public Boolean SetAddress(String contact,String address_1,String mobile,String notes) {
+    public Boolean SetAddress(String userId,String contact,String address_1,String mobile,String notes) {
 //        以下是页面传入拿值操作
         Address address=new Address();
+        address.setUserId(Integer.parseInt(userId));
         address.setContact(contact);
         address.setAddress(address_1);
         address.setMobile(mobile);
@@ -72,8 +76,7 @@ public class AddressController {
         address.setAddress(address_s);
 //
         Boolean insert = this.addressService.insert(address);
-
-            return insert;
+        return insert;
     }
 
     /**
@@ -122,7 +125,6 @@ public class AddressController {
     public Boolean deleteById(Integer id){
 //        System.out.println(id);
         Boolean aBoolean = this.addressService.deleteById(id);
-
         return aBoolean;
     };
 
@@ -135,7 +137,6 @@ public class AddressController {
     @RequestMapping("/findByuUserId")
     public Integer findByuUserId(String name){
         Integer byuUserId = this.addressService.findByuUserId(name);
-
         return byuUserId;
     };
 }

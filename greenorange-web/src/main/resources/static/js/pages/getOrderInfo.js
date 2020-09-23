@@ -13,7 +13,6 @@ $(function () {
     });
     $(".payType li").click(function () {
         $(this).toggleClass("selected").siblings().removeClass("selected");
-
     });
     //地址获取
     function GetQueryString(name) {
@@ -24,6 +23,7 @@ $(function () {
     // 调用方法
     var ids=GetQueryString("ids");
     var nums=GetQueryString("nums");
+    var userIds;
     var cartIds;
     var cartNums;
     var addressId;
@@ -31,16 +31,78 @@ $(function () {
     var orderData={};
     //页面加载时，查询数据添加到页面
     $(document).ready(function(){
-        $.ajax({ url:"/address/getConditions", success: function(data){
-                inits(data);
-            }});
         //商品订单
         cartIds=ids.split(":");
         cartNums=nums.split(":");
         $.ajax({ url:"/goodsFavourite/findAllByConditions",type: "post",data:{"ids":ids,"nums":nums}, success: function(data){
                 $(".send-detail").empty();
+                userIds=data[0].userId;
                 exhibit(data);
             }});
+        //根据用户id从数据库中获取商品订单
+        function exhibit(data) {
+            var tbody=$(".send-detail");
+            //用户名
+            userIds=data[0].userId;
+            //地址
+            $.ajax({ url:"/address/getConditions",data:{"userId":userIds}, success: function(data){
+                    inits(data);
+                }});
+            //
+            $.ajax({ url:"/user/getOne",type: "post",data:{"id":data[0].userId}, success: function(date){
+                    $("#userId").empty();
+                    $("#userId").append("<li class='f-item'>"+date.name+"&nbsp;青橙欢迎您!</li>")
+                }});
+            for (var i = 0; i <data.length ; i++) {
+                goodsSkuId.push(data[i].goodsSku.id);
+                var showimg=data[i].goodsSku.showImg.split(",");
+                var showimg_1=showimg[0].split("[");
+                //
+                //
+                var param=data[i].goodsSku.params.split(";");
+                var param_1=param[0].split(",");
+                tbody.append("<li><div class='sendGoods'>"+
+                    "<ul class='yui3-g'>"+
+                    "<li class='yui3-u-1-6'>"+
+                    "<span><img src=../img/goods_img/"+showimg_1[1].toString()+"></span>"+
+                    "</li>"+
+                    "<li class='yui3-u-7-12'>"+
+                    "<div class='desc'>"+data[i].goodsSku.title+"</div>"+
+                    "<div class='seven'>7天无理由退货</div></li>"+
+                    "<li class='yui3-u-1-12'>"+
+                    "<div class='price' data-number='"+data[i].goodsSku.price+"'>￥"+data[i].goodsSku.price+".00</div></li>"+
+                    "<li class='yui3-u-1-12'>"+
+                    "<div class='num'>X1</div></li>"+
+                    "<li class='yui3-u-1-12'>"+
+                    "<div class='exit'>有货</div>"+
+                    "</li></ul></div></li>");
+                var num=$(tbody).find(".price");
+                nums=nums+parseFloat(num.attr("data-number"));
+            };
+            //金钱
+            var nums=$(".num");
+            var price=$(".price");
+            var shu=0;
+            var money=0;
+            for (var i = 0; i <nums.length ; i++) {
+                $(nums.get(i)).text("×"+cartNums[i]);
+                shu+=parseInt(cartNums[i]);
+                money+=parseInt(cartNums[i])*parseInt($(price.get(i)).attr("data-number"));
+            }
+            $(".list .number").text(shu);
+            $(".list .allprice").text("￥"+money);
+            $(".trade .price").text("￥"+money);
+            // alert(cartNums+":"+goodsSkuId);
+            //传值cartNums数量集合，goodsSkuId集合
+            orderData.skus = [];
+            for (var i = 0; i <goodsSkuId.length ; i++) {
+                var temp = {
+                    id:parseInt(goodsSkuId[i]),
+                    count:parseInt(cartNums[i])
+                }
+                orderData.skus .push(temp)
+            }
+        }
     });
     //从页面地址中获取商品id!
     //点击新增地址按钮时产生的页面样式
@@ -91,19 +153,19 @@ $(function () {
         } else {
             //判断是否是添加还是修改
             if (titles=="新增地址"){
-                $.ajax({ url:"/address/SetAddress",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"notes":null}, success: function(data){
+                $.ajax({ url:"/address/SetAddress",data:{"userId":userIds,"contact":names,"address_1":diZi,"mobile":dianHua,"notes":null}, success: function(data){
                         if (data){
                             $(".sui-close").click();
-                            $.ajax({ url:"/address/getConditions", success: function(data){
+                            $.ajax({ url:"/address/getConditions",data:{"userId":userIds}, success: function(data){
                                     inits(data);
                                 }});
                         }
                     }});
             } else if (titles=="修改地址"){
-                $.ajax({ url:"/address/update",data:{"contact":names,"address_1":diZi,"mobile":dianHua,"id":beiZu}, success: function(data){
+                $.ajax({ url:"/address/update",data:{"userId":userIds,"contact":names,"address_1":diZi,"mobile":dianHua,"id":beiZu}, success: function(data){
                         if (data){
                             $(".sui-close").click();
-                            $.ajax({ url:"/address/getConditions", success: function(data){
+                            $.ajax({ url:"/address/getConditions",data:{"userId":userIds}, success: function(data){
                                     inits(data);
                                 }});
                         }
@@ -145,7 +207,7 @@ $(function () {
                 $(".sui-modal").css("display","block");
                 $(".control-development").hide();
                 //
-                $.ajax({ url:"/address/getConditions", success: function(data){
+                $.ajax({ url:"/address/getConditions",data:{"userId":userIds}, success: function(data){
                         inits(data);
                     }});
             });
@@ -154,7 +216,7 @@ $(function () {
                 var id=$($(this).parent().parent().parent()).attr("data-title");
                 $.ajax({ url:"/address/deleteById",data :{"id":id}, success: function(data){
                         if (data){
-                            $.ajax({ url:"/address/getConditions", success: function(data){
+                            $.ajax({ url:"/address/getConditions",data:{"userId":userIds}, success: function(data){
                                     inits(data);
                                 }});
                         }
@@ -177,67 +239,6 @@ $(function () {
 
             });
         });
-    }
-    // $(".submit").click(function () {
-    //
-    // })
-    //根据用户id从数据库中获取商品订单
-    function exhibit(data) {
-        var tbody=$(".send-detail");
-        //用户名
-        $.ajax({ url:"/user/getOne",type: "post",data:{"id":data[0].userId}, success: function(date){
-                $("#userId").empty();
-                $("#userId").append("<li class='f-item'>"+date.name+"&nbsp;青橙欢迎您!</li>")
-            }});
-        for (var i = 0; i <data.length ; i++) {
-            goodsSkuId.push(data[i].goodsSku.id);
-            var showimg=data[i].goodsSku.showImg.split(",");
-            var showimg_1=showimg[0].split("[");
-            //
-            //
-            var param=data[i].goodsSku.params.split(";");
-            var param_1=param[0].split(",");
-            tbody.append("<li><div class='sendGoods'>"+
-                "<ul class='yui3-g'>"+
-                "<li class='yui3-u-1-6'>"+
-                "<span><img src=../img/goods_img/"+showimg_1[1].toString()+"></span>"+
-                "</li>"+
-                "<li class='yui3-u-7-12'>"+
-                "<div class='desc'>"+data[i].goodsSku.title+"</div>"+
-                "<div class='seven'>7天无理由退货</div></li>"+
-                "<li class='yui3-u-1-12'>"+
-                "<div class='price' data-number='"+data[i].goodsSku.price+"'>￥"+data[i].goodsSku.price+".00</div></li>"+
-                "<li class='yui3-u-1-12'>"+
-                "<div class='num'>X1</div></li>"+
-                "<li class='yui3-u-1-12'>"+
-                "<div class='exit'>有货</div>"+
-                "</li></ul></div></li>");
-            var num=$(tbody).find(".price");
-            nums=nums+parseFloat(num.attr("data-number"));
-        };
-        //金钱
-        var nums=$(".num");
-        var price=$(".price");
-        var shu=0;
-        var money=0;
-        for (var i = 0; i <nums.length ; i++) {
-            $(nums.get(i)).text("×"+cartNums[i]);
-            shu+=parseInt(cartNums[i]);
-            money+=parseInt(cartNums[i])*parseInt($(price.get(i)).attr("data-number"));
-        }
-        $(".list .number").text(shu);
-        $(".list .allprice").text("￥"+money);
-        $(".trade .price").text("￥"+money);
-        // alert(cartNums+":"+goodsSkuId);
-        //传值cartNums数量集合，goodsSkuId集合
-        orderData.skus = [];
-        for (var i = 0; i <goodsSkuId.length ; i++) {
-            var temp = {
-                id:parseInt(goodsSkuId[i]),
-                count:parseInt(cartNums[i])
-            }
-            orderData.skus .push(temp)
-        }
     }
     //
     $(".submit a").click(function () {
