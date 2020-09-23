@@ -147,17 +147,6 @@ public class CategoryServiceImpl implements CategoryService {
                 list.add(map);
             }
         }
-//        for (int i = 0; i < categories.size(); i++) {
-//            Category category = categories.get(i);
-//            if (category.getParentId()==pid){
-//                HashMap<Object, Object> map = new HashMap<>();
-//                map.put("name",category.getName());
-//                map.put("list'",test(categories,category.getId()) );
-//                categories.remove(i);
-//                i--;
-//                list.add(map);
-//            }
-//        }
         return list;
 
     }
