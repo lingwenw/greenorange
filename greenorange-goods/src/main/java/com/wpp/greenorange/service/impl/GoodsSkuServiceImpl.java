@@ -12,8 +12,6 @@ import com.wpp.greenorange.domain.select.GoodsSkuSelect;
 import com.wpp.greenorange.service.CategoryService;
 import com.wpp.greenorange.service.GoodsService;
 import com.wpp.greenorange.service.GoodsSkuService;
-import com.wpp.webutil.exception.MyException;
-import com.wpp.webutil.util.MyUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -37,6 +35,8 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.wpp.webutil.exception.MyException;
+import com.wpp.webutil.util.MyUtil;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -469,7 +469,7 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
      * @return 是否成功
      */
     @Override
-    @Transactional(rollbackFor = {Exception.class,MyException.class})
+    @Transactional(rollbackFor = {Exception.class, MyException.class})
     public Boolean insert(GoodsSku goodsSku) throws IOException {
         //获得他所属的goods
         Goods goods = goodsService.findById(goodsSku.getGoodsId());

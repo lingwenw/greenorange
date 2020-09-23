@@ -5,6 +5,7 @@ import com.wpp.greenorange.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Admin)表数据库访问层
@@ -14,6 +15,13 @@ import java.util.List;
  */
 @Mapper
 public interface AdminDao {
+
+    /**
+     * 查出用户具有的权限
+     * @param id
+     * @return
+     */
+    List<Map<String, Object>> findPowerByAdminId(Integer id);
 
     /**
      * 通过ID查询单条数据
@@ -81,4 +89,11 @@ public interface AdminDao {
      * 永封
      */
     int foreverStop(int id);
+
+    /**
+     * 根据账号查询用户
+     * @param accout
+     * @return
+     */
+    Admin findUserByAccont(String accout);
 }

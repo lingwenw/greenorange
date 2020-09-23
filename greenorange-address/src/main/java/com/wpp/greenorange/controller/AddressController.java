@@ -27,17 +27,6 @@ public class AddressController {
     private AddressService addressService;
 
     /**
-     * 通过主键查询单条数据
-     *
-     * @param id 主键
-     * @return 单条数据
-     */
-    @RequestMapping("/getOne")
-    public Address getOne(Integer id) {
-        return this.addressService.findById(id);
-    }
-
-    /**
      * 查询所有地址信息
      *
      * @param
@@ -47,9 +36,10 @@ public class AddressController {
     public List<Address> getConditions(){
         List<Address> allByCondition = this.addressService.findAllByCondition(null);
 //        System.out.println(allByCondition);
-
+        //用户id
         return allByCondition;
     };
+
     /**
      *进行添加地址数据
      *

@@ -6,10 +6,19 @@ import com.wpp.greenorange.dao.AdminDao;
 import com.wpp.greenorange.domain.Admin;
 import com.wpp.greenorange.domain.User;
 import com.wpp.greenorange.service.AdminService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Admin)表服务实现类
@@ -18,9 +27,26 @@ import java.util.List;
  * @since 2020-09-04 01:30:17
  */
 @Service("adminService")
-public class AdminServiceImpl implements AdminService {
+public class AdminServiceImpl implements AdminService, UserDetailsService {
     @Resource
     private AdminDao adminDao;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // 从数据库中查出用户
+        Admin admin = adminDao.findUserByAccont(username);
+        admin.setUsername(username);
+        //从数据库中查出权限列表
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Map<String, Object> power : admin.getPowers()) {
+            SimpleGrantedAuthority powerName = new SimpleGrantedAuthority((String) power.get("powerName"));
+            authorities.add(powerName);
+        }
+
+        admin.setAuthorities(authorities);
+//        String password = admin.getPassword();
+        return admin;
+    }
 
     /**
      * 通过实体作为筛选条件查询
@@ -111,4 +137,6 @@ public class AdminServiceImpl implements AdminService {
         int i = adminDao.foreverStop(id);
         return i==1;
     }
+
+
 }

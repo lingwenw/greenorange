@@ -1,7 +1,11 @@
 package com.wpp.greenorange.domain;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 /**
  * (Admin)实体类
@@ -9,8 +13,14 @@ import java.util.Date;
  * @author 吴鹏鹏ppp
  * @since 2020-09-04 02:28:42
  */
-public class Admin implements Serializable {
+public class Admin implements Serializable, UserDetails {
     private static final long serialVersionUID = -21023189685204466L;
+
+    private String password;
+
+    private List<GrantedAuthority> authorities;
+
+    private List<Map<String, Object>> powers;
     /**
      * 主键id
      */
@@ -22,7 +32,7 @@ public class Admin implements Serializable {
     /**
      * 密码
      */
-    private String password;
+    private String username;
     /**
      * 姓名
      */
@@ -39,6 +49,39 @@ public class Admin implements Serializable {
      * 最近一次修改时间
      */
     private Date updateTime;
+
+    public List<Map<String, Object>> getPowers() {
+        return powers;
+    }
+
+    public void setPowers(List<Map<String, Object>> powers) {
+        this.powers = powers;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
+        Admin admin = (Admin) o;
+        return Objects.equals(id, admin.id) &&
+                Objects.equals(accountnumber, admin.accountnumber) &&
+                Objects.equals(password, admin.password);
+    }
+
+    public Admin() {
+    }
 
 
     public Integer getId() {
@@ -57,8 +100,39 @@ public class Admin implements Serializable {
         this.accountnumber = accountnumber;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
+    }
+
+    @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {

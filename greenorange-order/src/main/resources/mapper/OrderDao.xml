@@ -21,6 +21,8 @@
         <collection property="orderGoods" column="id" select="com.wpp.greenorange.dao.OrderGoodsDao.findByOrderId"></collection>
     </resultMap>
 
+
+
     <!--获得全部的订单状态-->
     <select id="getAllOrderStatus" resultType="map">
         select id,`name`

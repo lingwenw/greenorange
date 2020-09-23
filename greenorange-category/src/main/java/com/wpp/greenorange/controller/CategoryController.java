@@ -8,6 +8,7 @@ import com.wpp.greenorange.service.CategoryService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,16 +33,6 @@ public class CategoryController{
 
     @Resource
     private RedisTemplate<String, String> redisTemplate;
-
-    /**
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    @RequestMapping("/findCategoryLimit")
-    public PageInfo<Category> findCategoryLimit(Integer pageNum, Integer pageSize) {
-        return categoryService.findCategoryLimit(pageNum, pageSize);
-    }
 
 
     /**
@@ -78,6 +69,7 @@ public class CategoryController{
      * @return Category 修改数据
      */
     @RequestMapping("/updateCategory")
+    @PreAuthorize("hasAnyAuthority('category_read','category_write','super_admin')")
     public boolean updateCategory(Category category) throws JsonProcessingException {
         boolean isUpdate = categoryService.update(category);
         if (isUpdate) {
@@ -92,6 +84,7 @@ public class CategoryController{
      * @return
      */
     @RequestMapping("/deleteCategory")
+    @PreAuthorize("hasAnyAuthority('category_read','category_write','super_admin')")
     public boolean deleteCategory(Category category) throws JsonProcessingException {
         boolean aBoolean = categoryService.deleteById(category);
         redisTemplate.delete("categorys");
@@ -100,6 +93,7 @@ public class CategoryController{
     }
 
     @RequestMapping("/addCategory")
+    @PreAuthorize("hasAnyAuthority('category_read','category_write','super_admin')")
     public boolean addCategory(Category category) throws JsonProcessingException {
         Boolean insert = categoryService.insert(category);
         if (insert){

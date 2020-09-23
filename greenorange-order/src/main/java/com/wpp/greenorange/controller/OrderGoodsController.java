@@ -22,15 +22,4 @@ public class OrderGoodsController {
     @Resource
     private OrderGoodsService orderGoodsService;
 
-    /**
-     * 通过主键查询单条数据
-     *
-     * @param id 主键
-     * @return 单条数据
-     */
-    @RequestMapping("/getOne")
-    public OrderGoods getOne(Integer id) {
-        return this.orderGoodsService.findById(id);
-    }
-
 }

@@ -3,6 +3,7 @@ package com.wpp.greenorange.controller;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Advert;
 import com.wpp.greenorange.service.AdvertService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,7 @@ public class AdvertController {
     private AdvertService advertService;
 
     @RequestMapping("/uploadImg")
+    @PreAuthorize("hasAnyAuthority('advert_write','super_admin')")
     public ModelAndView uploadImg(String option, String herf,MultipartFile upload, HttpServletRequest request) throws IOException {
         ModelAndView mv=new ModelAndView("redirect:/admin/advertising.html");
         //定义文件保存的本地路径
@@ -118,7 +120,9 @@ public class AdvertController {
     public PageInfo<Advert> getAllAdvert(Integer pageNum,Integer pageSize) {
         return advertService.findAllLimit(pageNum,pageSize);
     }
+
     @RequestMapping("/removeAdvert")
+    @PreAuthorize("hasAnyAuthority('advert_write','super_admin')")
     public boolean removeAdvert(Integer ids) {
         Boolean flag=false;
         if (ids!=null){
@@ -129,6 +133,7 @@ public class AdvertController {
     }
 
     @RequestMapping("/setAdvert")
+    @PreAuthorize("hasAnyAuthority('advert_write','super_admin')")
     public ModelAndView setAdvert(Integer id,String positions,String herf,MultipartFile upload) throws IOException {
         ModelAndView mv=new ModelAndView("redirect:/admin/advertising.html");
         //定义文件保存的本地路径

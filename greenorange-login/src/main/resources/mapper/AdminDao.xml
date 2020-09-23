@@ -10,6 +10,7 @@
         <result property="deleted" column="deleted" jdbcType="BOOLEAN"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <association property="powers" column="id" select="com.wpp.greenorange.dao.AdminDao.findPowerByAdminId"></association>
     </resultMap>
 
     <resultMap type="com.wpp.greenorange.domain.User" id="userMap">
@@ -23,6 +24,24 @@
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+    <!--查出用户具有的权限-->
+    <select id="findPowerByAdminId" resultType="map">
+        SELECT p.`power_name` powerName , p.`comment`
+        FROM tb_admin_power ap
+        LEFT JOIN tb_power p
+        ON ap.`power_id` = p.id
+        WHERE ap.`admin_id` = #{id}
+    </select>
+
+    <!--根据账号查询用户-->
+    <select id="findUserByAccont" resultMap="adminMap">
+        select
+          id, accountNumber, password, name, deleted, create_time, update_time
+        from greenorange.tb_admin
+        where accountNumber = #{account}
+    </select>
+
     <!--查询单个-->
     <select id="findById" resultMap="adminMap">
         select

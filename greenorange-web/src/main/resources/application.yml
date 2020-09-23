@@ -9,6 +9,7 @@ spring:
       uris: http://es-cn-st21u8rrg0002244h.public.elasticsearch.aliyuncs.com:9200
       username: elastic
       password: 1478963025Wu
+
   #数据库配置
   datasource:
     username: root
@@ -65,9 +66,13 @@ logging:
 #配置mybatis
 mybatis:
   mapper-locations: classpath:mapper/*Dao.xml,classpath*:mapper/*Dao.xml
-
+server:
+  servlet:
+    session:
+      timeout: 3600
 #属性
 imgPath: E:/greenorange/img/
 pagePath: E:/greenorange/pages/
 bottomPackage: com.wpp
 notHandleExceptions: /goods/uploadGoods
+

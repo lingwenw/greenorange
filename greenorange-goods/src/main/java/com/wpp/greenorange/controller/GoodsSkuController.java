@@ -5,6 +5,7 @@ import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.domain.select.GoodsSkuSelect;
 import com.wpp.greenorange.domain.GoodsSku;
 import com.wpp.greenorange.service.GoodsSkuService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,17 +30,37 @@ public class GoodsSkuController {
     @Resource
     private GoodsSkuService goodsSkuService;
 
+    @PutMapping("/sku/updateSku")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
+    public boolean updateSku(@RequestBody GoodsSku sku) throws IOException {
+        return goodsSkuService.update(sku);
+    }
+
+    @GetMapping("/sku/getSkuInfo")
+    @PreAuthorize("hasAnyAuthority('goods_read','goods_write','super_admin')")
+    public Map<String, Object> getSkuInfo(Integer id, Integer goodsId) throws IOException {
+        return goodsSkuService.getSkuInfo(id, goodsId);
+    }
+
+    @PutMapping("/sku/updatePriceStock")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
+    public boolean updatePriceStock(@RequestBody GoodsSku sku) throws IOException {
+        return goodsSkuService.updatePriceStock(sku);
+    }
+
     @RequestMapping("/sku/getPriceAndStock")
     public Map getPriceAndStock(Integer skuId){
         return goodsSkuService.getPriceAndStock(skuId);
     }
 
     @PutMapping("/sku/addSku")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
     public boolean addSku(@RequestBody GoodsSku sku) throws IOException {
         return goodsSkuService.insert(sku);
     }
 
     @PutMapping("/sku/enableSku")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
     public boolean enableSku(@RequestBody GoodsSku sku) throws IOException {
         goodsSkuService.enableSku(sku);
         return true;
@@ -50,6 +71,7 @@ public class GoodsSkuController {
      * @return
      */
     @GetMapping("/sku/getAllLimit")
+    @PreAuthorize("hasAnyAuthority('goods_read','goods_write','super_admin')")
     public PageInfo<GoodsSku> getAllLimit(GoodsSkuSelect goodsSkuSelect){
         if (goodsSkuSelect.getPageNum()==null||goodsSkuSelect.getPageNum()<1){
             goodsSkuSelect.setPageNum(1);
@@ -127,24 +149,13 @@ public class GoodsSkuController {
         return modelAndView;
     }
 
-    @RequestMapping("/searchJson")
-    public Map<String, Object> searchJson(String input, String[] brand, String category, Integer pageNum) throws IOException {
-        if (pageNum==null||pageNum<1){
-            pageNum = 1;
-        }
-        //从es中获得数据
-//        Map<String, Object>  search = goodsSkuService.search(input, brand, category, pageNum, sort, order, params);
-
-        return null;
-    }
-
-    /**
-     * 根据id查询对应数据
-     * @param id
-     * @return
-     */
-    @RequestMapping("/GoodsSkuFindById")
-    public GoodsSku findById(Integer id){
-        return goodsSkuService.findById(id);
-    }
+//    /**
+//     * 根据id查询对应数据
+//     * @param id
+//     * @return
+//     */
+//    @RequestMapping("/GoodsSkuFindById")
+//    public GoodsSku findById(Integer id){
+//        return goodsSkuService.findById(id);
+//    }
 }

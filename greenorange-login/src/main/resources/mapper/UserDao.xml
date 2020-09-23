@@ -132,7 +132,7 @@
     <!--添加普通用户-->
     <insert id="insertUser" keyProperty="id" useGeneratedKeys="true">
         insert into tb_user(email, phone, password, name, birthday, deleted, create_time, update_time)
-        values (#{email}, #{phone}, #{password}, #{name}, #{birthday}, #{deleted}, #{createTime}, #{updateTime})
+        values (#{email}, #{phone}, #{password}, #{name}, #{birthday}, 0, #{createTime}, #{updateTime})
     </insert>
 
     <!--注册时通过邮箱查询-->

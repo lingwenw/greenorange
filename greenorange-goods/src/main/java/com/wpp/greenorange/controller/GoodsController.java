@@ -1,21 +1,20 @@
 package com.wpp.greenorange.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Goods;
 import com.wpp.greenorange.domain.select.GoodsSelect;
 import com.wpp.greenorange.service.GoodsService;
-import com.wpp.webutil.util.MyUtil;
 import org.apache.commons.io.FileUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.wpp.webutil.util.MyUtil;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.io.*;
 import java.util.*;
 
@@ -34,22 +33,13 @@ public class GoodsController {
     @Resource
     private GoodsService goodsService;
 
-
-    /*@RequestMapping("/testSend")
-    public void testSend() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        HashMap<String, Object> map = new HashMap<>(4);
-        map.put("type", ServerSendType.ORDER_COUNT);
-
-        WebSocketServer.massInfo(mapper.writeValueAsString(map));
-    }*/
-
     /**
      * 文件上传的方法
      * @param file
      * @return
      */
     @RequestMapping("/uploadGoods")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
     public Map uploadGoods(MultipartFile file){
         HashMap<Object, Object> map = new HashMap<>(4);
         //获得文件名和目标文件夹名
@@ -85,11 +75,13 @@ public class GoodsController {
 
 
     @DeleteMapping("/deleteGoods")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
     public boolean deleteGoods(Integer id) throws IOException {
         return goodsService.deleteById(id);
     }
 
     @PutMapping("/updateGoods")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
     public Boolean updateGoods(@RequestBody Goods goods){
         return goodsService.update(goods);
     }
@@ -101,6 +93,7 @@ public class GoodsController {
      * @return
      */
     @GetMapping("/getInfoSkuAddNeed")
+    @PreAuthorize("hasAnyAuthority('goods_read','goods_write','super_admin')")
     public Map<String, Object> getInfoSkuAddNeed(Integer goodsId) throws JsonProcessingException {
         return goodsService.getInfoSkuAddNeed(goodsId);
     }
@@ -111,6 +104,7 @@ public class GoodsController {
      * @return
      */
     @PutMapping("/enableGoods")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
     public Map enableGoods(@RequestBody Goods goods){
         return goodsService.enableGoods(goods);
     }
@@ -121,6 +115,7 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("/addGoods")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
     public boolean addGoods(Goods goods){
         goods.setDeleted(true);
         return goodsService.insert(goods);
@@ -132,6 +127,7 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("/getAllLimit")
+    @PreAuthorize("hasAnyAuthority('goods_read','goods_write','super_admin')")
     public PageInfo<Goods> getAllLimit(GoodsSelect goodsSelect){
         return goodsService.findAllLimit(goodsSelect);
     }
@@ -141,6 +137,7 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("/getAllBrand")
+    @PreAuthorize("hasAnyAuthority('goods_read','super_admin')")
     public List<Map> getAllBrand(){
         return goodsService.getAllBrand();
     }
@@ -152,6 +149,7 @@ public class GoodsController {
      * @return 单条数据
      */
     @RequestMapping("/getOne")
+    @PreAuthorize("hasAnyAuthority('goods_read','super_admin')")
     public Goods getOne(Integer id) {
         return this.goodsService.findById(id);
     }

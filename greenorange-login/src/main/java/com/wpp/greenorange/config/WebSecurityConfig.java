@@ -1,5 +1,8 @@
 package com.wpp.greenorange.config;
 
+import com.wpp.greenorange.dao.PowerDao;
+import com.wpp.greenorange.service.AdminService;
+import com.wpp.greenorange.service.impl.AdminServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -7,9 +10,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -25,8 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private MyAuthenctiationFailureHandler myAuthenctiationFailureHandler;
 
     @Resource
-    //密码加密
-    private MyUserDetailService myUserDetailService;
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    @Resource
+    private PowerDao powerDao;
 
     // 自定义认证配置
     @Override
@@ -35,13 +43,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        //配置不走SpringSecurity验证的url
+        web.ignoring().antMatchers("/","/admin/**/*.css","/admin/**/*.js","/admin/**/*.png","/admin/**/*.ttf","/admin/**/*.woff");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //对网页资源进行控制
+        List<Map<String, String>> resourcePower = powerDao.findResourcePower();
+        for (Map<String, String> map : resourcePower) {
+            String powerName = map.get("powerName");
+            powerName += ",super_admin";
+            http.authorizeRequests()
+                    .antMatchers(map.get("resources")).hasAnyAuthority(powerName.split(","));
+        }
+
+
         http.authorizeRequests()
-                .antMatchers("/","/admin/**/*.css","/admin/**/*.js","/admin/**/*.png","/admin/**/*.ttf","/admin/**/*.woff").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                //admin下面的资源需要ADMIN权限
+                .antMatchers("/admin/**").hasAnyAuthority("admin","super_admin")
                 .and()
-                // 同源头
+                // 同源头，避免框架集无法打开
                 .headers().frameOptions().sameOrigin()
+                .and()
+                //设置session超时管理
+                .sessionManagement()
+                .invalidSessionUrl("/admin/login.html")
+                .and()
+                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 //配置登录页面
                 .formLogin().loginPage("/admin/login.html")
@@ -50,13 +80,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(myAuthenticationSuccessHandler)
                 // 登陆失败处理器
                 .failureHandler(myAuthenctiationFailureHandler)
-                .permitAll()
-                .and()
+                .permitAll();
+//                .and()
                 //设置userDetailsService，处理用户信息
-                .userDetailsService(myUserDetailService);
-
+//                .userDetailsService(adminService);
         http.headers().cacheControl(); //禁用缓存
         http.csrf().disable(); //禁用csrf校验
+
+
     }
 
     @Bean

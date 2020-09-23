@@ -14,6 +14,7 @@ import com.wpp.greenorange.service.GoodsSkuService;
 import com.wpp.greenorange.service.OrderService;
 import com.wpp.greenorange.websocket.ServerSendType;
 import com.wpp.greenorange.websocket.WebSocketServer;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +50,7 @@ public class OrderController {
 
 
     @RequestMapping("/getAllLimit")
+    @PreAuthorize("hasAnyAuthority('order_read','super_admin')")
     public PageInfo<Order> getAllLimit(OrderSelect orderSelect){
         return orderService.getAllLimit(orderSelect);
     }
@@ -62,30 +64,26 @@ public class OrderController {
     }
 
     /**
-     * 通过主键查询单条数据
-     *
-     * @param id 主键
-     * @return 单条数据
-     */
-    @RequestMapping("/getOne")
-    public Order getOne(Integer id) {
-        return this.orderService.findById(id);
-    }
-
-    /**
      * 获得全部订单状态
      * @return
      */
     @GetMapping("/getAllOrderStatus")
+    @PreAuthorize("hasAnyAuthority('order_read','super_admin')")
     public List<Map> getAllOrderStatus(){
         return orderService.getAllOrderStatus();
     }
 
+    /**
+     * 用户新建订单
+     * @param orderData
+     * @param session
+     * @param req
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/addOrder")
     public @ResponseBody Order addOrder(@RequestBody Map orderData, HttpSession session, HttpServletRequest req) throws IOException {
         User user = (User) session.getAttribute("loginUser");
-//        User user = new User();
-//        user.setId(1);
         Order order = orderService.insert(orderData, user);
         //向客户端发消息
         ObjectMapper mapper = new ObjectMapper();
