@@ -18,22 +18,22 @@ var skuAddVue = new Vue({
             _this.sku.skuEdition = JSON.stringify(_this.sku.skuEdition);
             _this.sku.introduceData = editor.txt.html();
             console.log(_this.sku)
-            // axios.put("../sku/updateSku",_this.sku)
-            // .then( resp => {
-            //     let data = resp.data;
-            //     $.errorAjax(data,()=>{
-            //         setTimeout(function () {
-            //             try {
-            //                 let goodsVue = parent.goodsVue;
-            //                 goodsVue.getAllLimit(goodsVue.pageInfo.pageNum);
-            //                 layer_close();
-            //             } catch (e) {
-            //
-            //             }
-            //             location.reload();
-            //         },1000)
-            //     })
-            // } )
+            axios.put("../sku/updateSku",_this.sku)
+            .then( resp => {
+                let data = resp.data;
+                $.errorAjax(data,()=>{
+                    setTimeout(function () {
+                        try {
+                            let goodsVue = parent.goodsVue;
+                            goodsVue.getAllLimit(goodsVue.pageInfo.pageNum);
+                            layer_close();
+                        } catch (e) {
+
+                        }
+                        location.reload();
+                    },1000)
+                })
+            } )
         },
         /**
          * 获得页面展示数据的方法

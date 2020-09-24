@@ -43,16 +43,16 @@
                 and position_id = #{positionId}
             </if>
             <if test="describe != null and describe != ''">
-                and describe = #{describe}
+                and `describe` = #{describe}
             </if>
             <if test="href != null and href != ''">
                 and href = #{href}
             </if>
             <if test="index != null">
-                and index = #{index}
+                and `index` = #{index}
             </if>
             <if test="deleted != null">
-                and deleted = #{deleted}
+                and `deleted` = #{deleted}
             </if>
             <if test="createTime != null">
                 and create_time = #{createTime}

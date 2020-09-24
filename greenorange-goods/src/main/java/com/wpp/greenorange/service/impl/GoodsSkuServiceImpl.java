@@ -129,13 +129,16 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         //价格
         if (!MyUtil.isEmptyString(price)){
             String[] priceArr = price.split("-");
+            System.out.println(Arrays.toString(priceArr));
             if (priceArr.length>0 && !MyUtil.isEmptyString(priceArr[0])){
                 RangeQueryBuilder gte = QueryBuilders.rangeQuery("price").gte(priceArr[0]);
                 boolQuery.filter(gte);
+                System.out.println(priceArr[0]);
             }
             if (priceArr.length>1 && !MyUtil.isEmptyString(priceArr[1])){
-                RangeQueryBuilder lte = QueryBuilders.rangeQuery("price").lte(priceArr[0]);
+                RangeQueryBuilder lte = QueryBuilders.rangeQuery("price").lte(priceArr[1]);
                 boolQuery.filter(lte);
+                System.out.println(priceArr[1]);
             }
         }
         //params参数筛选
@@ -184,7 +187,7 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         searchSource.from((pageNum-1)*size);
         searchSource.size(size);
         searchRequest.source(searchSource);
-
+        System.out.println(searchSource);
         //查询结果
         SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
         //结果中的全部aggr
@@ -477,11 +480,15 @@ public class GoodsSkuServiceImpl implements GoodsSkuService {
         goodsSku.setDeleted( goods.getDeleted() );
         //保存到数据库
         this.goodsSkuDao.insert(goodsSku);
+        //更新缓存
+        redisTemplate.opsForHash().put("skuPriceStock","price"+goodsSku.getId(),goodsSku.getPrice());
+        redisTemplate.opsForHash().put("skuPriceStock","stock"+goodsSku.getId(),goodsSku.getStock().doubleValue());
         //如果商品启用中，更新静态页面
         if (!goods.getDeleted()){
             goodsService.createPage(goodsSku.getGoodsId());
             //添加到elasticsearch
-            this.saveSkuEsToElasticSearch(goodsSku);
+
+            this.saveSkuEsToElasticSearch(goodsSkuDao.findById(goodsSku.getId()));
         }else{
 
         }

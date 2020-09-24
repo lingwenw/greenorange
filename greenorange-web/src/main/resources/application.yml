@@ -2,19 +2,16 @@ spring:
   ##elasticsearch配置
   elasticsearch:
     rest:
-#      uris: http://localhost:9200
-#      username: elasticsearch
-#      uris: http://121.89.197.100:9200
-#      username: wpp-application
       uris: http://es-cn-st21u8rrg0002244h.public.elasticsearch.aliyuncs.com:9200
       username: elastic
       password: 1478963025Wu
-
   #数据库配置
   datasource:
     username: root
     password: 147258w
     driver-class-name: com.mysql.cj.jdbc.Driver
+    #    121.89.197.100
+#    localhost
     url: jdbc:mysql://121.89.197.100:3306/greenorange?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
     #mysql驱动8，需要加上时区
     #serverTimezone=GMT%2B8 GMT+8
@@ -27,8 +24,6 @@ spring:
       max-lifetime: 1800000
       connection-timeout: 10000
       connection-test-query: SELECT 1
-  profiles:
-    active: dev
   #redis配置
   redis:
     host: 121.89.197.100
@@ -50,7 +45,7 @@ spring:
     encoding: utf-8
     servlet:
       content-type: text/html
-    cache: false
+    cache: true
   devtools:
     livereload:
       enabled: false
@@ -59,20 +54,25 @@ spring:
       max-request-size: 20MB
       max-file-size: 2MB
 
-#logback配置
-logging:
-  config: classpath:logback/logback.xml
-
 #配置mybatis
 mybatis:
   mapper-locations: classpath:mapper/*Dao.xml,classpath*:mapper/*Dao.xml
+#  mapper-locations: classpath*:mapper/*.xml
 server:
   servlet:
     session:
       timeout: 3600
+
+logging:
+  file:
+    path: /usr/local/project/greenorange/log
 #属性
 imgPath: E:/greenorange/img/
 pagePath: E:/greenorange/pages/
 bottomPackage: com.wpp
 notHandleExceptions: /goods/uploadGoods
+#imgPath: /usr/local/project/greenorange/img/
+#pagePath: /usr/local/project/greenorange/pages/
+#bottomPackage: com.wpp
+#notHandleExceptions: /goods/uploadGoods
 

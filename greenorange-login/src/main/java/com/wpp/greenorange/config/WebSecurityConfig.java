@@ -55,8 +55,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             http.authorizeRequests()
                     .antMatchers(map.get("resources")).hasAnyAuthority(powerName.split(","));
         }
-
-
         http.authorizeRequests()
                 //admin下面的资源需要ADMIN权限
                 .antMatchers("/admin/**").hasAnyAuthority("admin","super_admin")

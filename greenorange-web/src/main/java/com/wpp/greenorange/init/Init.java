@@ -3,15 +3,16 @@ package com.wpp.greenorange.init;
 import com.wpp.greenorange.service.CategoryService;
 import com.wpp.greenorange.service.GoodsSkuService;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 @Component
 public class Init implements InitializingBean {
-    @Autowired
+    @Resource
     private CategoryService categoryService;
 
-    @Autowired
+    @Resource
     private GoodsSkuService goodsSkuService;
 
     @Override

@@ -601,7 +601,7 @@
             //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
             //等同于socket = new WebSocket("ws://localhost:8888/xxxx/im/25");
             //var socketUrl="${request.contextPath}/im/"+$("#userId").val();
-            var socketUrl = "http://localhost:8080/websocket/" + adminId;
+            var socketUrl = "http://121.89.197.100:8080/websocket/" + adminId;
             socketUrl = socketUrl.replace("https", "ws").replace("http", "ws");
             if (socket != null) {
                 socket.close();

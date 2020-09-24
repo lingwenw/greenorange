@@ -3,6 +3,9 @@ package com.wpp.greenorange.controller;
 import com.github.pagehelper.PageInfo;
 import com.wpp.greenorange.domain.Advert;
 import com.wpp.greenorange.service.AdvertService;
+import com.wpp.webutil.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,14 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -30,6 +29,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/advert")
 public class AdvertController {
+
     /**
      * 服务对象
      */
@@ -41,7 +41,7 @@ public class AdvertController {
     public ModelAndView uploadImg(String option, String herf,MultipartFile upload, HttpServletRequest request) throws IOException {
         ModelAndView mv=new ModelAndView("redirect:/admin/advertising.html");
         //定义文件保存的本地路径
-        String localPath = "E:/greenorange/img/";
+        String localPath = MyUtil.getYmlParam("application","imgPath");
         File file = new File(localPath);
         //如果目录不存在，创建该目录
         if (!file.exists()) {
@@ -54,7 +54,8 @@ public class AdvertController {
         //获得文件类型（可以判断如果不是图片，禁止上传）
         //得到 文件名
         Filename = uuid + "_" + Filename;
-        upload.transferTo(new File(localPath + Filename));
+        File desk = new File(localPath + Filename);
+        upload.transferTo(desk);
         String img = "/img/" + Filename;
         Boolean insert = null;
         if (img != null&& option!=null) {
@@ -128,7 +129,6 @@ public class AdvertController {
         if (ids!=null){
             flag = advertService.deleteById(ids);
         }
-        System.out.println(flag);
         return flag;
     }
 
@@ -137,7 +137,7 @@ public class AdvertController {
     public ModelAndView setAdvert(Integer id,String positions,String herf,MultipartFile upload) throws IOException {
         ModelAndView mv=new ModelAndView("redirect:/admin/advertising.html");
         //定义文件保存的本地路径
-        String localPath = "E:/greenorange/img/";
+        String localPath = MyUtil.getYmlParam("application","imgPath");
         File file = new File(localPath);
         //如果目录不存在，创建该目录
         if (!file.exists()) {

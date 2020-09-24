@@ -166,6 +166,8 @@ $(function () {
                 sellPoint : editor.txt.html(),
                 categoryId : $("#scrollsidebar").data("categoryId")
             }
+            console.log( goods )
+
             //判断是否有内容是空的
             if ( $.emptyString(goods.brandId) || $.emptyString(goods.name) || $.emptyString(editor.txt.text()) ){
                 layer.alert('请填写完表单!', {icon: 5});

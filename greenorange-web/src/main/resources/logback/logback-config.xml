@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<included>
-    <!-- 应用名称-->
-    <property name="appName" value="mybatis-plus"/>
-    <!-- 日志的存放目录,web项目建议使用绝对路径-->
-    <property name="ERROR_LOG_FILE_NAME_PATTERN" value="/logs/${appName}-error.%d{yyyy-MM-dd}.%i.log"/>
-    <!--  需要打印日志的包  -->
-    <property name="package" value="com.wpp" />
-</included>

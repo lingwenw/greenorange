@@ -6,6 +6,7 @@ import com.wpp.greenorange.dao.AdminDao;
 import com.wpp.greenorange.domain.Admin;
 import com.wpp.greenorange.domain.User;
 import com.wpp.greenorange.service.AdminService;
+import com.wpp.webutil.exception.MyException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,8 +35,10 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 从数据库中查出用户
-        System.out.println(username);
         Admin admin = adminDao.findUserByAccount(username);
+        if (admin==null){
+            throw new MyException("账号不存在!");
+        }
         admin.setUsername(username);
         //从数据库中查出权限列表
         List<GrantedAuthority> authorities = new ArrayList<>();

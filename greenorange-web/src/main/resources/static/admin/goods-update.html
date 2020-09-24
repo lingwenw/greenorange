@@ -154,7 +154,7 @@
     }
     $(function () {
         //zTree
-        let zTree = $("#treeDemo");
+        var zTree = $("#treeDemo");
         $.post("/category/findCategorys", function (data) {
             zNodes.push({id: 0, pId: -1, name: "商城分类列表", open: true});
             zNodes = data;
@@ -163,6 +163,7 @@
                 open: true,
                 children: data
             });
+            goodsUpdateVue.getOne();
         })
 
         var E = window.wangEditor
@@ -180,7 +181,7 @@
 
 
         //获得goods
-        let goodsUpdateVue = new Vue({
+        var goodsUpdateVue = new Vue({
             el : "#form-article-add",
             data : {
                 goods : {}
@@ -207,6 +208,7 @@
                     $(".edition-input").each(function () {
                         editionChoice[this.value] = "";
                     })
+                    _this.sellPoint = editor.txt.html();
                     _this.goods.editionChoice = JSON.stringify(editionChoice);
                     axios.put("../goods/updateGoods",_this.goods)
                         .then( resp => {
@@ -228,7 +230,7 @@
                 }
             },
             created: function () {
-                this.getOne();
+
             }
         })
 

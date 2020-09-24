@@ -48,6 +48,12 @@ public class GoodsSkuController {
         return goodsSkuService.updatePriceStock(sku);
     }
 
+    @DeleteMapping("/sku/deleteSku")
+    @PreAuthorize("hasAnyAuthority('goods_write','super_admin')")
+    public boolean deleteSku(Integer id, Integer goodsId) throws IOException {
+        return goodsSkuService.deleteById(id, goodsId);
+    }
+
     @RequestMapping("/sku/getPriceAndStock")
     public Map getPriceAndStock(Integer skuId){
         return goodsSkuService.getPriceAndStock(skuId);
